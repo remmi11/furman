@@ -1,0 +1,14 @@
+html,
+main {
+    font-family: 'Lobster';
+}
+
+.navbar {
+    width: 100%;
+    font-size: 25px;
+    padding: 10px;
+}
+
+.main {
+    padding: 50px;
+}

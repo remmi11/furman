@@ -1,0 +1,290 @@
+{% extends 'blog/base.html' %} {% block content %}
+<!-- <h1>New post</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form> -->
+<form method="POST" class="post-form">{% csrf_token %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <p style="margin-bottom: 0px;">
+                <strong>Title:
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <select name="title" class="form-control" required>
+                <option value= '{{ form.title.value }}' >{{ form.title.value }}</option>
+                <option value="Furman Land Surveyers, Inc.">Furman Land Surveyers, Inc.</option>
+                <option value="GDI, Inc.">GDI, Inc.</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p class="section-header">Client Info:</p>
+            <p>
+                <strong>Date:</strong>
+            </p>
+            <input type="date" class="form-control" name="date" value= '{{ form.date_entered.value|date:'Y-m-d' }}'/>
+            <p>
+                <strong>Date Needed:</strong>
+            </p>
+            <input type="date" class="form-control" name="date-needed" value= '{{ form.date_needed.value|date:'Y-m-d' }}' />
+            <p>
+                <strong>Client:
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" class="form-control" name="client" value= '{{ form.client.value }}' required/>
+
+            <p class="section-header">Job Info:</p>
+            <p>
+                <strong>Project No.
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" id="projectno" name="projectno" class="form-control" value= '{{ form.project_no.value }}' required/>
+            <p>
+                <strong>Map No.</strong>
+            </p>
+            <input type="text" name="mapno" class="form-control" value= '{{ form.map_no.value }}'/>
+
+            <p class="section-header">Certify To:</p>
+            <p>
+                <strong>Job Contact
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value }}' required/>
+            <p>
+                <strong>Phone
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" name="phone" class="form-control" value='{{ form.phone.value }}' required/>
+            <p>
+                <strong>Notes
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" name="notes" class="form-control big-ext" value='{{ form.notes.value }}' required/>
+            <p>
+                <strong>Certify To</strong>
+            </p>
+            <input type="text" name="certify" class="form-control" value='{{ form.certify_to.value }}' />
+            <p>
+                <strong>Lender</strong>
+            </p>
+            <input type="text" name="lender" class="form-control" value='{{ form.lender.value }}'/>
+            <p>
+                <strong>GF#</strong>
+            </p>
+            <input type="text" name="gf" class="form-control" value='{{ form.gf_no.value }}'/>
+        </div>
+        <div class="col-md-6">
+                    <!-- <p class="section-header">Job Location:</p>
+                    <p>
+                        <strong>Address:</strong>
+                    </p>
+                    <input type="text" name="address" class="form-control" placeholder="1234 Main St." />
+                    <div class="form-inline">
+                        <input type="text" name="city" class="form-control col-md-8" placeholder="City" />
+                        <input type="text" name="state" style="float: right;" class="form-control col-md-4" placeholder="State/Province" />
+                    </div>
+                    <div class="form-inline">
+                        <input type="text" name="zip" class="form-control col-md-8" placeholder="Postal/Zip Code" />
+                        <input type="text" name="country" id="country" style="float: right;" class="form-control col-md-4" placeholder="Country"
+                        />
+                    </div> -->
+                    <p class="section-header">Job Location:</p>
+                    <div class="form-group gaddress f38 " data-fid="f38">
+                            <label class="control-label">Address</label>
+        
+                            <div class="form-group addressLine1">
+                                <label class="control-label sr-only" for="f38_addressLine1">Address Line1</label>
+                                <input type="text" class="form-control gaddress-autocomplete" data-gaddress-types="street_number route" data-gaddress-name="long_name" id="f38_addressLine1" name="address_street" value="" aria-describedby="f38_addressLine1-help-block" placeholder="1234 Main St." autocomplete="off">
+                                <p id="f38_addressLine1-help-block" class="description sr-only">Street address, P.O. box, company name, c/o</p>
+                            </div>
+        
+        
+                            <div class="form-group city" style="float: none;">
+                                <label class="control-label sr-only" for="f38_city">City</label>
+                                <input type="text" class="form-control" data-gaddress-types="locality" data-gaddress-name="long_name" id="f38_city" name="city" value="" aria-describedby="f38_city-help-block" placeholder="City">
+                                <p id="f38_city-help-block" class="description sr-only">City</p>
+                            </div>
+        
+                            <div class="form-group state" style="float: none;">
+                                <label class="control-label sr-only" for="f38_state">State / Province / Region</label>
+                                <input type="text" class="form-control" data-gaddress-types="administrative_area_level_1" data-gaddress-name="long_name" id="f38_state" name="state" value="" aria-describedby="f38_state-help-block" placeholder="State / Province / Region">
+                                <p id="f38_state-help-block" class="description sr-only">State / Province / Region</p>
+                            </div>
+        
+                            <div class="form-group postalCode" style="float: none;">
+                                <label class="control-label sr-only" for="f38_postalCode">Postal / Zip Code</label>
+                                <input type="text" class="form-control" data-gaddress-types="postal_code" data-gaddress-name="long_name" id="f38_postalCode" name="zipcode" value="" aria-describedby="f38_postalCode-help-block" placeholder="Postal / Zip Code">
+                                <p id="f38_postalCode-help-block" class="description sr-only">Postal / Zip Code</p>
+                            </div>
+        
+                            <div class="form-group country" style="float: none;">
+                                <label class="control-label sr-only" for="f38_country">Country</label>
+                                <input type="text" class="form-control" data-gaddress-types="country" data-gaddress-name="long_name" id="f38_country" name="country" value="" aria-describedby="f38_country-help-block" placeholder="Country">
+                                <p id="f38_country-help-block" class="description sr-only">Country</p>
+                            </div>
+                            <div class="mq-indicator"></div>
+                        </div>
+
+
+                    <p class="section-header">Legal:</p>
+                    <p>
+                        <strong>Survey Type
+                            <span style="color:red;">*</span>
+                        </strong>
+                    </p>
+                    <!-- <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
+                        <option value="default">- Select -</option>
+                        <option value="prad">PRAD</option>
+                        <option value="rural">RURAL</option>
+                        <option value="plss">PLSS</option>
+                    </select> -->
+                    <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
+                            <option value='{{ form.survey_type.value }}'>{{ form.survey_type.value|upper }}</option>
+                            <option value="prad">PRAD</option>
+                            <option value="rural">RURAL</option>
+                            <option value="plss">PLSS</option>
+                        </select>
+                    <p>
+                        <strong>County
+                            <span style="color: red;">*</span>
+                        </strong>
+                    </p>
+                    <input type="text" name="county" class="form-control" id="county" value='{{ form.county.value }}' required/>
+                    <div id="prad-select" style="display: none;">
+                        <p>
+                            <strong>Subdivision</strong>
+                        </p>
+                        <input type="text" name="subdivision" id="subdivision" class="form-control" value='{{ form.subdivision.value }}'/>
+                        <p>
+                            <strong>Unit</strong>
+                        </p>
+                        <input type="text" name="unit" id="unit" class="form-control" value='{{ form.unit.value }}'/>
+                        <p>
+                            <strong>Sub Block</strong>
+                        </p>
+                        <input type="text" name="subblock" id="subblock" class="form-control" value='{{ form.sub_block.value }}' />
+                        <p>
+                            <strong>Lot</strong>
+                        </p>
+                        <input type="text" name="lot" id="lot" class="form-control" value='{{ form.lot.value }}'/>
+                    </div>
+                    <div id="rural-select" style="display: none;">
+                        <p>
+                            <strong>Survey
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="survey" class="form-control" id="survey" value='{{ form.survey.value }}'/>
+                        <p>
+                            <strong>Block
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="block" class="form-control" id="block" value='{{ form.rural_block.value }}'/>
+                        <p>
+                            <strong>Section
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="rural_section" class="form-control" id="section" value='{{ form.rural_section.value }}'/>
+                    </div>
+                    <div id="plss-select" style="display: none;">
+                        <p>
+                            <strong>Meridian
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="meridian" class="form-control" id="meridian" value='{{ form.meridian.value }}'/>
+                        <p>
+                            <strong>Township Range
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="town_range" class="form-control" id="town-range" value='{{ form.t_r.value }}'/>
+                        <p>
+                            <strong>Section
+                                <span style="color: red;">*</span>
+                            </strong>
+                        </p>
+                        <input type="text" name="section" class="form-control" id="" value='{{ form.plss_section.value }}'/>
+                    </div>
+                </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="section-header">Folder Path</p>
+            <p>
+                <strong>Folder Path
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" name="fpath" class="form-control"  value='{{ form.folder_path.value }}'required/>
+        </div>
+    </div>
+    <button class="btn btn-ext">Save</button>
+
+    <script>
+        $( document ).ready(function() {
+            var form_type = "{{ form.survey_type.value }}";
+            console.log(form_type)
+            var rural = document.getElementById('rural-select');
+            var prad = document.getElementById('prad-select');
+            var plss = document.getElementById('plss-select');
+            if (form_type == "rural") {
+                prad.style.display = "none";
+                plss.style.display = "none";
+                rural.style.display = "block";
+            }  else if (form_type == "prad") {
+                //display prad-select
+                prad.style.display = "block";
+                plss.style.display = "none";
+                rural.style.display = "none";
+            } else if (form_type == "plss") {
+                //display plss-select
+                prad.style.display = "none";
+                plss.style.display = "block";
+                rural.style.display = "none";
+            } else {
+                prad.style.display = "none";
+                plss.style.display = "none";
+                rural.style.display = "none";
+            }
+        });
+        function determineForm(e) {
+            //3 values are: rural, prad, plss
+            var rural = document.getElementById('rural-select');
+            var prad = document.getElementById('prad-select');
+            var plss = document.getElementById('plss-select');
+            if (e.value == "rural") {
+                //display rural-select
+                prad.style.display = "none";
+                plss.style.display = "none";
+                rural.style.display = "block";
+            } else if (e.value == "prad") {
+                //display prad-select
+                prad.style.display = "block";
+                plss.style.display = "none";
+                rural.style.display = "none";
+            } else if (e.value == "plss") {
+                //display plss-select
+                prad.style.display = "none";
+                plss.style.display = "block";
+                rural.style.display = "none";
+            } else {
+                prad.style.display = "none";
+                plss.style.display = "none";
+                rural.style.display = "none";
+            }
+        }
+    </script>
+</form>
+{% endblock %}
