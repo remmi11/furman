@@ -8,6 +8,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # class Post(models.Model):
 #     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -69,7 +70,7 @@ class Form(models.Model):
     title = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'form'
 
 
@@ -117,7 +118,7 @@ class Form500(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'form_500'
 
 
@@ -165,7 +166,7 @@ class FormAll(models.Model):
     created_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'form_all'
 
 
@@ -237,7 +238,7 @@ class FurmanRecords(models.Model):
     job_canceled = models.TextField(db_column='JOB CANCELED', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'furman_records'
 
 
@@ -265,7 +266,7 @@ class MasterGeom(models.Model):
     block_numb = models.CharField(max_length=10, blank=True, null=True)
     subdivisio = models.CharField(max_length=50, blank=True, null=True)
     unit_numbe = models.CharField(max_length=10, blank=True, null=True)
-    address = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    address = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
     parcel_cou = models.CharField(max_length=10, blank=True, null=True)
     parcel_typ = models.CharField(max_length=10, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
@@ -276,22 +277,20 @@ class MasterGeom(models.Model):
     globalid = models.CharField(max_length=38, blank=True, null=True)
     edit_date = models.DateField(blank=True, null=True)
     edit_by = models.CharField(max_length=50, blank=True, null=True)
-    shape_leng = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    shape_leng = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
+    shape_area = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
     county_code = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'master_geom'
 
-class Users(models.Model):
-    email = models.CharField(max_length=255, blank=True, null=True)
-    password = models.CharField(max_length=255, blank=True, null=True)
+class Users(AbstractUser):
+    # email = models.CharField(max_length=255, blank=True, null=True)
+    # password = models.CharField(max_length=255, blank=True, null=True)
     remember_token = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(blank=True, null=True)
-    updated_at = models.DateTimeField(blank=True, null=True)
     role_id = models.IntegerField(blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'users'
+    def save(self, *args, **kwargs):
+        super(Users, self).save(*args, **kwargs)
+

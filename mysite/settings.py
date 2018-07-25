@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
+SITE_ID = 1
 
 # Application definition
 
@@ -132,3 +133,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'blog.Users'
+
+LOGIN_REDIRECT_URL = '/post/'
+LOGOUT_REDIRECT_URL = '/'
+
+SESSION_COOKIE_AGE = 3600

@@ -30,21 +30,35 @@
 </head>
 
 <body>
-    <div class="navbar navbar-dark bg-dark">
-        <a href="/">Furman Records</a>
+    <div class="navbar navbar-dark bg-dark" style="display: flow-root;">
+        {% if user.is_authenticated %}
+        {% if request.user.is_superuser %}
+            <a href="{% url 'user_list' %}">Users</a>
+        {% endif %}
+        <a href="{% url 'post_list' %}" style="margin-left: 20px;">Furman Records</a>
+
         <div class="pull-right">
-            <a href="{% url 'post_new' %}" class="top-menu">
+            <a href="
+            {% if 'post' in request.path %}
+                {% url 'post_new' %}
+            {% elif 'user' in request.path and request.user.is_superuser %}
+                {% url 'user_new' %}
+            {% endif %}" class="top-menu">
                 <span>
                     <i class="fa fa-plus-circle" style="font-size:36px"></i>
                 </span>
             </a>
         </div>
+        <div class="pull-right" style="margin-right: 20px; color: white; font-size: 20px;">
+            Hi {{ user.username }}! 
+            <a href="/logout/" > Logout </a>
+        </div>
+        {% else %}
+        {% endif %}
     </div>
     <div class="main container">
-        {% block content %} {% if user.is_authenticated %} Hi {{ user.username }}! {% else %}
-        <p>You are not logged in</p>
-        <a href="{% url 'login' %}">login</a>
-        {% endif %} {% endblock %}
+
+        {% block content %}  {% endblock %}
     </div>
     <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script> -->

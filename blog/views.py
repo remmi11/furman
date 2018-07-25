@@ -1,30 +1,31 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-# from .models import Form, Form500, MasterGeom, County
-from .forms import PostForm, newForm
+from .models import Form, Form500, MasterGeom, County
+from .forms import PostForm, newForm, UserForm, UserEditForm
 from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import *
 #from django.utils import simplejson
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 # def post_list(request):
 #     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
 #     return render(request, 'blog/post_list.html', {'posts': posts})
 
-
+@login_required
 def post_list(request):
     # filter(published_date__lte=timezone.now()).order_by('published_date')
     posts = Form500.objects.all()
     return render(request, 'blog/post_list.html', {'posts': posts})
 
-
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Form, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
-
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -47,6 +48,7 @@ def loadCounties(request):
     #counties = MasterGeom.objects.filter(join_type=county_id).order_by('county_code')
     return render(request, 'blog/post_new.html', {'counties': counties })
 
+@login_required
 def getdetails(request):
     
     #country_name = request.POST['country_name']
@@ -68,7 +70,7 @@ def getdetails(request):
     return HttpResponse(simplejson.dumps(result_set), mimetype='application/json', content_type='application/json')
 
 
-
+@login_required
 def post_edit(request, pk):
     posts = Form500.objects.all()
     post = get_object_or_404(Form500, pk=pk)
@@ -110,7 +112,6 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
 # def post_edit(request, pk):
 #     posts = Form.objects.all()
 #     post = get_object_or_404(Form, pk=pk)
@@ -132,3 +133,65 @@ def post_edit(request, pk):
 #     else:
 #         form = PostForm(instance=post)
 #     return render(request, 'blog/post_edit.html', {'form': form})
+
+
+@login_required
+def user_list(request):
+
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    # filter(published_date__lte=timezone.now()).order_by('published_date')
+    users = Users.objects.all().order_by('pk')
+    return render(request, 'registration/user_list.html', {'users': users})
+
+@login_required
+def user_new(request):
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit=False)
+            new_user.set_password(
+            form.cleaned_data['password'])
+            new_user.save()
+
+            return redirect('/user/')
+    else:
+        form = UserForm()
+    return render(request, 'registration/user_new.html', {'user_form': form})
+
+@login_required
+def user_edit(request, pk):
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    users = Users.objects.all()
+    user = get_object_or_404(Users, pk=pk)
+    if request.method == "POST":
+        form = UserEditForm(request.POST, instance=user)
+        print (form.errors)
+        if form.is_valid():
+            user = form.save(commit=False)
+
+            print (request.POST.get('new_password'))
+            if request.POST.get('new_password') != "":
+                user.set_password(request.POST.get('new_password'))
+            user.save()
+            return redirect('/user/')
+    else:
+        form = UserEditForm(instance=user)
+    return render(request, 'registration/user_edit.html', {'user_form': form})
+
+@login_required
+def user_remove(request, pk):
+    if not request.user.is_superuser:
+        return redirect('/')
+
+    user = get_object_or_404(Users, pk=pk)
+    if user:
+        user.delete()
+
+    return redirect('/user/')
