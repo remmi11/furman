@@ -68,6 +68,7 @@ class Form(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     title = models.CharField(max_length=100, blank=True, null=True)
+    title1 = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         # managed = False

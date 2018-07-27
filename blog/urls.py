@@ -20,9 +20,11 @@ urlpatterns = [
     url(r'^user/new/$', views.user_new, name='user_new'),
     url(r'^user/(?P<pk>\d+)/edit/$', views.user_edit, name='user_edit'),
     url(r'^user/(?P<pk>\d+)/remove/$', views.user_remove, name='user_remove'),
+
+    url(r'^ajax_load_counties/$', views.loadCounties, name='ajax_load_counties'),
+    url(r'^ajax_load_data/$', views.getdetails, name='ajax_load_data'),
     
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path(r'^post/new/$', views.loadCounties, name='ajax_load_counties'),
 
 ]

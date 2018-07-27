@@ -136,88 +136,196 @@
 
 
                     <p class="section-header">Legal:</p>
-                    <p>
-                        <strong>Survey Type
-                            <span style="color:red;">*</span>
-                        </strong>
-                    </p>
-                    <!-- <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
-                        <option value="default">- Select -</option>
-                        <option value="prad">PRAD</option>
-                        <option value="rural">RURAL</option>
-                        <option value="plss">PLSS</option>
-                    </select> -->
-                    <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
-                            <option value='{{ form.survey_type.value }}'>{{ form.survey_type.value|upper }}</option>
-                            <option value="prad">PRAD</option>
-                            <option value="rural">RURAL</option>
-                            <option value="plss">PLSS</option>
-                        </select>
-                    <p>
-                        <strong>County
-                            <span style="color: red;">*</span>
-                        </strong>
-                    </p>
-                    <input type="text" name="county" class="form-control" id="county" value='{{ form.county.value }}' required/>
-                    <div id="prad-select" style="display: none;">
-                        <p>
-                            <strong>Subdivision</strong>
-                        </p>
-                        <input type="text" name="subdivision" id="subdivision" class="form-control" value='{{ form.subdivision.value }}'/>
-                        <p>
-                            <strong>Unit</strong>
-                        </p>
-                        <input type="text" name="unit" id="unit" class="form-control" value='{{ form.unit.value }}'/>
-                        <p>
-                            <strong>Sub Block</strong>
-                        </p>
-                        <input type="text" name="subblock" id="subblock" class="form-control" value='{{ form.sub_block.value }}' />
-                        <p>
-                            <strong>Lot</strong>
-                        </p>
-                        <input type="text" name="lot" id="lot" class="form-control" value='{{ form.lot.value }}'/>
-                    </div>
-                    <div id="rural-select" style="display: none;">
-                        <p>
-                            <strong>Survey
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="survey" class="form-control" id="survey" value='{{ form.survey.value }}'/>
-                        <p>
-                            <strong>Block
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="block" class="form-control" id="block" value='{{ form.rural_block.value }}'/>
-                        <p>
-                            <strong>Section
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="rural_section" class="form-control" id="section" value='{{ form.rural_section.value }}'/>
-                    </div>
-                    <div id="plss-select" style="display: none;">
-                        <p>
-                            <strong>Meridian
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="meridian" class="form-control" id="meridian" value='{{ form.meridian.value }}'/>
-                        <p>
-                            <strong>Township Range
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="town_range" class="form-control" id="town-range" value='{{ form.t_r.value }}'/>
-                        <p>
-                            <strong>Section
-                                <span style="color: red;">*</span>
-                            </strong>
-                        </p>
-                        <input type="text" name="section" class="form-control" id="" value='{{ form.plss_section.value }}'/>
-                    </div>
-                </div>
+            <p>
+                <strong>Survey Type
+                    <span style="color:red;">*</span>
+                </strong>
+            </p>
+            <!-- <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
+                <option value='{{ form.survey_type.value }}'>{{ form.survey_type.value|upper }}</option>
+                <option value="prad">PRAD</option>
+                <option value="rural">RURAL</option>
+                <option value="plss">PLSS</option>
+            </select> -->
+            <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
+                <option value=""> - Select - </option>
+                {% for join_type in join_types %}
+                {% if join_type.join_type != '0' %}
+                <option value="{{join_type.join_type }}" 
+                    {% if form.survey_type.value == join_type.join_type%}
+                        selected 
+                    {% endif %}>{{ join_type.join_type|upper }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            <div class="countyblk">
+                <p>
+                    <strong>County
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+
+                <select name="county" id="selectcounty" class="form-control" required
+                oninput="selCounty(this)">
+                    <option value=""> - Select - </option>
+                    {% for county in counties %}
+                        <option value="{{county}}" 
+                        {% if form.county.value == county|upper %}
+                            selected 
+                        {% endif %}>{{ county }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- <select id="company-list">
+                {% for company in company_list %}
+                <option value="{{ company.id }}">
+                    {{ company.name }}
+                </option>
+                {% endfor %}
+            </select> -->
+
+
+            <!-- <input type="text" name="county" class="form-control" id="county" value='{{ form.county.value }}' required/> -->
+            <div id="prad-select" style="display: none;">
+                <p>
+                    <strong>Subdivision</strong>
+                </p>
+                <select name="subdivision" id="subdivision" class="form-control" oninput="selLevel3(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level1 %}
+                        <option value="{{value}}" 
+                        {% if form.subdivision.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Unit</strong>
+                </p>
+                <select name="unit" id="unit" class="form-control" oninput="selLevel4(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level2 %}
+                        <option value="{{value}}" 
+                        {% if form.unit.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Sub Block</strong>
+                </p>
+                <select name="subblock" id="subblock" class="form-control" oninput="selLevel5(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level3 %}
+                        <option value="{{value}}" 
+                        {% if form.sub_block.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Lot</strong>
+                </p>
+                <select name="lot" id="lot" class="form-control">
+                    <option value=""> - Select - </option>
+                    {% for value in level4 %}
+                        <option value="{{value}}" 
+                        {% if form.lot.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="rural-select" style="display: none;">
+                <p>
+                    <strong>Survey
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="survey" id="survey" class="form-control" required oninput="selLevel3(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level1 %}
+                        <option value="{{value}}" 
+                        {% if form.survey.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Block
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="block" id="block" class="form-control" required oninput="selLevel4(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level2 %}
+                        <option value="{{value}}" 
+                        {% if form.rural_block.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Section
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="rural_section" id="rural_section" class="form-control" required>
+                    <option value=""> - Select - </option>
+                    {% for value in level3 %}
+                        <option value="{{value}}" 
+                        {% if form.rural_section.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="plss-select" style="display: none;">
+                <p>
+                    <strong>Meridian
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="meridian" id="meridian" class="form-control" required oninput="selLevel3(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level1 %}
+                        <option value="{{value}}" 
+                        {% if form.meridian.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Township Range
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="town_range" id="town_range" class="form-control" required oninput="selLevel4(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level2 %}
+                        <option value="{{value}}" 
+                        {% if form.t_r.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    <strong>Section
+                        <span style="color: red;">*</span>
+                    </strong>
+                </p>
+                <select name="section" id="section" class="form-control" required>
+                    <option value=""> - Select - </option>
+                    {% for value in level3 %}
+                        <option value="{{value}}" 
+                        {% if form.plss_section.value == value|upper %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -233,7 +341,22 @@
     <button class="btn btn-ext">Save</button>
 
     <script>
-        $( document ).ready(function() {
+        function ajaxFunc(url, data, indicator){
+            $.ajax({
+                method: "get",
+                url: url,
+                data: data
+            }).done(function( counties ) {
+                body = '<option value=""> - Select - </option>'
+                for (i=0; i<counties.length; i++){
+                    body += '<option value="'+counties[i]+'">'+counties[i].toUpperCase()+'</option>'
+                    
+                }
+                $(indicator).html(body)
+            });
+        }
+
+        $(document).ready(function () {
             var form_type = "{{ form.survey_type.value }}";
             console.log(form_type)
             var rural = document.getElementById('rural-select');
@@ -243,7 +366,7 @@
                 prad.style.display = "none";
                 plss.style.display = "none";
                 rural.style.display = "block";
-            }  else if (form_type == "prad") {
+            } else if (form_type == "prad") {
                 //display prad-select
                 prad.style.display = "block";
                 plss.style.display = "none";
@@ -260,6 +383,33 @@
             }
         });
         function determineForm(e) {
+            var join_type = $("#selectsurveytype").val();
+
+            $.ajax({
+                method: "get",
+                url: "{% url 'ajax_load_counties' %}",
+                data: { join_type: join_type }
+            })
+            .done(function( counties ) {
+                body = '<option value=""> - Select - </option>'
+                for (i=0; i<counties.length; i++){
+                    body += '<option value="'+counties[i]+'">'+counties[i]+'</option>'
+                    
+                }
+                $("#selectcounty").html(body)
+            });
+
+            $("#subdivision").html('<option value=""> - Select - </option>')
+            $("#unit").html('<option value=""> - Select - </option>')
+            $("#subblock").html('<option value=""> - Select - </option>')
+            $("#lot").html('<option value=""> - Select - </option>')
+            $("#survey").html('<option value=""> - Select - </option>')
+            $("#block").html('<option value=""> - Select - </option>')
+            $("#rural_section").html('<option value=""> - Select - </option>')
+            $("#meridian").html('<option value=""> - Select - </option>')
+            $("#town_range").html('<option value=""> - Select - </option>')
+            $("#section").html('<option value=""> - Select - </option>')
+
             //3 values are: rural, prad, plss
             var rural = document.getElementById('rural-select');
             var prad = document.getElementById('prad-select');
@@ -284,6 +434,103 @@
                 plss.style.display = "none";
                 rural.style.display = "none";
             }
+        }
+
+        function selCounty(e){
+            var join_type = $("#selectsurveytype").val();
+            var county = $("#selectcounty").val();
+
+            $("#subdivision").html('<option value=""> - Select - </option>')
+            $("#unit").html('<option value=""> - Select - </option>')
+            $("#subblock").html('<option value=""> - Select - </option>')
+            $("#lot").html('<option value=""> - Select - </option>')
+            $("#survey").html('<option value=""> - Select - </option>')
+            $("#block").html('<option value=""> - Select - </option>')
+            $("#rural_section").html('<option value=""> - Select - </option>')
+            $("#meridian").html('<option value=""> - Select - </option>')
+            $("#town_range").html('<option value=""> - Select - </option>')
+            $("#section").html('<option value=""> - Select - </option>')
+
+            if (join_type == "rural") {
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"survey" }, "#survey")
+            } else if (join_type == "prad") {
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"subdivision" }, "#subdivision")
+            } else if (join_type == "plss") {
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"meridian" }, "#meridian")
+            } else {
+            }
+        }
+
+        function selLevel3(obj){
+            var join_type = $("#selectsurveytype").val();
+            var county = $("#selectcounty").val();
+            type = $(obj).attr("id")
+
+            $("#unit").html('<option value=""> - Select - </option>')
+            $("#subblock").html('<option value=""> - Select - </option>')
+            $("#lot").html('<option value=""> - Select - </option>')
+            $("#block").html('<option value=""> - Select - </option>')
+            $("#rural_section").html('<option value=""> - Select - </option>')
+            $("#town_range").html('<option value=""> - Select - </option>')
+            $("#section").html('<option value=""> - Select - </option>')
+
+            tp = ""
+            if (type == "subdivision"){
+                tp = "unit"
+            } else if (type == "survey"){
+                tp = "block"
+            } else if (type == "meridian"){
+                tp = "town_range"
+            }
+
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp)
+        }
+
+        function selLevel4(obj){
+            var join_type = $("#selectsurveytype").val();
+            var county = $("#selectcounty").val();
+            type = $(obj).attr("id")
+
+            $("#subblock").html('<option value=""> - Select - </option>')
+            $("#lot").html('<option value=""> - Select - </option>')
+            $("#rural_section").html('<option value=""> - Select - </option>')
+            $("#section").html('<option value=""> - Select - </option>')
+
+            tp = ""
+            level1 = ""
+            if (type == "unit"){
+                level1 = $("#subdivision").val()
+                tp = "subblock"
+            } else if (type == "block"){
+                level1 = $("#survey").val()
+                tp = "rural_section"
+            } else if (type == "town_range"){
+                level1 = $("#meridian").val()
+                tp = "section"
+            }
+
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp)
+        }
+
+        function selLevel5(obj){
+            var join_type = $("#selectsurveytype").val();
+            var county = $("#selectcounty").val();
+            type = $(obj).attr("id")
+
+            $("#lot").html('<option value=""> - Select - </option>')
+
+            level1 = $("#subdivision").val()
+            level2 = $("#unit").val()
+            tp = "lot"
+
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: level1, level2: level2, 
+                        level3: $(obj).val(), type:tp }, "#" + tp)
         }
     </script>
 </form>

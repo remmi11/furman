@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import *
 #from django.utils import simplejson
+import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
@@ -38,17 +39,83 @@ def post_new(request):
             #return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
-    return render(request, 'blog/post_new.html', {'form': form})
+        join_type = MasterGeom.objects.all().distinct('join_type')
+    return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
 
 def loadCounties(request):
     #survey_types = MasterGeom.objects.all().distinct('join_type')
     # county_id = request.GET.get('surveytype')
     # print (county_id)
-    counties = MasterGeom.objects.all().distinct('county')
+    result_set = []
+    counties = MasterGeom.objects.filter(join_type=request.GET.get('join_type')).distinct('county')
+    
+    for county in counties:
+        if county == None:
+            continue
+        result_set.append(county.county)
     #counties = MasterGeom.objects.filter(join_type=county_id).order_by('county_code')
-    return render(request, 'blog/post_new.html', {'counties': counties })
+    return HttpResponse(json.dumps(result_set), content_type='application/json')
 
 @login_required
+def getdetails(request):
+    result_set = []
+    tmp_res = []
+    tokens = []
+
+    join_type = request.GET.get("join_type")
+    county = request.GET.get("county")
+    type_val = request.GET.get("type")
+
+    res = MasterGeom.objects.filter(join_type=join_type, county=county).distinct('join_field')
+    for element in res:
+        if element == None or element.join_field == None:
+            continue
+        tokens.append([tmp.strip() for tmp in element.join_field.split("\\") \
+            if tmp.strip()!="" and county.lower() != tmp.strip().lower()])
+
+    for token in tokens:
+        if type_val in ["survey", "subdivision", "meridian"]:
+            try:
+                if token[0] not in tmp_res:
+                    tmp_res.append(token[0].strip())
+            except:
+                pass
+        elif type_val in ["unit", "block", "town_range"]:
+            level1 = request.GET.get("level1")
+            try:
+                if token[1] not in tmp_res and level1.lower() == token[0].strip().lower():
+                    tmp_res.append(token[1].strip())
+            except:
+                pass
+        elif type_val in ["subblock", "rural_section", "section"]:
+            level1 = request.GET.get("level1")
+            level2 = request.GET.get("level2")
+            try:
+                if token[2] not in tmp_res and level1.lower() == token[0].strip().lower() and \
+                        level2.lower() == token[1].strip().lower():
+                    tmp_res.append(token[2].strip())
+            except:
+                pass
+        elif type_val == "lot":
+            level1 = request.GET.get("level1")
+            level2 = request.GET.get("level2")
+            level3 = request.GET.get("level3")
+            try:
+                if level2.lower() == token[1].strip().lower() and \
+                        token[3] not in tmp_res and level1.lower() == token[0].strip().lower() and \
+                        level3.lower() == token[2].strip().lower():
+                    tmp_res.append(token[3].strip())
+            except:
+                pass
+
+    for tp in tmp_res:
+        if tp == None:
+            continue
+        result_set.append(tp)
+
+    return HttpResponse(json.dumps(result_set), content_type='application/json')
+
+'''@login_required
 def getdetails(request):
     
     #country_name = request.POST['country_name']
@@ -67,8 +134,7 @@ def getdetails(request):
         print ("city name", city.county)
         result_set.append({'name': city.county})
 
-    return HttpResponse(simplejson.dumps(result_set), mimetype='application/json', content_type='application/json')
-
+    return HttpResponse(simplejson.dumps(result_set), mimetype='application/json', content_type='application/json')'''
 
 @login_required
 def post_edit(request, pk):
@@ -110,7 +176,59 @@ def post_edit(request, pk):
             # return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+        join_types = MasterGeom.objects.all().distinct('join_type')
+        counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
+        counties = [tp.county.strip() for tp in counties if tp.county!=None]
+
+        res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county.title()).distinct('join_field')
+        level = [[], [], [], []]
+        tokens = []
+
+        for element in res:
+            if element == None or element.join_field == None:
+                continue
+            tokens.append([tmp.strip() for tmp in element.join_field.split("\\") \
+                if tmp.strip()!="" and post.county.lower() != tmp.strip().lower()])
+
+
+        if post.survey_type == "prad":
+            keys = [post.subdivision, post.unit, post.sub_block, post.lot]
+        elif post.survey_type == "plss":
+            keys = [post.meridian, post.t_r, post.plss_section, ""]
+        elif post.survey_type == "rural":
+            keys = [post.survey, post.rural_block, post.rural_section, ""]
+
+        for token in tokens:
+            try:
+                if token[0] not in level[0]:
+                    level[0].append(token[0])
+            except:
+                pass
+            try:
+                if token[0].lower() == keys[0].lower() and token[1] not in level[1]:
+                    level[1].append(token[1])
+            except:
+                pass
+            try:
+                if token[0].lower() == keys[0].lower() and \
+                    token[1].lower() == keys[1].lower() and token[2] not in level[2]:
+                    level[2].append(token[2])
+            except:
+                pass
+            try:
+                if token[0].lower() == keys[0].lower() and \
+                    token[1].lower() == keys[1].lower() and \
+                    token[2].lower() == keys[2].lower() and token[3] not in level[3]:
+                    level[3].append(token[3])
+            except:
+                pass
+
+        print (level)
+        print (keys)
+
+    return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
+        'counties': counties, "level1": level[0], "level2": level[1], \
+        "level3": level[2], "level4": level[3]})
 
 # def post_edit(request, pk):
 #     posts = Form.objects.all()
@@ -172,11 +290,8 @@ def user_edit(request, pk):
     user = get_object_or_404(Users, pk=pk)
     if request.method == "POST":
         form = UserEditForm(request.POST, instance=user)
-        print (form.errors)
         if form.is_valid():
             user = form.save(commit=False)
-
-            print (request.POST.get('new_password'))
             if request.POST.get('new_password') != "":
                 user.set_password(request.POST.get('new_password'))
             user.save()
