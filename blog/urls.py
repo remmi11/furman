@@ -23,6 +23,7 @@ urlpatterns = [
 
     url(r'^ajax_load_counties/$', views.loadCounties, name='ajax_load_counties'),
     url(r'^ajax_load_data/$', views.getdetails, name='ajax_load_data'),
+    url(r'^get_pdf/(?P<pk>\d+)/$', views.getpdf, name='get_pdf'),
     
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),

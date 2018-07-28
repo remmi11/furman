@@ -10,6 +10,18 @@ import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
+import time
+from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+import os
+from textwrap import wrap
+
 
 # def post_list(request):
 #     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -138,6 +150,8 @@ def getdetails(request):
 
 @login_required
 def post_edit(request, pk):
+
+    print ("pppp")
     posts = Form500.objects.all()
     post = get_object_or_404(Form500, pk=pk)
     if request.method == "POST":
@@ -176,7 +190,7 @@ def post_edit(request, pk):
             # return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-        join_types = MasterGeom.objects.all().distinct('join_type')
+        join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
         counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
         counties = [tp.county.strip() for tp in counties if tp.county!=None]
 
@@ -223,12 +237,12 @@ def post_edit(request, pk):
             except:
                 pass
 
-        print (level)
-        print (keys)
+        # print (level)
+        # print (keys)
 
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \
-        "level3": level[2], "level4": level[3]})
+        "level3": level[2], "level4": level[3], 'pk': post.pk})
 
 # def post_edit(request, pk):
 #     posts = Form.objects.all()
@@ -310,3 +324,197 @@ def user_remove(request, pk):
         user.delete()
 
     return redirect('/user/')
+
+def drawText(canvasObj, text, length, x, y, line_space=22):
+    if text == "":
+        return 1
+    wraped_text = wrap(text, length)
+    for index in range(0, len(wraped_text)):
+        canvasObj.drawString(x, y-(index+1)*line_space, wraped_text[index])
+
+    return len(wraped_text)
+
+def clean(data):
+    return "" if data == None else data
+def cleanDate(data):
+    try:
+        return data.strftime('%m/%d/%Y')
+    except:
+        return ""
+
+@login_required
+def getpdf(request, pk):
+    post = get_object_or_404(Form500, pk=pk)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="%sWO.pdf"' % pk
+
+    start_x = 50
+    start_y = 680
+    line_space = 22
+    bgColor = colors.Color(red=(211.0/255),green=(211.0/255),blue=(211.0/255))
+
+    canvas1 = canvas.Canvas(response, pagesize=letter)
+    canvas1.setLineWidth(.3)
+
+    canvas1.setFont('Helvetica-Bold', 15)
+    canvas1.drawString(start_x+140,start_y+40, clean(post.title))
+
+    canvas1.setFont('Helvetica', 12)
+     
+    canvas1.drawString(start_x+50,start_y,'Date Created %s' % cleanDate(post.date_entered))
+
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,start_y-85,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, start_y-80,'Client Info')
+
+    canvas1.drawString(start_x, start_y-80-line_space,'Client')
+    lines = drawText(canvas1, clean(post.client), 17, start_x+130, start_y-80)
+
+    offsetY = start_y-180-lines*line_space
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Client Info')
+
+    canvas1.drawString(start_x, offsetY-line_space,'Job Contact')
+    lines = drawText(canvas1, clean(post.contact), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Job Phone')
+    lines = drawText(canvas1, clean(post.phone), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+
+    canvas1.drawString(start_x, offsetY-line_space,'Job City')
+    lines = drawText(canvas1, clean(post.city), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'JobSt:')
+    linesst = drawText(canvas1, clean(post.state), 13, start_x+40, offsetY)
+    canvas1.drawString(start_x+130, offsetY-line_space,'JobZip:')
+    lineszip = drawText(canvas1, clean(post.zipcode), 13, start_x+180, offsetY)
+    lines = linesst if linesst > lineszip else lineszip
+
+    offsetY = offsetY - 80 - lines*line_space
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Notes')
+
+    lines = drawText(canvas1, clean(post.notes), 40, start_x, offsetY)
+    offsetY = offsetY-lines*line_space-80
+
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Certify To:')
+
+    canvas1.drawString(start_x, offsetY-line_space,'Certify To')
+    lines = drawText(canvas1, clean(post.certify_to), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Lender')
+    lines = drawText(canvas1, clean(post.lender), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Gf#')
+    lines = drawText(canvas1, clean(post.gf_no), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    start_x = 310
+    canvas1.setFont('Helvetica-Bold', 12)
+    canvas1.drawString(start_x+60,start_y,'Survey Work Order')
+    canvas1.line(start_x+60,start_y-2,start_x+165,start_y-2)
+
+    offsetY = start_y - 20
+    canvas1.setFont('Helvetica', 12)
+    canvas1.drawString(start_x+60, offsetY-18,'Project #')
+    lines = drawText(canvas1, clean(post.project_no), 17, start_x+150, offsetY, 20)
+    offsetY = offsetY-lines*18
+
+    canvas1.drawString(start_x+60, offsetY-18,'Date Needed')
+    lines = drawText(canvas1, cleanDate(post.date_needed), 17, start_x+150, offsetY, 20)
+    offsetY = offsetY-lines*18
+
+    canvas1.drawString(start_x+60, offsetY-18,'Requested By')
+    lines = drawText(canvas1, clean(post.surveyor), 17, start_x+150, offsetY, 20)
+    offsetY = offsetY-lines*18
+
+    offsetY = offsetY - 65
+    start_x = start_x + 12
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Job Location')
+
+    canvas1.drawString(start_x, offsetY-line_space,'Address')
+    lines = drawText(canvas1, clean(post.address_street), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'City')
+    lines = drawText(canvas1, clean(post.city), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'State / Province / Region')
+    lines = drawText(canvas1, clean(post.state), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Postal / Zip Code')
+    lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    offsetY = offsetY - 65
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Legal')
+
+    canvas1.drawString(start_x, offsetY-line_space,'County')
+    lines = drawText(canvas1, clean(post.county), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    if post.survey_type == "prad":
+        canvas1.drawString(start_x, offsetY-line_space,'Subdivision')
+        lines = drawText(canvas1, clean(post.subdivision), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Unit')
+        lines = drawText(canvas1, clean(post.unit), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Block')
+        lines = drawText(canvas1, clean(post.sub_block), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Lot')
+        lines = drawText(canvas1, clean(post.lot), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+    elif post.survey_type == "plss":
+        canvas1.drawString(start_x, offsetY-line_space,'Meridian')
+        lines = drawText(canvas1, clean(post.meridian), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Twnshp/Range')
+        lines = drawText(canvas1,clean(post.t_r), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Section')
+        lines = drawText(canvas1, clean(post.plss_section), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+    elif post.survey_type == "rural":
+        canvas1.drawString(start_x, offsetY-line_space,'Survey')
+        lines = drawText(canvas1, clean(post.survey), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Block')
+        lines = drawText(canvas1, clean(post.rural_block), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+        canvas1.drawString(start_x, offsetY-line_space,'Section')
+        lines = drawText(canvas1, clean(post.rural_section), 17, start_x+130, offsetY)
+        offsetY = offsetY-lines*line_space
+
+    canvas1.save()
+    return response

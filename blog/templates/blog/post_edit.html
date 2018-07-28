@@ -150,11 +150,11 @@
             <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
                 <option value=""> - Select - </option>
                 {% for join_type in join_types %}
-                {% if join_type.join_type != '0' %}
-                <option value="{{join_type.join_type }}" 
-                    {% if form.survey_type.value == join_type.join_type%}
+                {% if join_type != '0' %}
+                <option value="{{join_type }}" 
+                    {% if form.survey_type.value == join_type%}
                         selected 
-                    {% endif %}>{{ join_type.join_type|upper }}</option>
+                    {% endif %}>{{ join_type|upper }}</option>
                 {% endif %}
                 {% endfor %}
             </select>
@@ -339,6 +339,7 @@
         </div>
     </div>
     <button class="btn btn-ext">Save</button>
+    <a href="{%url 'get_pdf' pk=pk %}" class="btn btn-warning" style="margin: 25px 0px 0px 200px;;">Print Work Order</a>
 
     <script>
         function ajaxFunc(url, data, indicator){
