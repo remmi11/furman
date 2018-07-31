@@ -22,8 +22,8 @@ from reportlab.lib import colors
 import os
 from textwrap import wrap
 
-from django.core.cache import caches
-from mysite.settings import M_CLIENT
+# from django.core.cache import caches
+# from mysite.settings import M_CLIENT
 
 # def post_list(request):
 #     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -223,16 +223,16 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
         join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
         
-        if M_CLIENT.get("counties-%s" % post.survey_type):
+        '''if M_CLIENT.get("counties-%s" % post.survey_type):
             print ("pp" * 20)
             data = json.loads(M_CLIENT.get("counties-%s" % post.survey_type).decode("utf8"))
             counties = data
 
-        else:
-            counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
-            counties = [tp.county.strip() for tp in counties if tp.county!=None]
+        else:'''
+        counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
+        counties = [tp.county.strip() for tp in counties if tp.county!=None]
 
-            M_CLIENT.set("counties-%s" % post.survey_type, json.dumps(counties))
+        # M_CLIENT.set("counties-%s" % post.survey_type, json.dumps(counties))
 
         res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county.title()).distinct('join_field')
         

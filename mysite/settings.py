@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from pymemcache.client.base import Client
+# from pymemcache.client.base import Client
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -145,4 +145,4 @@ LOGOUT_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 3600
 
-M_CLIENT = Client(('127.0.0.1', 11211))
+# M_CLIENT = Client(('127.0.0.1', 11211))
