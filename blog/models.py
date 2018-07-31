@@ -267,7 +267,7 @@ class MasterGeom(models.Model):
     block_numb = models.CharField(max_length=10, blank=True, null=True)
     subdivisio = models.CharField(max_length=50, blank=True, null=True)
     unit_numbe = models.CharField(max_length=10, blank=True, null=True)
-    address = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
     parcel_cou = models.CharField(max_length=10, blank=True, null=True)
     parcel_typ = models.CharField(max_length=10, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
@@ -278,8 +278,8 @@ class MasterGeom(models.Model):
     globalid = models.CharField(max_length=38, blank=True, null=True)
     edit_date = models.DateField(blank=True, null=True)
     edit_by = models.CharField(max_length=50, blank=True, null=True)
-    shape_leng = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
-    shape_area = models.DecimalField(max_digits=1000, decimal_places=999, blank=True, null=True)
+    shape_leng = models.CharField(max_length=255, blank=True, null=True)
+    shape_area = models.CharField(max_length=255, blank=True, null=True)
     county_code = models.TextField(blank=True, null=True)
 
     class Meta:

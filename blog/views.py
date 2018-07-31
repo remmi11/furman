@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from .models import Form, Form500, MasterGeom, County
+from .models import Form, FormAll, MasterGeom, County
 from .forms import PostForm, newForm, UserForm, UserEditForm
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -22,6 +22,8 @@ from reportlab.lib import colors
 import os
 from textwrap import wrap
 
+from django.core.cache import caches
+from mysite.settings import M_CLIENT
 
 # def post_list(request):
 #     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -30,13 +32,41 @@ from textwrap import wrap
 @login_required
 def post_list(request):
     # filter(published_date__lte=timezone.now()).order_by('published_date')
-    posts = Form500.objects.all()
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    # posts = FormAll.objects.all()[:100]
+    return render(request, 'blog/post_list.html', {})
 
 @login_required
 def post_detail(request, pk):
     post = get_object_or_404(Form, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
+
+@login_required
+def ajaxPagination(request):
+    start = int(request.GET.get("start"))
+    length = int(request.GET.get("length"))
+    draw = int(request.GET.get("draw"))
+    search_key = request.GET.get('search[value]')
+    if search_key == None or search_key == "":
+        count = FormAll.objects.all().count()
+        posts = FormAll.objects.all().order_by('pk')[start:start+length]
+    else:
+        count = FormAll.objects.filter(project_no__icontains=search_key).count()
+        posts = FormAll.objects.filter(project_no__icontains=search_key).order_by('pk')[start:start+length]
+
+    data = []
+    for post in posts:
+        data.append([post.pk, '<a href="/post/'+str(post.pk)+'/">'+str(post.project_no)+'</a>', \
+            post.client, post.survey_type, post.county, \
+            '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
+                    <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
+                </a>'])
+    posts = {
+            "draw": draw,
+            "recordsTotal": count,
+            "recordsFiltered": count,
+            "data": data
+        }
+    return HttpResponse(json.dumps(posts), content_type='application/json')
 
 @login_required
 def post_new(request):
@@ -150,10 +180,8 @@ def getdetails(request):
 
 @login_required
 def post_edit(request, pk):
-
-    print ("pppp")
-    posts = Form500.objects.all()
-    post = get_object_or_404(Form500, pk=pk)
+    posts = FormAll.objects.all()
+    post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -161,7 +189,7 @@ def post_edit(request, pk):
             # post.author = request.user
             # post.published_date = timezone.now()
             post.date_entered = timezone.now()
-            post.date_needed = request.POST.get('date-needed')
+            post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
             post.client = request.POST.get('client')
             post.project_no = request.POST.get('projectno')
             post.map_no = request.POST.get('mapno')
@@ -172,17 +200,20 @@ def post_edit(request, pk):
             post.lender = request.POST.get('lender')
             post.gf_no = request.POST.get('gf')
             post.survey_type = request.POST.get('surveytype')
-            post.county = request.POST.get('county')
-            post.subdivision = request.POST.get('subdivision')
-            post.unit = request.POST.get('unit')
-            post.sub_block = request.POST.get('subblock')
-            post.lot = request.POST.get('lot')
-            post.survey = request.POST.get('survey')
-            post.rural_block = request.POST.get('block')
-            post.rural_section = request.POST.get('rural_section')
-            post.meridian = request.POST.get('meridian')
-            post.t_r = request.POST.get('town_range')
-            post.plss_section = request.POST.get('section')
+            if request.POST.get('surveytype') == "prad":
+                post.county = request.POST.get('county')
+                post.subdivision = request.POST.get('subdivision')
+                post.unit = request.POST.get('unit')
+                post.sub_block = request.POST.get('subblock')
+                post.lot = request.POST.get('lot')
+            elif request.POST.get('surveytype') == "rural":
+                post.survey = request.POST.get('survey')
+                post.rural_block = request.POST.get('block')
+                post.rural_section = request.POST.get('rural_section')
+            else:
+                post.meridian = request.POST.get('meridian')
+                post.t_r = request.POST.get('town_range')
+                post.plss_section = request.POST.get('section')
             post.folder_path = request.POST.get('fpath')
 
             form.save()
@@ -191,10 +222,20 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
         join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
-        counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
-        counties = [tp.county.strip() for tp in counties if tp.county!=None]
+        
+        if M_CLIENT.get("counties-%s" % post.survey_type):
+            print ("pp" * 20)
+            data = json.loads(M_CLIENT.get("counties-%s" % post.survey_type).decode("utf8"))
+            counties = data
+
+        else:
+            counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
+            counties = [tp.county.strip() for tp in counties if tp.county!=None]
+
+            M_CLIENT.set("counties-%s" % post.survey_type, json.dumps(counties))
 
         res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county.title()).distinct('join_field')
+        
         level = [[], [], [], []]
         tokens = []
 
@@ -344,7 +385,7 @@ def cleanDate(data):
 
 @login_required
 def getpdf(request, pk):
-    post = get_object_or_404(Form500, pk=pk)
+    post = get_object_or_404(FormAll, pk=pk)
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="%sWO.pdf"' % pk

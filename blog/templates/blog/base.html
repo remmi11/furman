@@ -70,7 +70,11 @@
 
     <script>
         $(document).ready(function () {
-            $('#escalation').DataTable();
+            $('#escalation').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{% url 'ajax_pagination' %}"
+            });
 			// 	 $('select#selectsurveytype').change(function () {
     		// 		 var optionSelected = $(this).find("option:selected");
     		// 		 var valueSelected  = optionSelected.val();

@@ -13,23 +13,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for post in posts %}
-        <tr>
-            <td>{{post.pk}}</td>
-            <td>
-                <a href="{% url 'post_detail' pk=post.pk %}">{{ post.project_no }}</a>
-                <!-- {{post.title}} -->
-            </td>
-            <td>{{post.client}}</td>
-            <td>{{post.survey_type }}</td>
-            <td>{{post.county }}</td>
-            <td>
-                <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">
-                    <span><i class="fa fa-pencil" style="font-size:24px"></i></span>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
+        
     </tbody>
     <tfoot>
         <tr>
