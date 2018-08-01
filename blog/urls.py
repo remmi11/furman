@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^get_pdf/(?P<pk>\d+)/$', views.getpdf, name='get_pdf'),
 
     url(r'^ajax_pagination/$', views.ajaxPagination, name='ajax_pagination'),
+    url(r'^ajax_client_data/$', views.ajaxClientData, name='ajax_client_data'),
     
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),

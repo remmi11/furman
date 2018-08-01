@@ -36,7 +36,7 @@
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" class="form-control" name="client" value= '{{ form.client.value|default_if_none:"" }}' required/>
+            <input type="text" class="form-control autocomplete-client" name="client" value= '{{ form.client.value|default_if_none:"" }}' required/>
 
             <p class="section-header">Job Info:</p>
             <p>
@@ -394,6 +394,15 @@
                 plss.removeAttr("required");
                 rural.removeAttr("required");
             }
+
+            $.ajax({
+                method: "get",
+                url: '{% url "ajax_client_data" %}'
+            }).done(function( clients ) {
+                $( ".autocomplete-client" ).autocomplete({
+                   source: clients
+                });
+            });
         });
         function determineForm(e) {
             var join_type = $("#selectsurveytype").val();

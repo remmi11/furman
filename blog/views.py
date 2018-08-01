@@ -69,6 +69,13 @@ def ajaxPagination(request):
     return HttpResponse(json.dumps(posts), content_type='application/json')
 
 @login_required
+def ajaxClientData(request):
+    clients = []
+    temp = FormAll.objects.all().distinct('client')
+    clients = [tp.client for tp in temp if tp.client != None]
+    return HttpResponse(json.dumps(clients), content_type='application/json')
+
+@login_required
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -280,6 +287,7 @@ def post_edit(request, pk):
 
         # print (level)
         # print (keys)
+
 
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \
