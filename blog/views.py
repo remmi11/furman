@@ -22,6 +22,8 @@ from reportlab.lib import colors
 import os
 from textwrap import wrap
 
+from django.db.models import Q
+
 # from django.core.cache import caches
 # from mysite.settings import M_CLIENT
 
@@ -50,16 +52,29 @@ def ajaxPagination(request):
         count = FormAll.objects.all().count()
         posts = FormAll.objects.all().order_by('pk')[start:start+length]
     else:
-        count = FormAll.objects.filter(project_no__icontains=search_key).count()
-        posts = FormAll.objects.filter(project_no__icontains=search_key).order_by('pk')[start:start+length]
+        condition = Q(pk__icontains=search_key) | Q(project_no__icontains=search_key) | \
+            Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | \
+            Q(county__icontains=search_key) | Q(address_street__icontains=search_key) | \
+            Q(survey__icontains=search_key) | Q(rural_block__icontains=search_key) | \
+            Q(rural_section__icontains=search_key) | Q(subdivision__icontains=search_key) | \
+            Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
+            Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
+            Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key)
+        count = FormAll.objects.filter(condition).count()
+        posts = FormAll.objects.filter(condition).order_by('pk')[start:start+length]
 
     data = []
     for post in posts:
-        data.append([post.pk, '<a href="/post/'+str(post.pk)+'/">'+str(post.project_no)+'</a>', \
-            post.client, post.survey_type, post.county, \
+        data.append([post.pk, post.project_no, post.survey_type, \
+            post.client, post.county, post.address_street, post.survey, \
+            post.rural_block, post.rural_section, post.subdivision, \
+            post.unit, post.sub_block, post.lot, post.meridian, post.t_r, \
+            post.plss_section, \
             '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
                     <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
-                </a>'])
+                </a> <a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
+                <span><i class="fa fa-eye" style="font-size:24px"></i></span> \
+            </a>'])
     posts = {
             "draw": draw,
             "recordsTotal": count,
