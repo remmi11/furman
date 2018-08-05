@@ -1,104 +1,124 @@
-bs
-<div class="alert alert-danger">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Title!</strong> Alert body ...
-</div>
+{% load staticfiles %}
+
+<html>
+
+<head>
+    <title>Furman Form</title>
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"> -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.js"></script>-->
 
 
-<div class="col-md-6">
-    <div class="container">
-        <p class="section-header">Job Location:</p>
-        <p>
-            <strong>Address:</strong>
-        </p>
-        <input type="text" name="address" class="form-control" placeholder="1234 Main St." />
-        <div class="form-inline">
-            <input type="text" name="city" class="form-control col-md-8" placeholder="City" />
-            <input type="text" name="state" style="float: right;" class="form-control col-md-4" placeholder="State/Province" />
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}"> -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+
+    <!-- https://code.jquery.com/jquery-3.3.1.js
+    https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js
+    https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js -->
+</head>
+
+<body>
+    <!-- <div class="navbar navbar-dark bg-dark" style="display: flow-root;">
+        <a href="{% url 'post_list' %}" style="margin-left: 20px;">Furman Records</a>
+
+        {% if user.is_authenticated %} {% if request.user.is_superuser %}
+        <a href="{% url 'user_list' %}">Users</a>
+        {% endif %}
+
+        <div class="pull-right">
+            <a href="
+            {% if 'post' in request.path %}
+                {% url 'post_new' %}
+            {% elif 'user' in request.path and request.user.is_superuser %}
+                {% url 'user_new' %}
+            {% endif %}" class="top-menu">
+                <span>
+                    <i class="fa fa-plus-circle" style="font-size:36px"></i>
+                </span>
+            </a>
         </div>
-        <div class="form-inline">
-            <input type="text" name="zip" class="form-control col-md-8" placeholder="Postal/Zip Code" />
-            <input type="text" name="country" id="country" style="float: right;" class="form-control col-md-4" placeholder="Country"
-            />
+        <div class="pull-right" style="margin-right: 20px; color: white; font-size: 20px;">
+            Hi {{ user.username }}!
+            <a href="/logout/"> Logout </a>
         </div>
+        {% else %} {% endif %}
+    </div> -->
+
+    <nav class="navbar navbar-dark bg-dark">
+        {% if user.is_authenticated %}
+        <!-- Brand -->
+        <a class="navbar-brand" style="color: white; font-weight: bold">Furman Records</a>
+        {% if request.user.is_superuser %}
+        <!-- Links -->
+        <ul class="nav">
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post_list' %}">Home</a>
+                      </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'user_list' %}">Users</a>
+                </li>
+              </ul>
+        {% endif %}
+        <div class="pull-right" style="margin-right: 20px; color: white; font-size: 20px;">
+            Hi {{ user.username }}!
+            <a href="/logout/"> Logout </a>
+        </div>
+        {% else %} {% endif %}
+    </nav>
+
+    <div class="main container">
+        {% block content %} {% endblock %}
     </div>
-    <div class="container">
 
-        <p class="section-header">Legal:</p>
-        <p>
-            <strong>Survey Type
-                <span style="color:red;">*</span>
-            </strong>
-        </p>
-        <select name="surveytype" class="form-control" oninput="determineForm(this)" required>
-            <option value="default">- Select -</option>
-            <option value="prad">PRAD</option>
-            <option value="rural">RURAL</option>
-            <option value="plss">PLSS</option>
-        </select>
-        <p>
-            <strong>County
-                <span style="color: red;">*</span>
-            </strong>
-        </p>
-        <input type="text" name="county" class="form-control" id="county" required/>
-        <div id="prad-select" style="display: none;">
-            <p>
-                <strong>Subdivision</strong>
-            </p>
-            <input type="text" name="subdivision" class="form-control" />
-            <p>
-                <strong>Unit</strong>
-            </p>
-            <input type="text" name="unit" class="form-control" />
-            <p>
-                <strong>Sub Block</strong>
-            </p>
-            <input type="text" name="subblock" class="form-control" />
-            <p>
-                <strong>Lot</strong>
-            </p>
-            <input type="text" name="lot" class="form-control" />
-        </div>
-        <div id="rural-select" style="display: none;">
-            <p>
-                <strong>Survey
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="survey" class="form-control" id="survey" />
-            <p>
-                <strong>Block
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="block" class="form-control" id="block" />
-            <p>
-                <strong>Section
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="section" class="form-control" id="section" />
-        </div>
-        <div id="plss-select" style="display: none;">
-            <p>
-                <strong>Meridian
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="meridian" class="form-control" id="meridian" />
-            <p>
-                <strong>Township Range
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="town_range" class="form-control" id="town-range" />
-            <p>
-                <strong>Section
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="section" class="form-control" id="" />
-        </div>
-    </div>
-</div>
+
+    <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#escalation').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{% url 'ajax_pagination' %}",
+                "scrollX": true
+            });
+            $('#usertable').DataTable();
+            // 	 $('select#selectsurveytype').change(function () {
+            // 		 var optionSelected = $(this).find("option:selected");
+            // 		 var valueSelected  = optionSelected.val();
+            // 		 var country_name   = optionSelected.text();
+            // 		 data = {'surveytype' : country_name };
+            //           $.ajax('/getdetails',data,function(result){
+            // 			 	console.log(result);
+            // 			 	$("#selectcounty option").remove();
+            // 			 	for (var i = result.length - 1; i >= 0; i--) {
+            // 			 		$("#selectcounty").append('<option>'+ result[i].county +'</option>');
+            // 			 	};
+            // 			 });
+            // 	 });
+        });
+    </script>
+</body>
+
+</html>
