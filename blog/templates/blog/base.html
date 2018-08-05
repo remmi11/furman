@@ -89,12 +89,9 @@
             });
             $('#usertable').DataTable();
 
-            
-
-            // $('li.nav-item').click(function() {
-            //     //$(this).removeClass('active');
-            //     $('li.nav-item').addClass('active').siblings().removeClass('active');
-            // });
+            $('li.nav-item').click(function() {
+                $(this).addClass('active').siblings().removeClass('active');
+            });
             // 	 $('select#selectsurveytype').change(function () {
             // 		 var optionSelected = $(this).find("option:selected");
             // 		 var valueSelected  = optionSelected.val();

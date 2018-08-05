@@ -42,13 +42,12 @@ list-style-type:none !important;
 }
 
 /* Style the active class, and buttons on mouse-over */
-/* .nav li:hover {
+.nav li:hover {
     background-color: #666;
     color: white;
-} */
+}
 
-/* #top-nav > ul > li.nav-item.active {
+#top-nav > ul > li.nav-item.active {
     background-color: #666;
     color: white;
-
-} */
+}
