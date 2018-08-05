@@ -9,11 +9,6 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-import dj-database-url # add this to the top of your file
-db_from_env = dj_database_url.config()
-DATABASES[‘default’].update(db_from_env)
-
-
 import os
 # from pymemcache.client.base import Client
 
