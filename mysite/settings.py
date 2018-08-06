@@ -25,7 +25,8 @@ SECRET_KEY = '4H1EFLJMSAy6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'desolate-wave-60115.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 
+        'desolate-wave-60115.herokuapp.com', 'furman.herokuapp.com']
 
 SITE_ID = 1
 
@@ -144,4 +145,4 @@ LOGOUT_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 3600
 
-# M_CLIENT = Client(('127.0.0.1', 11211))
+# M_CLIENT = Client(('127.0.0.1', 11211))   
