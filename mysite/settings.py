@@ -26,7 +26,7 @@ SECRET_KEY = '4H1EFLJMSAy6'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 
-        'desolate-wave-60115.herokuapp.com', 'furman.herokuapp.com']
+        'desolate-wave-60115.herokuapp.com', 'furman.herokuapp.com', 'furmantest.herokuapp.com']
 
 SITE_ID = 1
 
