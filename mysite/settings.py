@@ -25,8 +25,13 @@ SECRET_KEY = '4H1EFLJMSAy6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'furman.herokuapp.com', 'furmantest.herokuapp.com']
+=======
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 
+        'desolate-wave-60115.herokuapp.com', 'furman.herokuapp.com']
+>>>>>>> 32911665ee1582718e94f16aa6f52542b6f7d1ee
 
 SITE_ID = 1
 
