@@ -87,12 +87,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'new',
-        #'USER': 'furman',
-        #'PASSWORD': 'gdipass1',
-        #'HOST': '13.82.41.95',
-        'USER': 'postgres',
-        'PASSWORD':'18iaPR3EBwgY',
-        'HOST':'localhost',
+        'USER': 'furman',
+        'PASSWORD': 'gdipass1',
+        'HOST': '13.82.41.95',
+        #'USER': 'postgres',
+        #'PASSWORD':'18iaPR3EBwgY',
+        #'HOST':'localhost',
         'PORT': '5432',
     }
 }
