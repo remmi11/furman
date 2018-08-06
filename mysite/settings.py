@@ -147,4 +147,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 3600
 
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'blog/static'),
+)
+
 # M_CLIENT = Client(('127.0.0.1', 11211))   
