@@ -411,7 +411,7 @@ def getpdf(request, pk):
     post = get_object_or_404(FormAll, pk=pk)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="%sWO.pdf"' % pk
+    response['Content-Disposition'] = 'filename="%sWO.pdf"' % post.project_no
 
     start_x = 50
     start_y = 680
