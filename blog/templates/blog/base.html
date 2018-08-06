@@ -118,10 +118,10 @@
             });
             $('#usertable').DataTable();
 
-            {% if 'post' in request.path %}
-                $(".home").addClass("active")
-            {% elif 'new' in request.path and request.user.is_superuser %}
+            {% if 'new' in request.path %}
                 $(".newitem").addClass("active")
+            {% elif 'post' in request.path and request.user.is_superuser %}
+                $(".home").addClass("active")
             {% else %}
                 $(".users").addClass("active")
             {% endif %}
