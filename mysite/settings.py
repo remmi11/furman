@@ -87,12 +87,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'furmandb',
-        'USER': 'furman',
+        'NAME': 'new',
+        'USER': 'postgres',
         'PASSWORD': 'gdipass1',
         'HOST': '13.82.41.95',
+        #'NAME': 'hlikfwfo',
         #'USER': 'postgres',
-        #'PASSWORD':'18iaPR3EBwgY',
+        #'PASSWORD':'postgres',
         #'HOST':'localhost',
         'PORT': '5432',
     }

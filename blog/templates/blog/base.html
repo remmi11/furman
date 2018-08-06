@@ -41,16 +41,16 @@
     <nav id="top-nav" class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" style="color: white; font-weight: bold">Furman Records</a>
         {% if user.is_authenticated %}
-        <ul class="nav nav-list">
-            <li class="nav-item active">
+        <ul class="nav nav-list ">
+            <li class="nav-item home">
                     <a class="nav-link" href="{% url 'post_list' %}">Home</a>
                 </li>
             {% if request.user.is_superuser %}
-            <li class="nav-item">
+            <li class="nav-item users">
                 <a class="nav-link" href="{% url 'user_list' %}">Users</a>
             </li>
             {% endif %}
-            <li class="nav-item">
+            <li class="nav-item newitem">
                     <a class="nav-link" href="
                             {% if 'post' in request.path %}
                                 {% url 'post_new' %}
@@ -118,9 +118,13 @@
             });
             $('#usertable').DataTable();
 
-            $('li.nav-item').click(function () {
-                $(this).addClass('active').siblings().removeClass('active');
-            });
+            {% if 'post' in request.path %}
+                $(".home").addClass("active")
+            {% elif 'new' in request.path and request.user.is_superuser %}
+                $(".newitem").addClass("active")
+            {% else %}
+                $(".users").addClass("active")
+            {% endif %}
             // 	 $('select#selectsurveytype').change(function () {
             // 		 var optionSelected = $(this).find("option:selected");
             // 		 var valueSelected  = optionSelected.val();
