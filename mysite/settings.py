@@ -25,7 +25,8 @@ SECRET_KEY = '4H1EFLJMSAy6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'desolate-wave-60115.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 
+        'desolate-wave-60115.herokuapp.com', 'furman.herokuapp.com']
 
 SITE_ID = 1
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -87,12 +89,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'new',
-        #'USER': 'furman',
-        #'PASSWORD': 'gdipass1',
-        #'HOST': '13.82.41.95',
         'USER': 'postgres',
-        'PASSWORD':'18iaPR3EBwgY',
-        'HOST':'localhost',
+        'PASSWORD': 'gdipass1',
+        'HOST': '13.82.41.95',
+        #'NAME': 'hlikfwfo',
+        #'USER': 'postgres',
+        #'PASSWORD':'postgres',
+        #'HOST':'localhost',
         'PORT': '5432',
     }
 }
@@ -129,12 +132,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+print (STATIC_ROOT)
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'blog.Users'
@@ -144,4 +149,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 SESSION_COOKIE_AGE = 3600
 
-# M_CLIENT = Client(('127.0.0.1', 11211))
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'blog/static'),
+)
+
+# M_CLIENT = Client(('127.0.0.1', 11211))   
