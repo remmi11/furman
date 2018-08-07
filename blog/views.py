@@ -92,12 +92,30 @@ def ajaxClientData(request):
 
 @login_required
 def post_new(request):
+    # posts = FormAll.objects.all()
+    # if request.method == "POST":
+    #     form = PostForm(request.POST)
+    #     if form.is_valid():
+    #         post = form.save(commit=False)
+    #         post.author = request.user
+    #         post.published_date = timezone.now()
+    #         form.save()
+    #         return render(request, 'blog/post_list.html', {'posts': posts})
+    #         #return redirect('post_detail', pk=post.pk)
+    # else:
+    #     form = PostForm()
+    #     join_type = MasterGeom.objects.all().distinct('join_type')
+    # return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+    posts = FormAll.objects.all()
+    #post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
+        #form = PostForm(request.POST, instance=post)
         form = PostForm(request.POST)
         if form.is_valid():
+            # post = form.save(commit=False)
+            # post.author = request.user
+            # post.published_date = timezone.now()
             post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
             post.date_entered = timezone.now()
             post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
             post.client = request.POST.get('client')
@@ -125,15 +143,17 @@ def post_new(request):
                 post.t_r = request.POST.get('town_range')
                 post.plss_section = request.POST.get('section')
             post.folder_path = request.POST.get('fpath')
+
             form.save()
             
             posts = FormAll.objects.all()
             return render(request, 'blog/post_list.html', {'posts': posts})
-            #return redirect('post_detail', pk=post.pk)
+
     else:
         form = PostForm()
         join_type = MasterGeom.objects.all().distinct('join_type')
     return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+
 
 def loadCounties(request):
     #survey_types = MasterGeom.objects.all().distinct('join_type')
