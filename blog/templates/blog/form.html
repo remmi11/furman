@@ -25,6 +25,8 @@
         </div>
         <div class="section-2">
             <p class="section-header">Job Location:</p>
+            <p><strong>Map No.</strong></p>
+            <input type="text" name="mapno" class="form-control"/>
             <p><strong>Address:</strong></p>
             <input type="text" name="address" class="form-control" placeholder="1234 Main St."/>
             <p><strong> </strong></p>
@@ -44,8 +46,13 @@
             <p class="section-header">Job Info:</p>
             <p><strong>Project No. <span style="color: red;">*</span></strong></p>
             <input type="text" name="projectno" class="form-control" required/>
-            <p><strong>Map No.</strong></p>
-            <input type="text" name="mapno" class="form-control"/>
+            <p><strong>Job Contact <span style="color: red;">*</span></strong></p>
+            <input type="text" name="jobcontact" class="form-control" required/>
+            <p><strong>Phone <span style="color: red;">*</span></strong></p>
+            <input type="text" name="phone" class="form-control" required/>
+            <p><strong>Notes <span style="color: red;">*</span></strong></p>
+            <input type="text" name="notes" class="form-control big-ext" required/>
+
         </div>
         <div class="section-2">
             <p class="section-header">Legal:</p>
@@ -89,19 +96,28 @@
     <div class="section-row">
         <div class="section-1">
             <p class="section-header">Certify To:</p>
-            <p><strong>Job Contact <span style="color: red;">*</span></strong></p>
-            <input type="text" name="jobcontact" class="form-control" required/>
-            <p><strong>Phone <span style="color: red;">*</span></strong></p>
-            <input type="text" name="phone" class="form-control" required/>
-            <p><strong>Notes <span style="color: red;">*</span></strong></p>
-            <input type="text" name="notes" class="form-control big-ext" required/>
+
             <p><strong>Certify To</strong></p>
             <input type="text" name="certify" class="form-control"/>
             <p><strong>Lender</strong></p>
             <input type="text" name="lender" class="form-control"/>
             <p><strong>GF#</strong></p>
             <input type="text" name="gf" class="form-control"/>
+
+
+            <!-- ADD THESE -->
+            <p><strong>Clerksfile #</strong></p>
+            <input type="text" name="gf" class="form-control"/>
+
+            <p><strong>Volume</strong></p>
+            <input type="text" name="#" class="form-control"/>
+
+            <p><strong>Page</strong></p>
+            <input type="text" name="#" class="form-control"/>
+            <!--END ADD-->
+
             <button class="btn btn-ext">Save</button>
+
         </div>
     </div>
     <div class="section-row">
