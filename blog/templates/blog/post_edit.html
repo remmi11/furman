@@ -68,7 +68,8 @@
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" name="notes" class="form-control big-ext" value='{{ form.notes.value|default_if_none:"" }}' required/>
+            <textarea name="notes" class="form-control big-ext" required rows=5>{{ form.notes.value|default_if_none:"" }}</textarea>
+
             <p>
                 <strong>Certify To</strong>
             </p>
