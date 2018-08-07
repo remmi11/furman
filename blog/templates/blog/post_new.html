@@ -359,28 +359,44 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             //3 values are: rural, prad, plss
-            var rural = document.getElementById('rural-select');
-            var prad = document.getElementById('prad-select');
-            var plss = document.getElementById('plss-select');
+            var rural = $(".rural-select"); //document.getElementById('rural-select');
+            var prad = $(".prad-select"); //document.getElementById('prad-select');
+            var plss = $(".plss-select"); //document.getElementById('plss-select');
             if (e.value == "rural") {
                 //display rural-select
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "block";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:block");
+
+                prad.removeAttr("required");
+                plss.removeAttr("required");
+                rural.attr("required", "");
             } else if (e.value == "prad") {
                 //display prad-select
-                prad.style.display = "block";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:block");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                prad.attr("required", "");
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             } else if (e.value == "plss") {
                 //display plss-select
-                prad.style.display = "none";
-                plss.style.display = "block";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:block");
+                rural.attr("style", "display:none");
+
+                prad.removeAttr("required");
+                plss.attr("required", "");
+                rural.removeAttr("required");
             } else {
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                prad.removeAttr("required");
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             }
         }
 
