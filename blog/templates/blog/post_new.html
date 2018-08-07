@@ -22,53 +22,61 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <p class="section-header">Client Info:</p>
-            <p>
+            <p class="section-header">Project Info:</p>
+            <!-- !!! DATE AS SAVE timestamp !!! -->
+            <!-- <p>
                 <strong>Date:</strong>
             </p>
-            <input type="date" class="form-control" name="date" value='{{ form.date_entered.value|date:' Y-m-d ' }}'/>
+            <input type="date" class="form-control" name="date" value='{{ form.date_entered.value|date:' Y-m-d ' }}'/> -->
             <p>
                 <strong>Date Needed:</strong>
             </p>
             <input type="date" class="form-control" name="date-needed" value='{{ form.date_needed.value|date:' Y-m-d ' }}' />
             <p>
-                <strong>Client:
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" class="form-control autocomplete-client" name="client" value='{{ form.client.value|default_if_none:"" }}' required/>
-
-            <p class="section-header">Job Info:</p>
-            <p>
                 <strong>Project No.
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" id="projectno" name="projectno" class="form-control" value='{{ form.project_no.value|default_if_none:"" }}' required/>
-            <p>
-                <strong>Map No.</strong>
-            </p>
-            <input type="text" name="mapno" class="form-control" value='{{ form.map_no.value|default_if_none:"" }}' />
+            <input type="text" id="projectno" name="projectno" class="form-control" value='{{ form.project_no.value|default_if_none:"" }}'
+                required/>
 
-            <p class="section-header">Certify To:</p>
+            <p>
+                <strong>Client:
+                    <span style="color: red;">*</span>
+                </strong>
+            </p>
+            <input type="text" class="form-control autocomplete-client" name="client" value='{{ form.client.value|default_if_none:"" }}'
+                required/>
+
+            <p>
+                <strong>Requested By:</strong>
+            </p>
+            <input type="text" class="form-control autocomplete-client" name="client" value='{{ form.client.value|default_if_none:"" }}'
+                required/>
             <p>
                 <strong>Job Contact
-                    <span style="color: red;">*</span>
                 </strong>
             </p>
             <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}' required/>
             <p>
                 <strong>Phone
-                    <span style="color: red;">*</span>
                 </strong>
             </p>
             <input type="text" name="phone" class="form-control" value='{{ form.phone.value|default_if_none:"" }}' required/>
+
+            <p class="section-header">Notes:</p>
+
+
             <p>
                 <strong>Notes
                     <span style="color: red;">*</span>
                 </strong>
             </p>
             <textarea name="notes" class="form-control big-ext" required rows=5>{{ form.notes.value|default_if_none:"" }}</textarea>
+
+
+            <p class="section-header">Certify To:</p>
+
             <p>
                 <strong>Certify To</strong>
             </p>
@@ -81,6 +89,34 @@
                 <strong>GF#</strong>
             </p>
             <input type="text" name="gf" class="form-control" value='{{ form.gf_no.value|default_if_none:"" }}' />
+
+            <!-- ADD THESE -->
+            <p>
+                <strong>Clerksfile #</strong>
+            </p>
+            <input type="text" name="#" class="form-control" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p>
+                        <strong>Volume</strong>
+                    </p>
+                    <input type="text" name="#" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        <strong>Page</strong>
+                    </p>
+                    <input type="text" name="#" class="form-control" />
+                </div>
+            </div>
+
+
+
+
+            <!--END ADD-->
+
+
         </div>
         <div class="col-md-6">
             <!-- <p class="section-header">Job Location:</p>
@@ -98,8 +134,13 @@
                         />
                     </div> -->
             <p class="section-header">Job Location:</p>
+            <p>
+                <strong>Map No.</strong>
+            </p>
+            <input type="text" name="mapno" class="form-control" value='{{ form.map_no.value|default_if_none:"" }}' />
+
             <div class="form-group gaddress f38 " data-fid="f38">
-                <label class="control-label">Address</label>
+                <strong>Address</strong>
 
                 <div class="form-group addressLine1">
                     <label class="control-label sr-only" for="f38_addressLine1">Address Line1</label>
@@ -155,11 +196,9 @@
             </select> -->
             <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
                 <option value=""> - Select - </option>
-                {% for join_type in join_types %}
-                {% if join_type.join_type != '0' %}
+                {% for join_type in join_types %} {% if join_type.join_type != '0' %}
                 <option value="{{join_type.join_type }}">{{ join_type.join_type|upper }}</option>
-                {% endif %}
-                {% endfor %}
+                {% endif %} {% endfor %}
             </select>
             <div class="countyblk">
                 <p>
@@ -168,8 +207,7 @@
                     </strong>
                 </p>
 
-                <select name="county" id="selectcounty" class="form-control" required
-                oninput="selCounty(this)">
+                <select name="county" id="selectcounty" class="form-control" required oninput="selCounty(this)">
                     <option value=""> - Select - </option>
                 </select>
             </div>
@@ -272,23 +310,23 @@
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" name="fpath" class="form-control" value='{{ form.folder_path.value|default_if_none:"" }}'/>
+            <input type="text" name="fpath" class="form-control" value='{{ form.folder_path.value|default_if_none:"" }}' />
         </div>
     </div>
     <button class="btn btn-ext">Save</button>
 
     <script>
 
-        function ajaxFunc(url, data, indicator){
+        function ajaxFunc(url, data, indicator) {
             $.ajax({
                 method: "get",
                 url: url,
                 data: data
-            }).done(function( counties ) {
+            }).done(function (counties) {
                 body = '<option value=""> - Select - </option>'
-                for (i=0; i<counties.length; i++){
-                    body += '<option value="'+counties[i].toUpperCase()+'">'+counties[i].toUpperCase()+'</option>'
-                    
+                for (i = 0; i < counties.length; i++) {
+                    body += '<option value="' + counties[i].toUpperCase() + '">' + counties[i].toUpperCase() + '</option>'
+
                 }
                 $(indicator).html(body)
             });
@@ -335,12 +373,12 @@
             $.ajax({
                 method: "get",
                 url: '{% url "ajax_client_data" %}'
-            }).done(function( clients ) {
-                $( ".autocomplete-client" ).autocomplete({
-                   source: clients
+            }).done(function (clients) {
+                $(".autocomplete-client").autocomplete({
+                    source: clients
                 });
             });
-            
+
         });
         function determineForm(e) {
             var join_type = $("#selectsurveytype").val();
@@ -350,14 +388,14 @@
                 url: "{% url 'ajax_load_counties' %}",
                 data: { join_type: join_type }
             })
-            .done(function( counties ) {
-                body = '<option value=""> - Select - </option>'
-                for (i=0; i<counties.length; i++){
-                    body += '<option value="'+counties[i]+'">'+counties[i]+'</option>'
-                    
-                }
-                $("#selectcounty").html(body)
-            });
+                .done(function (counties) {
+                    body = '<option value=""> - Select - </option>'
+                    for (i = 0; i < counties.length; i++) {
+                        body += '<option value="' + counties[i] + '">' + counties[i] + '</option>'
+
+                    }
+                    $("#selectcounty").html(body)
+                });
 
             $("#subdivision").html('<option value=""> - Select - </option>')
             $("#unit").html('<option value=""> - Select - </option>')
@@ -412,7 +450,7 @@
             }
         }
 
-        function selCounty(e){
+        function selCounty(e) {
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
 
@@ -428,19 +466,19 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             if (join_type == "rural") {
-                ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, type:"survey" }, "#survey")
+                ajaxFunc("{% url 'ajax_load_data' %}",
+                    { join_type: join_type, county: county, type: "survey" }, "#survey")
             } else if (join_type == "prad") {
-                ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, type:"subdivision" }, "#subdivision")
+                ajaxFunc("{% url 'ajax_load_data' %}",
+                    { join_type: join_type, county: county, type: "subdivision" }, "#subdivision")
             } else if (join_type == "plss") {
-                ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, type:"meridian" }, "#meridian")
+                ajaxFunc("{% url 'ajax_load_data' %}",
+                    { join_type: join_type, county: county, type: "meridian" }, "#meridian")
             } else {
             }
         }
 
-        function selLevel3(obj){
+        function selLevel3(obj) {
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -454,19 +492,19 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             tp = ""
-            if (type == "subdivision"){
+            if (type == "subdivision") {
                 tp = "unit"
-            } else if (type == "survey"){
+            } else if (type == "survey") {
                 tp = "block"
-            } else if (type == "meridian"){
+            } else if (type == "meridian") {
                 tp = "town_range"
             }
 
-            ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
         }
 
-        function selLevel4(obj){
+        function selLevel4(obj) {
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -478,22 +516,22 @@
 
             tp = ""
             level1 = ""
-            if (type == "unit"){
+            if (type == "unit") {
                 level1 = $("#subdivision").val()
                 tp = "subblock"
-            } else if (type == "block"){
+            } else if (type == "block") {
                 level1 = $("#survey").val()
                 tp = "rural_section"
-            } else if (type == "town_range"){
+            } else if (type == "town_range") {
                 level1 = $("#meridian").val()
                 tp = "section"
             }
 
-            ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
         }
 
-        function selLevel5(obj){
+        function selLevel5(obj) {
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -504,9 +542,11 @@
             level2 = $("#unit").val()
             tp = "lot"
 
-            ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: level1, level2: level2, 
-                        level3: $(obj).val(), type:tp }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                {
+                    join_type: join_type, county: county, level1: level1, level2: level2,
+                    level3: $(obj).val(), type: tp
+                }, "#" + tp)
         }
 
     </script>
