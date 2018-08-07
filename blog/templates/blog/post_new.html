@@ -216,7 +216,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="survey" id="survey" class="form-control" required oninput="selLevel3(this)">
+                <select name="survey" id="survey" class="form-control" oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                 </select>
                 <p>
@@ -224,7 +224,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="block" id="block" class="form-control" required oninput="selLevel4(this)">
+                <select name="block" id="block" class="form-control" oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                 </select>
                 <p>
@@ -232,7 +232,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="rural_section" id="rural_section" class="form-control" required>
+                <select name="rural_section" id="rural_section" class="form-control" >
                     <option value=""> - Select - </option>
                 </select>
             </div>
@@ -242,7 +242,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="meridian" id="meridian" class="form-control" required oninput="selLevel3(this)">
+                <select name="meridian" id="meridian" class="form-control" oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                 </select>
                 <p>
@@ -250,7 +250,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="town_range" id="town_range" class="form-control" required oninput="selLevel4(this)">
+                <select name="town_range" id="town_range" class="form-control" oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                 </select>
                 <p>
@@ -258,7 +258,7 @@
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="section" id="section" class="form-control" required>
+                <select name="section" id="section" class="form-control">
                     <option value=""> - Select - </option>
                 </select>
             </div>
@@ -272,7 +272,7 @@
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" name="fpath" class="form-control" value='{{ form.folder_path.value|default_if_none:"" }}' required/>
+            <input type="text" name="fpath" class="form-control" value='{{ form.folder_path.value|default_if_none:"" }}'/>
         </div>
     </div>
     <button class="btn btn-ext">Save</button>
