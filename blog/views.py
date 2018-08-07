@@ -92,19 +92,68 @@ def ajaxClientData(request):
 
 @login_required
 def post_new(request):
+    # posts = FormAll.objects.all()
+    # if request.method == "POST":
+    #     form = PostForm(request.POST)
+    #     if form.is_valid():
+    #         post = form.save(commit=False)
+    #         post.author = request.user
+    #         post.published_date = timezone.now()
+    #         form.save()
+    #         return render(request, 'blog/post_list.html', {'posts': posts})
+    #         #return redirect('post_detail', pk=post.pk)
+    # else:
+    #     form = PostForm()
+    #     join_type = MasterGeom.objects.all().distinct('join_type')
+    # return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+    posts = FormAll.objects.all()
+    #post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
+        #form = PostForm(request.POST, instance=post)
         form = PostForm(request.POST)
         if form.is_valid():
+            # post = form.save(commit=False)
+            # post.author = request.user
+            # post.published_date = timezone.now()
             post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
+            post.date_entered = timezone.now()
+            post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
+            post.client = request.POST.get('client')
+            post.project_no = request.POST.get('projectno')
+            post.map_no = request.POST.get('mapno')
+            post.contact = request.POST.get('jobcontact')
+            post.phone = request.POST.get('phone')
+            post.notes = request.POST.get('notes')
+            post.certify_to = request.POST.get('certify')
+            post.lender = request.POST.get('lender')
+            post.gf_no = request.POST.get('gf')
+            post.survey_type = request.POST.get('surveytype')
+            if request.POST.get('surveytype') == "prad":
+                post.county = request.POST.get('county')
+                post.subdivision = request.POST.get('subdivision')
+                post.unit = request.POST.get('unit')
+                post.sub_block = request.POST.get('subblock')
+                post.lot = request.POST.get('lot')
+            elif request.POST.get('surveytype') == "rural":
+                post.survey = request.POST.get('survey')
+                post.rural_block = request.POST.get('block')
+                post.rural_section = request.POST.get('rural_section')
+            else:
+                post.meridian = request.POST.get('meridian')
+                post.t_r = request.POST.get('town_range')
+                post.plss_section = request.POST.get('section')
+            post.folder_path = request.POST.get('fpath')
+
             form.save()
+            
+            posts = FormAll.objects.all()
             return render(request, 'blog/post_list.html', {'posts': posts})
-            #return redirect('post_detail', pk=post.pk)
+
     else:
         form = PostForm()
         join_type = MasterGeom.objects.all().distinct('join_type')
     return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+
 
 def loadCounties(request):
     #survey_types = MasterGeom.objects.all().distinct('join_type')
@@ -411,7 +460,7 @@ def getpdf(request, pk):
     post = get_object_or_404(FormAll, pk=pk)
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="%sWO.pdf"' % pk
+    response['Content-Disposition'] = 'filename="%sWO.pdf"' % post.project_no
 
     start_x = 50
     start_y = 680
