@@ -1,7 +1,7 @@
 from django import forms
 
 #from .models import Form
-from .models import Form, Form500, MasterGeom, Users
+from .models import Form, Form500, MasterGeom, Users, FormAll
 
 # class PostForm(forms.ModelForm):
 
@@ -13,7 +13,7 @@ from .models import Form, Form500, MasterGeom, Users
 class PostForm(forms.ModelForm):
     
     class Meta:
-        model = Form500
+        model = FormAll
         fields = ('__all__')
 
 class newForm(forms.ModelForm):

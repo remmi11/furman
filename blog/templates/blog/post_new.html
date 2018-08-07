@@ -184,81 +184,81 @@
 
 
             <!-- <input type="text" name="county" class="form-control" id="county" value='{{ form.county.value }}' required/> -->
-            <div id="prad-select" style="display: none;">
-                <p>
+            <div id="prad-select">
+                <p class="prad-select">
                     <strong>Subdivision</strong>
                 </p>
-                <select name="subdivision" id="subdivision" class="form-control" oninput="selLevel3(this)">
+                <select name="subdivision" id="subdivision" class="form-control prad-select" oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="prad-select">
                     <strong>Unit</strong>
                 </p>
-                <select name="unit" id="unit" class="form-control" oninput="selLevel4(this)">
+                <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="prad-select">
                     <strong>Sub Block</strong>
                 </p>
-                <select name="subblock" id="subblock" class="form-control" oninput="selLevel5(this)">
+                <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="prad-select">
                     <strong>Lot</strong>
                 </p>
-                <select name="lot" id="lot" class="form-control">
+                <select name="lot" id="lot" class="form-control prad-select">
                     <option value=""> - Select - </option>
                 </select>
             </div>
-            <div id="rural-select" style="display: none;">
-                <p>
+            <div id="rural-select">
+                <p class="rural-select">
                     <strong>Survey
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="survey" id="survey" class="form-control" required oninput="selLevel3(this)">
+                <select name="survey" id="survey" class="form-control rural-select" required oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="rural-select">
                     <strong>Block
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="block" id="block" class="form-control" required oninput="selLevel4(this)">
+                <select name="block" id="block" class="form-control rural-select" required oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="rural-select">
                     <strong>Section
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="rural_section" id="rural_section" class="form-control" required>
+                <select name="rural_section" id="rural_section" class="form-control rural-select" required>
                     <option value=""> - Select - </option>
                 </select>
             </div>
-            <div id="plss-select" style="display: none;">
-                <p>
+            <div id="plss-select">
+                <p class="plss-select">
                     <strong>Meridian
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="meridian" id="meridian" class="form-control" required oninput="selLevel3(this)">
+                <select name="meridian" id="meridian" class="form-control plss-select" required oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="plss-select">
                     <strong>Township Range
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="town_range" id="town_range" class="form-control" required oninput="selLevel4(this)">
+                <select name="town_range" id="town_range" class="form-control plss-select" required oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                 </select>
-                <p>
+                <p class="plss-select">
                     <strong>Section
                         <span style="color: red;">*</span>
                     </strong>
                 </p>
-                <select name="section" id="section" class="form-control" required>
+                <select name="section" id="section" class="form-control plss-select" required>
                     <option value=""> - Select - </option>
                 </select>
             </div>
@@ -297,27 +297,39 @@
         $(document).ready(function () {
             var form_type = "{{ form.survey_type.value }}";
             console.log(form_type)
-            var rural = document.getElementById('rural-select');
-            var prad = document.getElementById('prad-select');
-            var plss = document.getElementById('plss-select');
+            var rural = $(".rural-select"); //document.getElementById('rural-select');
+            var prad = $(".prad-select"); //document.getElementById('prad-select');
+            var plss = $(".plss-select"); //document.getElementById('plss-select');
             if (form_type == "rural") {
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "block";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:block");
+
+                plss.removeAttr("required");
+                rural.attr("required", "");
             } else if (form_type == "prad") {
                 //display prad-select
-                prad.style.display = "block";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:block");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             } else if (form_type == "plss") {
                 //display plss-select
-                prad.style.display = "none";
-                plss.style.display = "block";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:block");
+                rural.attr("style", "display:none");
+
+                plss.attr("required", "");
+                rural.removeAttr("required");
             } else {
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             }
 
             $.ajax({
@@ -359,28 +371,44 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             //3 values are: rural, prad, plss
-            var rural = document.getElementById('rural-select');
-            var prad = document.getElementById('prad-select');
-            var plss = document.getElementById('plss-select');
+            var rural = $(".rural-select"); //document.getElementById('rural-select');
+            var prad = $(".prad-select"); //document.getElementById('prad-select');
+            var plss = $(".plss-select"); //document.getElementById('plss-select');
             if (e.value == "rural") {
                 //display rural-select
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "block";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:block");
+
+                prad.removeAttr("required");
+                plss.removeAttr("required");
+                rural.attr("required", "");
             } else if (e.value == "prad") {
                 //display prad-select
-                prad.style.display = "block";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:block");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                prad.attr("required", "");
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             } else if (e.value == "plss") {
                 //display plss-select
-                prad.style.display = "none";
-                plss.style.display = "block";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:block");
+                rural.attr("style", "display:none");
+
+                prad.removeAttr("required");
+                plss.attr("required", "");
+                rural.removeAttr("required");
             } else {
-                prad.style.display = "none";
-                plss.style.display = "none";
-                rural.style.display = "none";
+                prad.attr("style", "display:none");
+                plss.attr("style", "display:none");
+                rural.attr("style", "display:none");
+
+                prad.removeAttr("required");
+                plss.removeAttr("required");
+                rural.removeAttr("required");
             }
         }
 
