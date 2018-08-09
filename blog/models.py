@@ -166,6 +166,9 @@ class FormAll(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
 
+    volume = models.CharField(max_length=255, blank=True, null=True)
+    requested_by = models.CharField(max_length=255, blank=True, null=True)
+
     class Meta:
         # managed = False
         db_table = 'form_all'

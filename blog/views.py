@@ -44,13 +44,22 @@ def post_detail(request, pk):
 
 @login_required
 def ajaxPagination(request):
+    order_cols = ['pk', 'project_no', 'survey_type', 'client', 'county', 'address_street',
+                    'survey', 'rural_block', 'rural_section', 'subdivision', 
+                    'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section']
+
     start = int(request.GET.get("start"))
     length = int(request.GET.get("length"))
     draw = int(request.GET.get("draw"))
     search_key = request.GET.get('search[value]')
+
+    order_col = request.GET.get('order[0][column]')
+    order_type = request.GET.get('order[0][dir]')
+    order_key = order_cols[int(order_col)] if order_type == "asc" else "-" + order_cols[int(order_col)]
+        
     if search_key == None or search_key == "":
         count = FormAll.objects.all().count()
-        posts = FormAll.objects.all().order_by('pk')[start:start+length]
+        posts = FormAll.objects.all().order_by(order_key)[start:start+length]
     else:
         condition = Q(pk__icontains=search_key) | Q(project_no__icontains=search_key) | \
             Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | \
@@ -61,7 +70,7 @@ def ajaxPagination(request):
             Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
             Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key)
         count = FormAll.objects.filter(condition).count()
-        posts = FormAll.objects.filter(condition).order_by('pk')[start:start+length]
+        posts = FormAll.objects.filter(condition).order_by(order_key)[start:start+length]
 
     data = []
     for post in posts:
@@ -128,6 +137,8 @@ def post_new(request):
             post.lender = request.POST.get('lender')
             post.gf_no = request.POST.get('gf')
             post.survey_type = request.POST.get('surveytype')
+            post.clerksfile = request.POST.get('clerksfile')
+            post.requested_by = request.POST.get('requested_by')
             if request.POST.get('surveytype') == "prad":
                 post.county = request.POST.get('county')
                 post.subdivision = request.POST.get('subdivision')
@@ -271,6 +282,8 @@ def post_edit(request, pk):
             post.lender = request.POST.get('lender')
             post.gf_no = request.POST.get('gf')
             post.survey_type = request.POST.get('surveytype')
+            post.clerksfile = request.POST.get('clerksfile')
+            post.requested_by = request.POST.get('requested_by')
             if request.POST.get('surveytype') == "prad":
                 post.county = request.POST.get('county')
                 post.subdivision = request.POST.get('subdivision')
@@ -545,6 +558,10 @@ def getpdf(request, pk):
     canvas1.setFont('Helvetica', 12)
     canvas1.drawString(start_x+60, offsetY-18,'Project #')
     lines = drawText(canvas1, clean(post.project_no), 17, start_x+150, offsetY, 20)
+    offsetY = offsetY-lines*18
+
+    canvas1.drawString(start_x+60, offsetY-18,'Map #')
+    lines = drawText(canvas1, clean(post.map_no), 17, start_x+150, offsetY, 20)
     offsetY = offsetY-lines*18
 
     canvas1.drawString(start_x+60, offsetY-18,'Date Needed')
