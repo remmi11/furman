@@ -51,18 +51,17 @@
             <p>
                 <strong>Requested By:</strong>
             </p>
-            <input type="text" class="form-control autocomplete-client" name="client" value='{{ form.client.value|default_if_none:"" }}'
-                required/>
+            <input type="text" class="form-control" name="requested_by" value='{{ form.requested_by.value|default_if_none:"" }}'/>
             <p>
                 <strong>Job Contact
                 </strong>
             </p>
-            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}' required/>
+            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}'/>
             <p>
                 <strong>Phone
                 </strong>
             </p>
-            <input type="text" name="phone" class="form-control" value='{{ form.phone.value|default_if_none:"" }}' required/>
+            <input type="text" name="phone" class="form-control" value='{{ form.phone.value|default_if_none:"" }}'/>
 
 
             <!-- Job Location -->
@@ -140,20 +139,20 @@
             <p>
                 <strong>Clerksfile #</strong>
             </p>
-            <input type="text" name="#" class="form-control" />
+            <input type="text" name="clerkfile" class="form-control" value='{{ form.clerkfile.value|default_if_none:"" }}' />
 
             <div class="row">
                 <div class="col-md-6">
                     <p>
                         <strong>Volume</strong>
                     </p>
-                    <input type="text" name="#" class="form-control" />
+                    <input type="text" name="volume" class="form-control" value='{{ form.volume.value|default_if_none:"" }}' />
                 </div>
                 <div class="col-md-6">
                     <p>
                         <strong>Page</strong>
                     </p>
-                    <input type="text" name="#" class="form-control" />
+                    <input type="text" name="page" class="form-control" value='{{ form.page.value|default_if_none:"" }}' />
                 </div>
             </div>
             <!--END ADD-->
@@ -281,12 +280,18 @@
     <div class="row">
         <div class="col-md-12">
             <p class="section-header">Folder Path</p>
-            <p>
-                <strong>Folder Path
-                    <span style="color: red;">*</span>
-                </strong>
-            </p>
-            <input type="text" name="fpath" class="form-control" value='{{ form.folder_path.value|default_if_none:"" }}' />
+            <div class="row">
+                <div class="col-md-1">
+                    <p>
+                        <strong>Folder Path
+                            <span style="color: red;">*</span>
+                        </strong>
+                    </p>
+                </div>
+                <input type="text" name="fpath" class="form-control col-md-8 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <div class="col-md-1"></div>
+                <a type="text" class="form-control btn btn btn-primary col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Path </a>
+            </div>
         </div>
     </div>
     <button class="btn btn-ext">Save</button>
@@ -523,6 +528,10 @@
                     join_type: join_type, county: county, level1: level1, level2: level2,
                     level3: $(obj).val(), type: tp
                 }, "#" + tp)
+        }
+
+        function changePath(obj){
+            $(".pathlink").attr("href", $(obj).val())
         }
 
     </script>
