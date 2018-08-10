@@ -169,6 +169,9 @@ class FormAll(models.Model):
     volume = models.CharField(max_length=255, blank=True, null=True)
     requested_by = models.CharField(max_length=255, blank=True, null=True)
 
+    well_name = models.CharField(max_length=255, blank=True, null=True)
+    well_number = models.CharField(max_length=255, blank=True, null=True)
+
     class Meta:
         # managed = False
         db_table = 'form_all'

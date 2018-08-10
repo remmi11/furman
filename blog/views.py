@@ -157,8 +157,7 @@ def post_new(request):
 
             form.save()
             
-            posts = FormAll.objects.all()
-            return render(request, 'blog/post_list.html', {'posts': posts})
+            return redirect("/post/%d/edit/" % post.pk)
 
     else:
         form = PostForm()
@@ -301,7 +300,7 @@ def post_edit(request, pk):
             post.folder_path = request.POST.get('fpath')
 
             form.save()
-            return render(request, 'blog/post_list.html', {'posts': posts})
+            return redirect("/post/%d/edit/" % post.pk)
             # return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
@@ -477,7 +476,7 @@ def getpdf(request, pk):
 
     start_x = 50
     start_y = 680
-    line_space = 22
+    line_space = 25
     bgColor = colors.Color(red=(211.0/255),green=(211.0/255),blue=(211.0/255))
 
     canvas1 = canvas.Canvas(response, pagesize=letter)
@@ -491,39 +490,72 @@ def getpdf(request, pk):
     canvas1.drawString(start_x+50,start_y,'Date Created %s' % cleanDate(post.date_entered))
 
     canvas1.setFillColor(bgColor)
-    canvas1.rect(start_x-10,start_y-85,270,20, fill=True, stroke=False)
+    canvas1.rect(start_x-10,start_y-65,270,20, fill=True, stroke=False)
     canvas1.setFillColor(colors.black)
-    canvas1.drawString(start_x, start_y-80,'Client Info')
+    canvas1.drawString(start_x, start_y-60,'Client Info')
 
-    canvas1.drawString(start_x, start_y-80-line_space,'Client')
-    lines = drawText(canvas1, clean(post.client), 17, start_x+130, start_y-80)
+    offsetY = start_y-60
+    canvas1.drawString(start_x, offsetY-line_space,'Date Needed')
+    lines = drawText(canvas1, cleanDate(post.date_needed), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
 
-    offsetY = start_y-180-lines*line_space
-    canvas1.setFillColor(bgColor)
-    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
-    canvas1.setFillColor(colors.black)
-    canvas1.drawString(start_x, offsetY,'Client Info')
+    canvas1.drawString(start_x, offsetY-line_space,'Project No')
+    lines = drawText(canvas1, clean(post.project_no), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Job Contact')
+    canvas1.drawString(start_x, offsetY-line_space,'Client')
+    lines = drawText(canvas1, clean(post.client), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Requested By')
+    lines = drawText(canvas1, clean(post.requested_by), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Contact')
     lines = drawText(canvas1, clean(post.contact), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Job Phone')
+    canvas1.drawString(start_x, offsetY-line_space,'Phone')
     lines = drawText(canvas1, clean(post.phone), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
+    offsetY = offsetY-lines*line_space - 30
+    canvas1.setFillColor(bgColor)
+    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
+    canvas1.setFillColor(colors.black)
+    canvas1.drawString(start_x, offsetY,'Job Location')
 
-    canvas1.drawString(start_x, offsetY-line_space,'Job City')
-    lines = drawText(canvas1, clean(post.city), 17, start_x+130, offsetY)
+    canvas1.drawString(start_x, offsetY-line_space,'Map No')
+    lines = drawText(canvas1, clean(post.map_no), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'JobSt:')
+    canvas1.drawString(start_x, offsetY-line_space,'Address')
+    lines = drawText(canvas1, clean(post.address_street), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'City')
+    lines = drawText(canvas1, clean(post.city), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'State / Province / Region')
+    lines = drawText(canvas1, clean(post.state), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Postal / Zip Code')
+    lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Country')
+    lines = drawText(canvas1, clean(post.country), 15, start_x+140, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    '''canvas1.drawString(start_x, offsetY-line_space,'JobSt:')
     linesst = drawText(canvas1, clean(post.state), 13, start_x+40, offsetY)
     canvas1.drawString(start_x+130, offsetY-line_space,'JobZip:')
     lineszip = drawText(canvas1, clean(post.zipcode), 13, start_x+180, offsetY)
-    lines = linesst if linesst > lineszip else lineszip
+    lines = linesst if linesst > lineszip else lineszip'''
 
-    offsetY = offsetY - 80 - lines*line_space
+    offsetY = offsetY - 30 - lines*line_space
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
     canvas1.setFillColor(colors.black)
@@ -531,23 +563,6 @@ def getpdf(request, pk):
 
     lines = drawText(canvas1, clean(post.notes), 40, start_x, offsetY)
     offsetY = offsetY-lines*line_space-80
-
-    canvas1.setFillColor(bgColor)
-    canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
-    canvas1.setFillColor(colors.black)
-    canvas1.drawString(start_x, offsetY,'Certify To:')
-
-    canvas1.drawString(start_x, offsetY-line_space,'Certify To')
-    lines = drawText(canvas1, clean(post.certify_to), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
-
-    canvas1.drawString(start_x, offsetY-line_space,'Lender')
-    lines = drawText(canvas1, clean(post.lender), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
-
-    canvas1.drawString(start_x, offsetY-line_space,'Gf#')
-    lines = drawText(canvas1, clean(post.gf_no), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
 
     start_x = 310
     canvas1.setFont('Helvetica-Bold', 12)
@@ -569,30 +584,46 @@ def getpdf(request, pk):
     offsetY = offsetY-lines*18
 
     canvas1.drawString(start_x+60, offsetY-18,'Requested By')
-    lines = drawText(canvas1, clean(post.surveyor), 17, start_x+150, offsetY, 20)
+    lines = drawText(canvas1, clean(post.requested_by), 17, start_x+150, offsetY, 20)
     offsetY = offsetY-lines*18
 
-    offsetY = offsetY - 65
+    offsetY = offsetY - 40
     start_x = start_x + 12
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
     canvas1.setFillColor(colors.black)
-    canvas1.drawString(start_x, offsetY,'Job Location')
+    canvas1.drawString(start_x, offsetY,'Certify To')
 
-    canvas1.drawString(start_x, offsetY-line_space,'Address')
-    lines = drawText(canvas1, clean(post.address_street), 15, start_x+140, offsetY)
+    canvas1.drawString(start_x, offsetY-line_space,'Certify To')
+    lines = drawText(canvas1, clean(post.certify_to), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'City')
-    lines = drawText(canvas1, clean(post.city), 15, start_x+140, offsetY)
+    canvas1.drawString(start_x, offsetY-line_space,'Lender')
+    lines = drawText(canvas1, clean(post.lender), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'State / Province / Region')
-    lines = drawText(canvas1, clean(post.state), 15, start_x+140, offsetY)
+    canvas1.drawString(start_x, offsetY-line_space,'Gf#')
+    lines = drawText(canvas1, clean(post.gf_no), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Postal / Zip Code')
-    lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
+    canvas1.drawString(start_x, offsetY-line_space,'Clerkfile#')
+    lines = drawText(canvas1, clean(post.clerksfile), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Volume')
+    lines = drawText(canvas1, clean(post.volume), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Page')
+    lines = drawText(canvas1, clean(post.page), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Well Name')
+    lines = drawText(canvas1, clean(post.well_name), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Well Number')
+    lines = drawText(canvas1, clean(post.well_number), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
     offsetY = offsetY - 65

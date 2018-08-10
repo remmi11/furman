@@ -156,6 +156,20 @@
                     <input type="text" class="form-control" name="page" value='{{ form.page.value|default_if_none:"" }}'/>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>
+                        <strong>Well Name</strong>
+                    </p>
+                    <input type="text" name="well_name" class="form-control" value='{{ form.well_name.value|default_if_none:"" }}'/>
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        <strong>Well Number</strong>
+                    </p>
+                    <input type="text" name="well_number" class="form-control" value='{{ form.well_number.value|default_if_none:"" }}'/>
+                </div>
+            </div>
             <!--END ADD-->
             <p class="section-header">Legal:</p>
             <p>
@@ -353,15 +367,15 @@
         <div class="col-md-12">
             <p class="section-header">Folder Path</p>
             <div class="row">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <p>
                         <strong>Folder Path
                             <span style="color: red;">*</span>
                         </strong>
                     </p>
                 </div>
-                <input type="text" name="fpath" class="form-control col-md-8 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
-                <div class="col-md-1"></div>
+                <input type="text" name="fpath" class="form-control col-md-6 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <div class="col-md-2"></div>
                 <a type="text" class="form-control btn btn btn-primary col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Path </a>
             </div>
         </div>
