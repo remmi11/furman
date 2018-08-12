@@ -1,0 +1,57 @@
+html,
+main {
+    font-family: 'Lobster';
+}
+/* #top-nav {
+    min-height: 50px;
+} */
+/* .navbar {
+    width: 100%;
+    font-size: 25px;
+    padding: 10px;
+} */
+
+/* .main {
+    padding: 50px;
+} */
+
+form {
+ padding-left: 30px;
+ padding-right: 30px;
+}
+
+
+.container { 
+max-width: 1800px;
+margin: 3% auto;
+}
+
+ div.dataTables_wrapper {
+    max-width: 1600px;
+    margin: 50 auto;
+}
+
+.nav-item {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 25px;
+}
+.nav-item a{
+color: #f1f1f1;
+}
+
+#top-nav > li {
+list-style-type:none !important;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.nav li:hover {
+    background-color: #666;
+    color: white;
+}
+
+#top-nav > ul > li.nav-item.active {
+    background-color: #666;
+    color: white;
+}

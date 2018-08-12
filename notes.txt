@@ -1,0 +1,3 @@
+https://packaging.python.org/guides/installing-using-pip-and-virtualenv/
+
+heroku config:set DJANGO_SECRET_KEY=`4H1EFLJMSAy6`
