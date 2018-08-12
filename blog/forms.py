@@ -1,7 +1,11 @@
 from django import forms
 
 #from .models import Form
+<<<<<<< HEAD
 from .models import MasterGeom, Users, FormAll
+=======
+from .models import Form, Form500, MasterGeom, Users, FormAll
+>>>>>>> f49c2818e3e81e289622011a04b655ec5cd1e91f
 
 # class PostForm(forms.ModelForm):
 
