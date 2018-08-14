@@ -87,15 +87,15 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        #'NAME': 'new',
-        #'USER': 'postgres',
-        #'PASSWORD': 'gdipass1',
-        #'HOST': '13.82.41.95',
-        'NAME': 'hlikfwfo',
+        'NAME': 'new',
         'USER': 'postgres',
-        'PASSWORD':'postgres',
-        'HOST':'localhost',
-        'PORT': '5432',
+        'PASSWORD': 'gdipass1',
+        'HOST': '13.82.41.95',
+        #'NAME': 'hlikfwfo',
+        #'USER': 'postgres',
+        #'PASSWORD':'postgres',
+        #'HOST':'localhost',
+        #'PORT': '5432',
     }
 }
 
