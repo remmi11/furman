@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+<<<<<<< HEAD
+from .models import FormAll, MasterGeom, County
+=======
 from .models import Form, FormAll, MasterGeom, County
+>>>>>>> f49c2818e3e81e289622011a04b655ec5cd1e91f
 from .forms import PostForm, newForm, UserForm, UserEditForm
 from django.shortcuts import redirect
 from django.shortcuts import render
