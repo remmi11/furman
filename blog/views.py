@@ -317,7 +317,7 @@ def post_edit(request, pk):
 
         # M_CLIENT.set("counties-%s" % post.survey_type, json.dumps(counties))
 
-        res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county.title()).distinct('join_field')
+        res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county).distinct('join_field')
         
         level = [[], [], [], []]
         tokens = []
@@ -344,6 +344,8 @@ def post_edit(request, pk):
                 pass
             try:
                 if token[0].lower() == keys[0].lower() and token[1] not in level[1]:
+                    print (token)
+                    print (token[0].lower(), keys[0].lower())
                     level[1].append(token[1])
             except:
                 pass
@@ -363,7 +365,6 @@ def post_edit(request, pk):
 
         # print (level)
         # print (keys)
-
 
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \

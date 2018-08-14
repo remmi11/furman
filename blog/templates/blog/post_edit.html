@@ -446,7 +446,9 @@
                 });
             });
 
+            {%if form.county.value == None or form.county.value == ""%}
             selCounty(null);
+            {% endif %}
         });
         function determineForm(e) {
             var join_type = $("#selectsurveytype").val();
