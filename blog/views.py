@@ -611,7 +611,7 @@ def getpdf(request, pk):
     offsetY = offsetY-lines*line_space
 
     canvas1.drawString(start_x, offsetY-line_space,'Volume')
-    lines = drawText(canvas1, clean(post.volume), 17, start_x+130, offsetY)
+    lines = drawText(canvas1, clean(post.book), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
     canvas1.drawString(start_x, offsetY-line_space,'Page')
