@@ -276,8 +276,8 @@
                 </select>
             </div>
             <div id="rural-select">
-                <p>For a map of Texas sections click <a href'http://gisweb.glo.texas.gov/glomapjs/index.html' target='_blank'>here.</a></p>
                 <p class="rural-select">
+                    <p>For a map of Texas sections click <a href="http://gisweb.glo.texas.gov/glomapjs/index.html" target="_blank">Print Work Order</a></p>
                     <strong>Survey
                         <span style="color: red;">*</span>
                     </strong>
@@ -370,16 +370,16 @@
         <div class="col-md-12">
             <p class="section-header">Folder Path</p>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <p>
                         <strong>Folder Path
                             <span style="color: red;">*</span>
                         </strong>
                     </p>
                 </div>
-                <input type="text" name="fpath" class="form-control col-md-6 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <input type="text" name="fpath" class="form-control col-md-10 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
                 <!-- <div class="col-md-2"></div> -->
-                <a type="text" class="form-control btn btn btn-success col-md-2 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a>
+                <a type="text" class="form-control btn btn btn-success col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a>
             </div>
         </div>
     </div>
