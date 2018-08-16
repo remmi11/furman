@@ -52,3 +52,7 @@ p {
     color: white;
     margin-top: 25px;
 }
+
+.btn-success {
+    margin-left: 5%;
+}
