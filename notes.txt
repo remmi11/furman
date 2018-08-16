@@ -4,3 +4,7 @@ heroku config:set DJANGO_SECRET_KEY=`4H1EFLJMSAy6`
 
 python3 -m virtualenv env
 .\env\Scripts\activate
+
+For a map of Texas sections click
+<a href="http://gisweb.glo.texas.gov/glomapjs/index.html" target="_blank">here</a>
+<br />

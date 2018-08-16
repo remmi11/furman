@@ -14,11 +14,9 @@
                 </strong>
             </p>
             <select name="title" class="form-control" required>
-                <option value='{{ form.title.value|default_if_none:"" }}'>{{ form.title.value|default_if_none:" - Select - " }}</option>
+                <option value= '{{ form.title.value|default_if_none:"" }}' >{{ form.title.value|default_if_none:" - Select - " }}</option>
                 <option value="Furman Land Surveyers, Inc.">Furman Land Surveyers, Inc.</option>
-                <option value="GDI, Inc.">GDI, Inc. - Amarillo</option>
-                <option value="GDI, Inc.">GDI, Inc. - Canadian</option>
-
+                <option value="GDI, Inc.">GDI, Inc.</option>
             </select>
         </div>
     </div>
@@ -28,86 +26,74 @@
             <p>
                 <strong>Date Needed:</strong>
             </p>
-            <input type="date" class="form-control" name="date-needed" value='{{ form.date_needed.value|date:' Y-m-d ' }}' />
+            <input type="date" class="form-control" name="date-needed" value= '{{ form.date_needed.value|date:'Y-m-d' }}' />
             <p>
                 <strong>Project No.
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" id="projectno" name="projectno" class="form-control" value='{{ form.project_no.value|default_if_none:"" }}'
-                required/>
+            <input type="text" id="projectno" name="projectno" class="form-control" value= '{{ form.project_no.value|default_if_none:"" }}' required/>
             <p>
                 <strong>Client:
                     <span style="color: red;">*</span>
                 </strong>
             </p>
-            <input type="text" class="form-control autocomplete-client" name="client" value='{{ form.client.value|default_if_none:"" }}'
-                required/>
+            <input type="text" class="form-control autocomplete-client" name="client" value= '{{ form.client.value|default_if_none:"" }}' required/>
             <p>
                 <strong>Requested By:</strong>
             </p>
-            <input type="text" class="form-control" name="requested_by" value='{{ form.requested_by.value|default_if_none:"" }}' />
+            <input type="text" class="form-control" name="requested_by" value='{{ form.requested_by.value|default_if_none:"" }}'/>
             <p>
                 <strong>Job Contact
                 </strong>
             </p>
-            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}' />
+            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}'/>
             <p>
                 <strong>Phone
                 </strong>
             </p>
-            <input type="text" name="phone" class="form-control" value='{{ form.phone.value|default_if_none:"" }}' />
+            <input type="text" name="phone" class="form-control" value='{{ form.phone.value|default_if_none:"" }}'/>
             <p class="section-header">Job Location:</p>
-
+            
             <p>
                 <strong>Map No.</strong>
             </p>
-            <input type="text" name="mapno" class="form-control" value='{{ form.map_no.value|default_if_none:"" }}' />
-            <div class="form-group gaddress f38 " data-fid="f38">
-                <label class="control-label">
-                    <strong>Address</strong>
-                </label>
-
-                <div class="form-group addressLine1">
-                    <label class="control-label sr-only" for="f38_addressLine1">Address Line1</label>
-                    <input type="text" class="form-control gaddress-autocomplete" data-gaddress-types="street_number route" data-gaddress-name="long_name"
-                        id="f38_addressLine1" name="address_street" value='{{ form.address_street.value|default_if_none:"" }}'
-                        aria-describedby="f38_addressLine1-help-block" placeholder="1234 Main St." autocomplete="off">
-                    <p id="f38_addressLine1-help-block" class="description sr-only">Street address, P.O. box, company name, c/o</p>
-                </div>
-
-
-                <div class="form-group city" style="float: none;">
-                    <label class="control-label sr-only" for="f38_city">City</label>
-                    <input type="text" class="form-control" data-gaddress-types="locality" data-gaddress-name="long_name" id="f38_city" name="city"
-                        value='{{ form.city.value|default_if_none:"" }}' aria-describedby="f38_city-help-block" placeholder="City">
-                    <p id="f38_city-help-block" class="description sr-only">City</p>
-                </div>
-
-                <div class="form-group state" style="float: none;">
-                    <label class="control-label sr-only" for="f38_state">State / Province / Region</label>
-                    <input type="text" class="form-control" data-gaddress-types="administrative_area_level_1" data-gaddress-name="long_name"
-                        id="f38_state" name="state" value='{{ form.state.value|default_if_none:"" }}' aria-describedby="f38_state-help-block"
-                        placeholder="State / Province / Region">
-                    <p id="f38_state-help-block" class="description sr-only">State / Province / Region</p>
-                </div>
-
-                <div class="form-group postalCode" style="float: none;">
-                    <label class="control-label sr-only" for="f38_postalCode">Postal / Zip Code</label>
-                    <input type="text" class="form-control" data-gaddress-types="postal_code" data-gaddress-name="long_name" id="f38_postalCode"
-                        name="zipcode" value='{{ form.zipcode.value|default_if_none:"" }}' aria-describedby="f38_postalCode-help-block"
-                        placeholder="Postal / Zip Code">
-                    <p id="f38_postalCode-help-block" class="description sr-only">Postal / Zip Code</p>
-                </div>
-
-                <div class="form-group country" style="float: none;">
-                    <label class="control-label sr-only" for="f38_country">Country</label>
-                    <input type="text" class="form-control" data-gaddress-types="country" data-gaddress-name="long_name" id="f38_country" name="country"
-                        value='{{ form.country.value|default_if_none:"" }}' aria-describedby="f38_country-help-block" placeholder="Country">
-                    <p id="f38_country-help-block" class="description sr-only">Country</p>
-                </div>
-                <div class="mq-indicator"></div>
-            </div>
+            <input type="text" name="mapno" class="form-control" value= '{{ form.map_no.value|default_if_none:"" }}'/>
+                    <div class="form-group gaddress f38 " data-fid="f38">
+                            <label class="control-label"><strong>Address</strong></label>
+        
+                            <div class="form-group addressLine1">
+                                <label class="control-label sr-only" for="f38_addressLine1">Address Line1</label>
+                                <input type="text" class="form-control gaddress-autocomplete" data-gaddress-types="street_number route" data-gaddress-name="long_name" id="f38_addressLine1" name="address_street" value='{{ form.address_street.value|default_if_none:"" }}' aria-describedby="f38_addressLine1-help-block" placeholder="1234 Main St." autocomplete="off">
+                                <p id="f38_addressLine1-help-block" class="description sr-only">Street address, P.O. box, company name, c/o</p>
+                            </div>
+        
+        
+                            <div class="form-group city" style="float: none;">
+                                <label class="control-label sr-only" for="f38_city">City</label>
+                                <input type="text" class="form-control" data-gaddress-types="locality" data-gaddress-name="long_name" id="f38_city" name="city" value='{{ form.city.value|default_if_none:"" }}' aria-describedby="f38_city-help-block" placeholder="City">
+                                <p id="f38_city-help-block" class="description sr-only">City</p>
+                            </div>
+        
+                            <div class="form-group state" style="float: none;">
+                                <label class="control-label sr-only" for="f38_state">State / Province / Region</label>
+                                <input type="text" class="form-control" data-gaddress-types="administrative_area_level_1" data-gaddress-name="long_name" id="f38_state" name="state" value='{{ form.state.value|default_if_none:"" }}'  aria-describedby="f38_state-help-block" placeholder="State / Province / Region">
+                                <p id="f38_state-help-block" class="description sr-only">State / Province / Region</p>
+                            </div>
+        
+                            <div class="form-group postalCode" style="float: none;">
+                                <label class="control-label sr-only" for="f38_postalCode">Postal / Zip Code</label>
+                                <input type="text" class="form-control" data-gaddress-types="postal_code" data-gaddress-name="long_name" id="f38_postalCode" name="zipcode" value='{{ form.zipcode.value|default_if_none:"" }}'  aria-describedby="f38_postalCode-help-block" placeholder="Postal / Zip Code">
+                                <p id="f38_postalCode-help-block" class="description sr-only">Postal / Zip Code</p>
+                            </div>
+        
+                            <div class="form-group country" style="float: none;">
+                                <label class="control-label sr-only" for="f38_country">Country</label>
+                                <input type="text" class="form-control" data-gaddress-types="country" data-gaddress-name="long_name" id="f38_country" name="country" value='{{ form.country.value|default_if_none:"" }}'  aria-describedby="f38_country-help-block" placeholder="Country">
+                                <p id="f38_country-help-block" class="description sr-only">Country</p>
+                            </div>
+                            <div class="mq-indicator"></div>
+                        </div>            
 
             <p class="section-header">Notes:</p>
             <p>
@@ -117,10 +103,10 @@
             </p>
             <textarea name="notes" class="form-control big-ext" required rows=5>{{ form.notes.value|default_if_none:"" }}</textarea>
 
-
+            
         </div>
         <div class="col-md-6">
-            <!-- <p class="section-header">Job Location:</p>
+                    <!-- <p class="section-header">Job Location:</p>
                     <p>
                         <strong>Address:</strong>
                     </p>
@@ -134,10 +120,10 @@
                         <input type="text" name="country" id="country" style="float: right;" class="form-control col-md-4" placeholder="Country"
                         />
                     </div> -->
+                    
 
 
-
-            <p class="section-header">Reference Info:</p>
+            <p class="section-header">Certify To:</p>
             <p>
                 <strong>Certify To</strong>
             </p>
@@ -145,29 +131,29 @@
             <p>
                 <strong>Lender</strong>
             </p>
-            <input type="text" name="lender" class="form-control" value='{{ form.lender.value|default_if_none:"" }}' />
+            <input type="text" name="lender" class="form-control" value='{{ form.lender.value|default_if_none:"" }}'/>
             <p>
                 <strong>GF#</strong>
             </p>
-            <input type="text" name="gf" class="form-control" value='{{ form.gf_no.value }}' />
+            <input type="text" name="gf" class="form-control" value='{{ form.gf_no.value }}'/>
             <!-- ADD THESE -->
             <p>
                 <strong>Clerksfile #</strong>
             </p>
-            <input type="text" class="form-control" name="clerksfile" value='{{ form.clerksfile.value|default_if_none:"" }}' />
+            <input type="text" class="form-control" name="clerksfile" value='{{ form.clerksfile.value|default_if_none:"" }}'/>
 
             <div class="row">
                 <div class="col-md-6">
                     <p>
                         <strong>Volume</strong>
                     </p>
-                    <input type="text" class="form-control" name="book" value='{{ form.book.value|default_if_none:"" }}' />
+                    <input type="text" class="form-control" name="book" value='{{ form.book.value|default_if_none:"" }}'/>
                 </div>
                 <div class="col-md-6">
                     <p>
                         <strong>Page</strong>
                     </p>
-                    <input type="text" class="form-control" name="page" value='{{ form.page.value|default_if_none:"" }}' />
+                    <input type="text" class="form-control" name="page" value='{{ form.page.value|default_if_none:"" }}'/>
                 </div>
             </div>
             <div class="row">
@@ -175,13 +161,13 @@
                     <p>
                         <strong>Well Name</strong>
                     </p>
-                    <input type="text" name="well_name" class="form-control" value='{{ form.well_name.value|default_if_none:"" }}' />
+                    <input type="text" name="well_name" class="form-control" value='{{ form.well_name.value|default_if_none:"" }}'/>
                 </div>
                 <div class="col-md-6">
                     <p>
                         <strong>Well Number</strong>
                     </p>
-                    <input type="text" name="well_number" class="form-control" value='{{ form.well_number.value|default_if_none:"" }}' />
+                    <input type="text" name="well_number" class="form-control" value='{{ form.well_number.value|default_if_none:"" }}'/>
                 </div>
             </div>
             <!--END ADD-->
@@ -198,16 +184,16 @@
                 <option value="plss">PLSS</option>
             </select> -->
             <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
-                    <option value=""> - Select - </option>
-                    {% for join_type in join_types %}
-                    {% if join_type != '0' %}
-                    <option value="{{join_type }}" 
-                        {% if form.survey_type.value == join_type%}
-                            selected 
-                        {% endif %}>{{ join_type|upper }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
+                <option value=""> - Select - </option>
+                {% for join_type in join_types %}
+                {% if join_type != '0' %}
+                <option value="{{join_type }}" 
+                    {% if form.survey_type.value == join_type%}
+                        selected 
+                    {% endif %}>{{ join_type|upper }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
             <div class="countyblk">
                 <p>
                     <strong>County
@@ -215,10 +201,14 @@
                     </strong>
                 </p>
 
-                <select name="county" id="selectcounty" class="form-control" required oninput="selCounty(this)">
+                <select name="county" id="selectcounty" class="form-control" required
+                oninput="selCounty(this)">
                     <option value=""> - Select - </option>
                     {% for county in counties %}
-                    <option value="{{county}}" {% if form.county.value==c ounty %} selected {% endif %}>{{ county|upper }}</option>
+                        <option value="{{county}}" 
+                        {% if form.county.value == county %}
+                            selected 
+                        {% endif %}>{{ county|upper }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -240,7 +230,10 @@
                 <select name="subdivision" id="subdivision" class="form-control prad-select" oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                     {% for value in level1 %}
-                    <option value="{{value}}" {% if form.subdivision.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.subdivision.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="prad-select">
@@ -249,7 +242,10 @@
                 <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                     {% for value in level2 %}
-                    <option value="{{value}}" {% if form.unit.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.unit.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="prad-select">
@@ -258,7 +254,10 @@
                 <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
                     <option value=""> - Select - </option>
                     {% for value in level3 %}
-                    <option value="{{value}}" {% if form.sub_block.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.sub_block.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="prad-select">
@@ -267,15 +266,15 @@
                 <select name="lot" id="lot" class="form-control prad-select">
                     <option value=""> - Select - </option>
                     {% for value in level4 %}
-                    <option value="{{value}}" {% if form.lot.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.lot.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div id="rural-select">
                 <p class="rural-select">
-                    For a map of Texas sections click
-                    <a href="http://gisweb.glo.texas.gov/glomapjs/index.html" target="_blank">here</a>
-                    <br />
                     <strong>Survey
                         <span style="color: red;">*</span>
                     </strong>
@@ -283,7 +282,10 @@
                 <select name="survey" id="survey" class="form-control rural-select" required oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                     {% for value in level1 %}
-                    <option value="{{value}}" {% if form.survey.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.survey.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="rural-select">
@@ -294,7 +296,10 @@
                 <select name="block" id="block" class="form-control rural-select" required oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                     {% for value in level2 %}
-                    <option value="{{value}}" {% if form.rural_block.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.rural_block.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="rural-select">
@@ -305,7 +310,10 @@
                 <select name="rural_section" id="rural_section" class="form-control rural-select" required>
                     <option value=""> - Select - </option>
                     {% for value in level3 %}
-                    <option value="{{value}}" {% if form.rural_section.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.rural_section.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -318,7 +326,10 @@
                 <select name="meridian" id="meridian" class="form-control plss-select" required oninput="selLevel3(this)">
                     <option value=""> - Select - </option>
                     {% for value in level1 %}
-                    <option value="{{value}}" {% if form.meridian.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.meridian.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="plss-select">
@@ -329,7 +340,10 @@
                 <select name="town_range" id="town_range" class="form-control plss-select" required oninput="selLevel4(this)">
                     <option value=""> - Select - </option>
                     {% for value in level2 %}
-                    <option value="{{value}}" {% if form.t_r.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.t_r.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
                 <p class="plss-select">
@@ -340,7 +354,10 @@
                 <select name="section" id="section" class="form-control plss-select" required>
                     <option value=""> - Select - </option>
                     {% for value in level3 %}
-                    <option value="{{value}}" {% if form.plss_section.value==v alue %} selected {% endif %}>{{ value }}</option>
+                        <option value="{{value}}" 
+                        {% if form.plss_section.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -350,36 +367,33 @@
         <div class="col-md-12">
             <p class="section-header">Folder Path</p>
             <div class="row">
-                <div class="col-md-2 col-sm-2 col-lg-2">
+                <div class="col-md-2">
                     <p>
                         <strong>Folder Path
                             <span style="color: red;">*</span>
                         </strong>
                     </p>
                 </div>
-                <input type="text" name="fpath" class="form-control col-md-8 col-sm-8 col-lg-8 fpath" value='{{ form.folder_path.value|default_if_none:"" }}'
-                    required oninput="changePath(this)" />
-                <!-- <div class="col-md-2"></div> -->
-                <a type="text" class="form-control btn btn btn-success col-md-2 col-sm-2 col-lg-2 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}'
-                    target="_blank">Open </a>
+                <input type="text" name="fpath" class="form-control col-md-6 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <div class="col-md-2"></div>
+                <a type="text" class="form-control btn btn btn-primary col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Path </a>
             </div>
         </div>
     </div>
-    <div class="row">
-        <input type="submit" class="btn btn-ext" value="Save">
-        <a href="{%url 'get_pdf' pk=pk %}" target="_blank" class="btn btn-warning">Print Work Order</a>
-    </div>
+    <input type="submit" class="btn btn-ext" value="Save">
+    <a href="{%url 'get_pdf' pk=pk %}" target="_blank" class="btn btn-warning" style="margin: 25px 0px 0px 200px;;">Print Work Order</a>
+
     <script>
-        function ajaxFunc(url, data, indicator) {
+        function ajaxFunc(url, data, indicator){
             $.ajax({
                 method: "get",
                 url: url,
                 data: data
-            }).done(function (counties) {
+            }).done(function( counties ) {
                 body = '<option value=""> - Select - </option>'
-                for (i = 0; i < counties.length; i++) {
-                    body += '<option value="' + counties[i] + '">' + counties[i].toUpperCase() + '</option>'
-
+                for (i=0; i<counties.length; i++){
+                    body += '<option value="'+counties[i]+'">'+counties[i].toUpperCase()+'</option>'
+                    
                 }
                 $(indicator).html(body)
             });
@@ -426,13 +440,13 @@
             $.ajax({
                 method: "get",
                 url: '{% url "ajax_client_data" %}'
-            }).done(function (clients) {
-                $(".autocomplete-client").autocomplete({
-                    source: clients
+            }).done(function( clients ) {
+                $( ".autocomplete-client" ).autocomplete({
+                   source: clients
                 });
             });
 
-            {%if form.county.value == None or form.county.value == "" %}
+            {%if form.county.value == None or form.county.value == ""%}
             selCounty(null);
             {% endif %}
         });
@@ -444,14 +458,14 @@
                 url: "{% url 'ajax_load_counties' %}",
                 data: { join_type: join_type }
             })
-                .done(function (counties) {
-                    body = '<option value=""> - Select - </option>'
-                    for (i = 0; i < counties.length; i++) {
-                        body += '<option value="' + counties[i] + '">' + counties[i] + '</option>'
-
-                    }
-                    $("#selectcounty").html(body)
-                });
+            .done(function( counties ) {
+                body = '<option value=""> - Select - </option>'
+                for (i=0; i<counties.length; i++){
+                    body += '<option value="'+counties[i]+'">'+counties[i]+'</option>'
+                    
+                }
+                $("#selectcounty").html(body)
+            });
 
             $("#subdivision").html('<option value=""> - Select - </option>')
             $("#unit").html('<option value=""> - Select - </option>')
@@ -506,7 +520,7 @@
             }
         }
 
-        function selCounty(e) {
+        function selCounty(e){
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
 
@@ -522,19 +536,19 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             if (join_type == "rural") {
-                ajaxFunc("{% url 'ajax_load_data' %}",
-                    { join_type: join_type, county: county, type: "survey" }, "#survey")
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"survey" }, "#survey")
             } else if (join_type == "prad") {
-                ajaxFunc("{% url 'ajax_load_data' %}",
-                    { join_type: join_type, county: county, type: "subdivision" }, "#subdivision")
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"subdivision" }, "#subdivision")
             } else if (join_type == "plss") {
-                ajaxFunc("{% url 'ajax_load_data' %}",
-                    { join_type: join_type, county: county, type: "meridian" }, "#meridian")
+                ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, type:"meridian" }, "#meridian")
             } else {
             }
         }
 
-        function selLevel3(obj) {
+        function selLevel3(obj){
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -548,19 +562,19 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             tp = ""
-            if (type == "subdivision") {
+            if (type == "subdivision"){
                 tp = "unit"
-            } else if (type == "survey") {
+            } else if (type == "survey"){
                 tp = "block"
-            } else if (type == "meridian") {
+            } else if (type == "meridian"){
                 tp = "town_range"
             }
 
-            ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp)
         }
 
-        function selLevel4(obj) {
+        function selLevel4(obj){
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -572,22 +586,22 @@
 
             tp = ""
             level1 = ""
-            if (type == "unit") {
+            if (type == "unit"){
                 level1 = $("#subdivision").val()
                 tp = "subblock"
-            } else if (type == "block") {
+            } else if (type == "block"){
                 level1 = $("#survey").val()
                 tp = "rural_section"
-            } else if (type == "town_range") {
+            } else if (type == "town_range"){
                 level1 = $("#meridian").val()
                 tp = "section"
             }
 
-            ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp)
         }
 
-        function selLevel5(obj) {
+        function selLevel5(obj){
             var join_type = $("#selectsurveytype").val();
             var county = $("#selectcounty").val();
             type = $(obj).attr("id")
@@ -598,14 +612,12 @@
             level2 = $("#unit").val()
             tp = "lot"
 
-            ajaxFunc("{% url 'ajax_load_data' %}",
-                {
-                    join_type: join_type, county: county, level1: level1, level2: level2,
-                    level3: $(obj).val(), type: tp
-                }, "#" + tp)
+            ajaxFunc("{% url 'ajax_load_data' %}", 
+                    { join_type: join_type, county: county, level1: level1, level2: level2, 
+                        level3: $(obj).val(), type:tp }, "#" + tp)
         }
 
-        function changePath(obj) {
+        function changePath(obj){
             $(".pathlink").attr("href", $(obj).val())
         }
     </script>
