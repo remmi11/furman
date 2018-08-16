@@ -378,7 +378,7 @@
                 </div>
                 <input type="text" name="fpath" class="form-control col-md-8 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
                 <!-- <div class="col-md-2"></div> -->
-                <a type="text" class="form-control btn btn btn-success col-md-2 pull-left pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a>
+                <a type="text" class="form-control btn btn btn-success col-md-2 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a>
             </div>
         </div>
     </div>
