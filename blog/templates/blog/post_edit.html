@@ -200,7 +200,7 @@
             <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
                 <option value=""> - Select - </option>
                 {% for join_type in join_types %} {% if join_type != '0' %}
-                <option value="{{join_type }}" {% if form.survey_type.value==j oin_type%} selected {% endif %}>{{ join_type|upper }}</option>
+                <option value="{{join_type }}" {% if form.survey_type.value==join_type%} selected {% endif %}>{{ join_type|upper }}</option>
                 {% endif %} {% endfor %}
             </select>
             <div class="countyblk">
