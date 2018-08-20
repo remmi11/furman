@@ -31,4 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 
+    # change password urls
+    url(r'^update-profile/(?P<pk>\d+)/$', views.update_profile, name='update_profile')
+
 ]
