@@ -615,7 +615,7 @@ def getpdf(request, pk):
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
     canvas1.setFillColor(colors.black)
-    canvas1.drawString(start_x, offsetY,'Certify To')
+    canvas1.drawString(start_x, offsetY,'Reference Info')
 
     canvas1.drawString(start_x, offsetY-line_space,'Certify To')
     lines = drawText(canvas1, clean(post.certify_to), 17, start_x+130, offsetY)
