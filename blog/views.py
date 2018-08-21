@@ -46,7 +46,7 @@ def post_detail(request, pk):
 def ajaxPagination(request):
     order_cols = ['pk', 'project_no', 'survey_type', 'client', 'county', 'address_street',
                     'survey', 'rural_block', 'rural_section', 'subdivision', 
-                    'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section']
+                    'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section', 'notes']
 
     start = int(request.GET.get("start"))
     length = int(request.GET.get("length"))
@@ -68,7 +68,8 @@ def ajaxPagination(request):
             Q(rural_section__icontains=search_key) | Q(subdivision__icontains=search_key) | \
             Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
             Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
-            Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key)
+            Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key) \
+            | Q(notes__icontains=search_key)
         count = FormAll.objects.filter(condition).count()
         posts = FormAll.objects.filter(condition).order_by(order_key)[start:start+length]
 
@@ -78,7 +79,7 @@ def ajaxPagination(request):
             post.client, post.county, post.address_street, post.survey, \
             post.rural_block, post.rural_section, post.subdivision, \
             post.unit, post.sub_block, post.lot, post.meridian, post.t_r, \
-            post.plss_section, \
+            post.plss_section, post.notes, \
             '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
                     <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
                 </a> <a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
@@ -441,6 +442,27 @@ def user_edit(request, pk):
     return render(request, 'registration/user_edit.html', {'user_form': form})
 
 @login_required
+def update_profile(request, pk):
+    if not request.user.pk != pk: 
+        return redirect('/')
+    
+    users = Users.objects.all()
+    user = get_object_or_404(Users, pk=pk)
+
+    if request.method == "POST":
+        form = UserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            if request.POST.get('new_password') != "":
+                user.set_password(request.POST.get('new_password'))
+            user.save()
+            return redirect('/user/')
+    else:
+        form = UserEditForm(instance=user)
+    return render(request, 'registration/update_profile.html', {'user_form': form})
+
+
+@login_required
 def user_remove(request, pk):
     if not request.user.is_superuser:
         return redirect('/')
@@ -680,3 +702,23 @@ def getpdf(request, pk):
 
     canvas1.save()
     return response
+
+
+class AuthenticationEmailBackend(object):
+    def authenticate(self, username=None, password=None, **kwargs):
+        # UserModel = get_user_model()
+        print ("ppppppppppppppppp")
+        try:
+            user = Users.objects.get(email=username)
+        except Users.DoesNotExist:
+            return None
+        else:
+            if getattr(user, 'is_active', False) and user.check_password(password):
+                return user
+        return None
+
+    def get_user(self, user_id):
+        try:
+            return Users.objects.get(pk=user_id)
+        except Users.DoesNotExist:
+            return None

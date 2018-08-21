@@ -53,6 +53,13 @@ MIDDLEWARE = [
     #'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "blog.views.AuthenticationEmailBackend",
+)
+
+
 ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
