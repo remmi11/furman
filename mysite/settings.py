@@ -176,4 +176,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'blog/static'),
 )
 
-M_CLIENT = Client(('127.0.0.1', 11211))   
+#M_CLIENT = Client(('127.0.0.1', 11211))   
