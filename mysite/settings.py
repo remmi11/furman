@@ -25,7 +25,7 @@ SECRET_KEY = '4H1EFLJMSAy6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'furmanrecords.com', 'www.furmanrecords.com', 'furman.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'furmanrecords.com', 'www.furmanrecords.com', 'furman.herokuapp.com', 'localhost', '159.89.131.61']
 
 SITE_ID = 1
 
