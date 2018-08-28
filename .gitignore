@@ -1,4 +1,5 @@
 env/
+myvenv/
 .vscode
 *.accdb
 data/
