@@ -151,14 +151,19 @@ def post_new(request):
                 post.unit = request.POST.get('unit')
                 post.sub_block = request.POST.get('subblock')
                 post.lot = request.POST.get('lot')
+                post.join_field = "\\".join([post.county, post.subdivision, post.unit, post.sub_block, post.lot])
             elif request.POST.get('surveytype') == "rural":
+                post.county = request.POST.get('county')
                 post.survey = request.POST.get('survey')
                 post.rural_block = request.POST.get('block')
                 post.rural_section = request.POST.get('rural_section')
+                post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
             else:
+                post.county = request.POST.get('county')
                 post.meridian = request.POST.get('meridian')
                 post.t_r = request.POST.get('town_range')
                 post.plss_section = request.POST.get('section')
+                post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
             post.folder_path = request.POST.get('fpath')
 
             form.save()
@@ -295,14 +300,19 @@ def post_edit(request, pk):
                 post.unit = request.POST.get('unit')
                 post.sub_block = request.POST.get('subblock')
                 post.lot = request.POST.get('lot')
+                post.join_field = "\\".join([post.subdivision, post.unit, post.sub_block, post.lot])
             elif request.POST.get('surveytype') == "rural":
+                post.county = request.POST.get('county')
                 post.survey = request.POST.get('survey')
                 post.rural_block = request.POST.get('block')
                 post.rural_section = request.POST.get('rural_section')
+                post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
             else:
+                post.county = request.POST.get('county')
                 post.meridian = request.POST.get('meridian')
                 post.t_r = request.POST.get('town_range')
                 post.plss_section = request.POST.get('section')
+                post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
             post.folder_path = request.POST.get('fpath')
 
             form.save()
