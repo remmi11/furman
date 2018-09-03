@@ -79,15 +79,16 @@ def ajaxPagination(request):
             post.client, post.county, post.address_street, post.survey, \
             post.rural_block, post.rural_section, post.subdivision, \
             post.unit, post.sub_block, post.lot, post.meridian, post.t_r, \
-            post.plss_section, post.notes, \
-            '<a class="btn btn-default" href="'+str(post.folder_path)+'" target="_blank"> \
-                    <span><i class="fa fa-external-link" style="font-size:24px"></i></span> \
-                </a>',\
+            post.plss_section, post.notes, 
             '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
                     <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
                 </a> <a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
                 <span><i class="fa fa-eye" style="font-size:24px"></i></span> \
             </a>'])
+            '''\
+            '<a class="btn btn-default" href="'+str(post.folder_path)+'" target="_blank"> \
+                    <span><i class="fa fa-external-link" style="font-size:24px"></i></span> \
+                </a>',\'''
     posts = {
             "draw": draw,
             "recordsTotal": count,
