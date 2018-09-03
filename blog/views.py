@@ -71,7 +71,7 @@ def ajaxPagination(request):
             Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
             Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
             Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key) \
-            | Q(notes__icontains=search_key | Q(aka__icontains=search_key))
+            | Q(notes__icontains=search_key) | Q(aka__icontains=search_key)
         count = FormAll.objects.filter(condition).count()
         posts = FormAll.objects.filter(condition).order_by(order_key)[start:start+length]
 
