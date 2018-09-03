@@ -103,6 +103,11 @@
             </p>
             <textarea name="notes" class="form-control big-ext" required rows=5>{{ form.notes.value|default_if_none:"" }}</textarea>
 
+            <p>
+                <strong>AKA</strong>
+            </p>
+            <input type="text" class="form-control" name="aka" value= '{{ form.aka.value|default_if_none:"" }}'/>
+
             
         </div>
         <div class="col-md-6">
@@ -376,7 +381,7 @@
                 </div>
                 <input type="text" name="fpath" class="form-control col-md-6 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
                 <div class="col-md-2"></div>
-                <a type="text" class="form-control btn btn btn-primary col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Path </a>
+                <a type="text" class="form-control btn btn btn-success col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Path </a>
             </div>
         </div>
     </div>

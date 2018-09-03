@@ -82,8 +82,9 @@ class FormAll(models.Model):
     well_number = models.CharField(max_length=255, blank=True, null=True)
     join_field = models.CharField(max_length=255, blank=True, null=True)
 
+    aka = models.CharField(max_length=255, blank=True, null=True)
+
     class Meta:
-        managed = False
         db_table = 'form_all'
 
 

@@ -48,7 +48,7 @@ def post_detail(request, pk):
 def ajaxPagination(request):
     order_cols = ['pk', 'project_no', 'survey_type', 'client', 'county', 'address_street',
                     'survey', 'rural_block', 'rural_section', 'subdivision', 
-                    'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section', 'notes']
+                    'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section', 'notes', 'aka']
 
     start = int(request.POST.get("start"))
     length = int(request.POST.get("length"))
@@ -71,7 +71,7 @@ def ajaxPagination(request):
             Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
             Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
             Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key) \
-            | Q(notes__icontains=search_key)
+            | Q(notes__icontains=search_key | Q(aka__icontains=search_key))
         count = FormAll.objects.filter(condition).count()
         posts = FormAll.objects.filter(condition).order_by(order_key)[start:start+length]
 
@@ -81,8 +81,8 @@ def ajaxPagination(request):
             post.client, post.county, post.address_street, post.survey, \
             post.rural_block, post.rural_section, post.subdivision, \
             post.unit, post.sub_block, post.lot, post.meridian, post.t_r, \
-            post.plss_section, post.notes, \
-            '<a class="btn btn-default" href="'+str(post.folder_path)+'" target="_blank"> \
+            post.plss_section, post.notes, post.aka, \
+            '<a class="btn btn-default" href="'+str(post.folder_path)+'" target="_blank" title="'+str(post.folder_path)+'"> \
                     <span><i class="fa fa-external-link" style="font-size:24px"></i></span> \
                 </a>',\
             '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \

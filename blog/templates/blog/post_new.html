@@ -116,6 +116,10 @@
                 </strong>
             </p>
             <textarea name="notes" class="form-control big-ext" required rows=5>{{ form.notes.value|default_if_none:"" }}</textarea>
+            <p>
+                <strong>AKA</strong>
+            </p>
+            <input type="text" class="form-control" name="aka" value= '{{ form.aka.value|default_if_none:"" }}'/>
         </div>
 
 
@@ -223,15 +227,11 @@
                 <p class="prad-select">
                     <strong>Unit</strong>
                 </p>
-                <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
-                    <option value=""> - Select - </option>
-                </select>
+                <input type="text" name="unit" id="unit" class="form-control prad-select" onblur="selLevel4(this)">
                 <p class="prad-select">
                     <strong>Sub Block</strong>
                 </p>
-                <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
-                    <option value=""> - Select - </option>
-                </select>
+                <input type="text" name="subblock" id="subblock" class="form-control prad-select" onblur="selLevel5(this)"/>
                 <p class="prad-select">
                     <strong>Lot</strong>
                 </p>
@@ -308,7 +308,8 @@
                         </strong>
                     </p>
                 </div>
-                <input type="text" name="fpath" class="form-control col-md-8 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <input type="text" name="fpath" class="form-control col-md-6 fpath"  value='{{ form.folder_path.value|default_if_none:"" }}' required oninput="changePath(this)" />
+                <div class="col-md-2"></div>
                 <!-- <div class="col-md-2"></div> -->
 <!--                 <a type="text" class="form-control btn btn btn-success col-md-2 pull-left pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a> -->
                 <a type="text" class="form-control btn btn btn-success col-md-1 pathlink" href='{{ form.folder_path.value|default_if_none:"javascript:void(0)" }}' target="_blank" > Open </a>
@@ -319,18 +320,24 @@
 
     <script>
 
-        function ajaxFunc(url, data, indicator) {
+        function ajaxFunc(url, data, indicator, flag=1) {
             $.ajax({
                 method: "get",
                 url: url,
                 data: data
             }).done(function (counties) {
-                body = '<option value=""> - Select - </option>'
-                for (i = 0; i < counties.length; i++) {
-                    body += '<option value="' + counties[i].toUpperCase() + '">' + counties[i].toUpperCase() + '</option>'
+                if(flag == 1){
+                    body = '<option value=""> - Select - </option>'
+                    for (i = 0; i < counties.length; i++) {
+                        body += '<option value="' + counties[i].toUpperCase() + '">' + counties[i].toUpperCase() + '</option>'
 
+                    }
+                    $(indicator).html(body)
+                } else {
+                    $(indicator).autocomplete({
+                        source: counties
+                    });
                 }
-                $(indicator).html(body)
             });
         }
 
