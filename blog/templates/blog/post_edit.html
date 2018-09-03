@@ -244,39 +244,15 @@
                 <p class="prad-select">
                     <strong>Unit</strong>
                 </p>
-                <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
-                    <option value=""> - Select - </option>
-                    {% for value in level2 %}
-                        <option value="{{value}}" 
-                        {% if form.unit.value == value %}
-                            selected 
-                        {% endif %}>{{ value }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" name="unit" id="unit" class="form-control prad-select" onblur="selLevel4(this)" value="{{form.unit.value}}" />
                 <p class="prad-select">
                     <strong>Sub Block</strong>
                 </p>
-                <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
-                    <option value=""> - Select - </option>
-                    {% for value in level3 %}
-                        <option value="{{value}}" 
-                        {% if form.sub_block.value == value %}
-                            selected 
-                        {% endif %}>{{ value }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" name="subblock" id="subblock" class="form-control prad-select" onblur="selLevel5(this)" value="{{form.sub_block.value}}" />
                 <p class="prad-select">
                     <strong>Lot</strong>
                 </p>
-                <select name="lot" id="lot" class="form-control prad-select">
-                    <option value=""> - Select - </option>
-                    {% for value in level4 %}
-                        <option value="{{value}}" 
-                        {% if form.lot.value == value %}
-                            selected 
-                        {% endif %}>{{ value }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" name="lot" id="lot" class="form-control prad-select" value="{{form.lot.value}}">
             </div>
             <div id="rural-select">
                 <p class="rural-select">
@@ -389,18 +365,24 @@
     <a href="{%url 'get_pdf' pk=pk %}" target="_blank" class="btn btn-warning" style="margin: 25px 0px 0px 200px;;">Print Work Order</a>
 
     <script>
-        function ajaxFunc(url, data, indicator){
+        function ajaxFunc(url, data, indicator, flag=1){
             $.ajax({
                 method: "get",
                 url: url,
                 data: data
             }).done(function( counties ) {
-                body = '<option value=""> - Select - </option>'
-                for (i=0; i<counties.length; i++){
-                    body += '<option value="'+counties[i]+'">'+counties[i].toUpperCase()+'</option>'
-                    
+                if(flag == 1){
+                    body = '<option value=""> - Select - </option>'
+                    for (i=0; i<counties.length; i++){
+                        body += '<option value="'+counties[i]+'">'+counties[i].toUpperCase()+'</option>'
+                        
+                    }
+                    $(indicator).html(body)
+                } else {
+                    $(indicator).autocomplete({
+                        source: counties
+                    });
                 }
-                $(indicator).html(body)
             });
         }
 
@@ -567,8 +549,10 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             tp = ""
+            flag = 1
             if (type == "subdivision"){
                 tp = "unit"
+                flag = 0
             } else if (type == "survey"){
                 tp = "block"
             } else if (type == "meridian"){
@@ -576,7 +560,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp)
+                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp, flag)
         }
 
         function selLevel4(obj){
@@ -591,9 +575,11 @@
 
             tp = ""
             level1 = ""
+            flag = 1
             if (type == "unit"){
                 level1 = $("#subdivision").val()
                 tp = "subblock"
+                flag = 0
             } else if (type == "block"){
                 level1 = $("#survey").val()
                 tp = "rural_section"
@@ -603,7 +589,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp)
+                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp, flag)
         }
 
         function selLevel5(obj){
@@ -619,7 +605,7 @@
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
                     { join_type: join_type, county: county, level1: level1, level2: level2, 
-                        level3: $(obj).val(), type:tp }, "#" + tp)
+                        level3: $(obj).val(), type:tp }, "#" + tp, 1)
         }
 
         function changePath(obj){
