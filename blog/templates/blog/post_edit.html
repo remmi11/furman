@@ -605,7 +605,7 @@
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
                     { join_type: join_type, county: county, level1: level1, level2: level2, 
-                        level3: $(obj).val(), type:tp }, "#" + tp, 1)
+                        level3: $(obj).val(), type:tp }, "#" + tp, 0)
         }
 
         function changePath(obj){
