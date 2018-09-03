@@ -68,7 +68,10 @@
             $('#escalation').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{% url 'ajax_pagination' %}",
+                "ajax": {
+                    "url": "{% url 'ajax_pagination' %}",
+                    "type": "POST"
+                },
                 "scrollX": true
             });
             $('#usertable').DataTable();
