@@ -501,8 +501,10 @@
             $("#section").html('<option value=""> - Select - </option>')
 
             tp = ""
+            flag = 1
             if (type == "subdivision") {
                 tp = "unit"
+                flag = 0
             } else if (type == "survey") {
                 tp = "block"
             } else if (type == "meridian") {
@@ -510,7 +512,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
+                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp, flag)
         }
 
         function selLevel4(obj) {
@@ -525,9 +527,11 @@
 
             tp = ""
             level1 = ""
+            flag = 1
             if (type == "unit") {
                 level1 = $("#subdivision").val()
                 tp = "subblock"
+                flag = 0
             } else if (type == "block") {
                 level1 = $("#survey").val()
                 tp = "rural_section"
@@ -537,7 +541,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
+                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp, flag)
         }
 
         function selLevel5(obj) {
@@ -555,7 +559,7 @@
                 {
                     join_type: join_type, county: county, level1: level1, level2: level2,
                     level3: $(obj).val(), type: tp
-                }, "#" + tp)
+                }, "#" + tp, 0)
         }
 
         function changePath(obj){
