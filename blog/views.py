@@ -23,6 +23,7 @@ import os
 from textwrap import wrap
 
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 # from django.core.cache import caches
 # from mysite.settings import M_CLIENT
@@ -43,18 +44,19 @@ def post_detail(request, pk):
     return render(request, 'blog/post_detail.html', {'post': post})
 
 @login_required
+@csrf_exempt
 def ajaxPagination(request):
     order_cols = ['pk', 'project_no', 'survey_type', 'client', 'county', 'address_street',
                     'survey', 'rural_block', 'rural_section', 'subdivision', 
                     'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section', 'notes']
 
-    start = int(request.GET.get("start"))
-    length = int(request.GET.get("length"))
-    draw = int(request.GET.get("draw"))
-    search_key = request.GET.get('search[value]')
+    start = int(request.POST.get("start"))
+    length = int(request.POST.get("length"))
+    draw = int(request.POST.get("draw"))
+    search_key = request.POST.get('search[value]')
 
-    order_col = request.GET.get('order[0][column]')
-    order_type = request.GET.get('order[0][dir]')
+    order_col = request.POST.get('order[0][column]')
+    order_type = request.POST.get('order[0][dir]')
     order_key = order_cols[int(order_col)] if order_type == "asc" else "-" + order_cols[int(order_col)]
         
     if search_key == None or search_key == "":
