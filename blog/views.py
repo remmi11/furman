@@ -602,6 +602,10 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.notes), 40, start_x, offsetY)
     offsetY = offsetY-lines*line_space-80
 
+    canvas1.drawString(start_x, offsetY-line_space,'AKA')
+    lines = drawText(canvas1, cleanDate(post.aka), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
     start_x = 310
     canvas1.setFont('Helvetica-Bold', 12)
     canvas1.drawString(start_x+60,start_y,'Survey Work Order')
