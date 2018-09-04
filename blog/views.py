@@ -603,7 +603,7 @@ def getpdf(request, pk):
     offsetY = offsetY-lines*line_space-80
 
     canvas1.drawString(start_x, offsetY-line_space,'AKA')
-    lines = drawText(canvas1, post.aka, 17, start_x+130, offsetY)
+    lines = drawText(canvas1, clean(post.aka), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
     start_x = 310
