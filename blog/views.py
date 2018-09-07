@@ -28,14 +28,8 @@ from django.views.decorators.csrf import csrf_exempt
 # from django.core.cache import caches
 # from mysite.settings import M_CLIENT
 
-# def post_list(request):
-#     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
-#     return render(request, 'blog/post_list.html', {'posts': posts})
-
 @login_required
 def post_list(request):
-    # filter(published_date__lte=timezone.now()).order_by('published_date')
-    # posts = FormAll.objects.all()[:100]
     return render(request, 'blog/post_list.html', {})
 
 @login_required
@@ -107,29 +101,11 @@ def ajaxClientData(request):
 
 @login_required
 def post_new(request):
-    # posts = FormAll.objects.all()
-    # if request.method == "POST":
-    #     form = PostForm(request.POST)
-    #     if form.is_valid():
-    #         post = form.save(commit=False)
-    #         post.author = request.user
-    #         post.published_date = timezone.now()
-    #         form.save()
-    #         return render(request, 'blog/post_list.html', {'posts': posts})
-    #         #return redirect('post_detail', pk=post.pk)
-    # else:
-    #     form = PostForm()
-    #     join_type = MasterGeom.objects.all().distinct('join_type')
-    # return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+
     posts = FormAll.objects.all()
-    #post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
-        #form = PostForm(request.POST, instance=post)
         form = PostForm(request.POST)
         if form.is_valid():
-            # post = form.save(commit=False)
-            # post.author = request.user
-            # post.published_date = timezone.now()
             post = form.save(commit=False)
             post.date_entered = timezone.now()
             post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
@@ -177,9 +153,6 @@ def post_new(request):
 
 
 def loadCounties(request):
-    #survey_types = MasterGeom.objects.all().distinct('join_type')
-    # county_id = request.GET.get('surveytype')
-    # print (county_id)
     result_set = []
     counties = MasterGeom.objects.filter(join_type=request.GET.get('join_type')).distinct('county')
     
@@ -187,7 +160,6 @@ def loadCounties(request):
         if county == None:
             continue
         result_set.append(county.county)
-    #counties = MasterGeom.objects.filter(join_type=county_id).order_by('county_code')
     return HttpResponse(json.dumps(result_set), content_type='application/json')
 
 @login_required
@@ -277,9 +249,6 @@ def post_edit(request, pk):
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            # post = form.save(commit=False)
-            # post.author = request.user
-            # post.published_date = timezone.now()
             post.date_entered = timezone.now()
             post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
             post.client = request.POST.get('client')
@@ -317,7 +286,6 @@ def post_edit(request, pk):
 
             form.save()
             return redirect("/post/%d/edit/" % post.pk)
-            # return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
         join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
@@ -385,28 +353,6 @@ def post_edit(request, pk):
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \
         "level3": level[2], "level4": level[3], 'pk': post.pk})
-
-# def post_edit(request, pk):
-#     posts = Form.objects.all()
-#     post = get_object_or_404(Form, pk=pk)
-#     if request.method == "POST":
-#         form = PostForm(request.POST, instance=post)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             #post.date_entered=request.POST.get('date_entered')
-#             #post.date_needed=request.POST.get('date_needed')
-#             #post.client=request.POST.get('client')
-#             #post.project_no = request.POST.get('project_no')
-#             post.project_no=request.POST.get('project_no')
-#             post.author = request.user
-#             post.published_date = timezone.now()
-#             post.save()
-#             # return redirect('post_detail', pk=post.pk)
-#             return render(request, 'blog/post_list.html', {'posts': posts})
-
-#     else:
-#         form = PostForm(instance=post)
-#     return render(request, 'blog/post_edit.html', {'form': form})
 
 
 @login_required
