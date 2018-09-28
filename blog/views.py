@@ -105,7 +105,6 @@ def ajaxClientData(request):
 @login_required
 def post_new(request):
     posts = FormAll.objects.all()
-    #post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -234,9 +233,6 @@ def post_edit(request, pk):
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            # post = form.save(commit=False)
-            # post.author = request.user
-            # post.published_date = timezone.now()
             post.date_entered = timezone.now()
             post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
             post.client = request.POST.get('client')
