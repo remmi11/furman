@@ -27,3 +27,8 @@
     color: white;
     margin-top: 25px;
 }
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}

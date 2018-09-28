@@ -25,17 +25,8 @@ from textwrap import wrap
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 
-# from django.core.cache import caches
-# from mysite.settings import M_CLIENT
-
-# def post_list(request):
-#     posts = Form.objects.all() #filter(published_date__lte=timezone.now()).order_by('published_date')
-#     return render(request, 'blog/post_list.html', {'posts': posts})
-
 @login_required
 def post_list(request):
-    # filter(published_date__lte=timezone.now()).order_by('published_date')
-    # posts = FormAll.objects.all()[:100]
     return render(request, 'blog/post_list.html', {})
 
 @login_required
@@ -77,6 +68,17 @@ def ajaxPagination(request):
 
     data = []
     for post in posts:
+        if request.user.edit_auth:
+            action_buttons = '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
+                        <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
+                    </a> <a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
+                    <span><i class="fa fa-eye" style="font-size:24px"></i></span> \
+                </a>'
+        else:
+            action_buttons = '<a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
+                    <span><i class="fa fa-eye" style="font-size:24px"></i></span> \
+                </a>'
+
         data.append([post.pk, post.project_no, post.survey_type, \
             post.client, post.county, post.address_street, post.survey, \
             post.rural_block, post.rural_section, post.subdivision, \
@@ -84,12 +86,7 @@ def ajaxPagination(request):
             post.plss_section, post.notes, post.aka, \
             '<a class="btn btn-default" href="'+str(post.folder_path)+'" target="_blank" title="'+str(post.folder_path)+'"> \
                     <span><i class="fa fa-external-link" style="font-size:24px"></i></span> \
-                </a>',\
-            '<a class="btn btn-default" href="/post/'+str(post.pk)+'/edit/"> \
-                    <span><i class="fa fa-pencil" style="font-size:24px"></i></span> \
-                </a> <a class="btn btn-default" target="_blank" href="/get_pdf/'+str(post.pk)+'/"> \
-                <span><i class="fa fa-eye" style="font-size:24px"></i></span> \
-            </a>'])
+                </a>', action_buttons])
     posts = {
             "draw": draw,
             "recordsTotal": count,
@@ -107,29 +104,11 @@ def ajaxClientData(request):
 
 @login_required
 def post_new(request):
-    # posts = FormAll.objects.all()
-    # if request.method == "POST":
-    #     form = PostForm(request.POST)
-    #     if form.is_valid():
-    #         post = form.save(commit=False)
-    #         post.author = request.user
-    #         post.published_date = timezone.now()
-    #         form.save()
-    #         return render(request, 'blog/post_list.html', {'posts': posts})
-    #         #return redirect('post_detail', pk=post.pk)
-    # else:
-    #     form = PostForm()
-    #     join_type = MasterGeom.objects.all().distinct('join_type')
-    # return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
     posts = FormAll.objects.all()
     #post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
-        #form = PostForm(request.POST, instance=post)
         form = PostForm(request.POST)
         if form.is_valid():
-            # post = form.save(commit=False)
-            # post.author = request.user
-            # post.published_date = timezone.now()
             post = form.save(commit=False)
             post.date_entered = timezone.now()
             post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
@@ -177,9 +156,6 @@ def post_new(request):
 
 
 def loadCounties(request):
-    #survey_types = MasterGeom.objects.all().distinct('join_type')
-    # county_id = request.GET.get('surveytype')
-    # print (county_id)
     result_set = []
     counties = MasterGeom.objects.filter(join_type=request.GET.get('join_type')).distinct('county')
     
@@ -187,7 +163,6 @@ def loadCounties(request):
         if county == None:
             continue
         result_set.append(county.county)
-    #counties = MasterGeom.objects.filter(join_type=county_id).order_by('county_code')
     return HttpResponse(json.dumps(result_set), content_type='application/json')
 
 @login_required
@@ -249,29 +224,11 @@ def getdetails(request):
 
     return HttpResponse(json.dumps(result_set), content_type='application/json')
 
-'''@login_required
-def getdetails(request):
-    
-    #country_name = request.POST['country_name']
-    country_name = request.GET['surveytype']
-    print ("ajax country_name " + country_name)
-
-    result_set = []
-    all_cities = []
-
-    answer = str(country_name[1:-1])
-    selected_country = MasterGeom.objects.get(join_type=answer)
-    print ("selected country name ", selected_country)
-
-    all_cities = selected_country.city_set.all()
-    for city in all_cities:
-        print ("city name", city.county)
-        result_set.append({'name': city.county})
-
-    return HttpResponse(simplejson.dumps(result_set), mimetype='application/json', content_type='application/json')'''
-
 @login_required
 def post_edit(request, pk):
+    if request.user.edit_auth == False:
+        get_object_or_404(FormAll, pk=None)
+
     posts = FormAll.objects.all()
     post = get_object_or_404(FormAll, pk=pk)
     if request.method == "POST":
@@ -317,21 +274,12 @@ def post_edit(request, pk):
 
             form.save()
             return redirect("/post/%d/edit/" % post.pk)
-            # return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
         join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
         
-        '''if M_CLIENT.get("counties-%s" % post.survey_type):
-            print ("pp" * 20)
-            data = json.loads(M_CLIENT.get("counties-%s" % post.survey_type).decode("utf8"))
-            counties = data
-
-        else:'''
         counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
         counties = [tp.county.strip() for tp in counties if tp.county!=None]
-
-        # M_CLIENT.set("counties-%s" % post.survey_type, json.dumps(counties))
 
         res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county).distinct('join_field')
         
@@ -385,29 +333,6 @@ def post_edit(request, pk):
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \
         "level3": level[2], "level4": level[3], 'pk': post.pk})
-
-# def post_edit(request, pk):
-#     posts = Form.objects.all()
-#     post = get_object_or_404(Form, pk=pk)
-#     if request.method == "POST":
-#         form = PostForm(request.POST, instance=post)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             #post.date_entered=request.POST.get('date_entered')
-#             #post.date_needed=request.POST.get('date_needed')
-#             #post.client=request.POST.get('client')
-#             #post.project_no = request.POST.get('project_no')
-#             post.project_no=request.POST.get('project_no')
-#             post.author = request.user
-#             post.published_date = timezone.now()
-#             post.save()
-#             # return redirect('post_detail', pk=post.pk)
-#             return render(request, 'blog/post_list.html', {'posts': posts})
-
-#     else:
-#         form = PostForm(instance=post)
-#     return render(request, 'blog/post_edit.html', {'form': form})
-
 
 @login_required
 def user_list(request):
@@ -587,12 +512,6 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.country), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
-    '''canvas1.drawString(start_x, offsetY-line_space,'JobSt:')
-    linesst = drawText(canvas1, clean(post.state), 13, start_x+40, offsetY)
-    canvas1.drawString(start_x+130, offsetY-line_space,'JobZip:')
-    lineszip = drawText(canvas1, clean(post.zipcode), 13, start_x+180, offsetY)
-    lines = linesst if linesst > lineszip else lineszip'''
-
     offsetY = offsetY - 30 - lines*line_space
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
@@ -725,8 +644,6 @@ def getpdf(request, pk):
 
 class AuthenticationEmailBackend(object):
     def authenticate(self, username=None, password=None, **kwargs):
-        # UserModel = get_user_model()
-        print ("ppppppppppppppppp")
         try:
             user = Users.objects.get(email=username)
         except Users.DoesNotExist:

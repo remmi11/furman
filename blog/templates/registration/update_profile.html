@@ -29,10 +29,12 @@
             <p class="help-block">
 	            {{ user_form.email.errors }}
 	        </p>
-            <p>
-                <strong>Remember Token:</strong>
-            </p>
-            {{ user_form.remember_token }}
+            {% if request.user.is_superuser %}
+                <p>
+                    <strong>Edit:</strong>
+                </p>
+                {{ user_form.edit_auth }}
+            {% endif %}
         </div>
     </div>
     <button class="btn btn-ext">Save</button>

@@ -243,6 +243,7 @@ class Users(AbstractUser):
     # password = models.CharField(max_length=255, blank=True, null=True)
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     role_id = models.IntegerField(blank=True, null=True)
+    edit_auth = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         super(Users, self).save(*args, **kwargs)

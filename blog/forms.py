@@ -31,7 +31,7 @@ class UserForm(forms.ModelForm):
     
     class Meta:
         model = Users
-        fields = ('username', 'email', 'remember_token')
+        fields = ('username', 'email', 'edit_auth')
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -48,7 +48,7 @@ class UserForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = Users
-        fields = ('username', 'email', 'remember_token')
+        fields = ('username', 'email', 'edit_auth')
 
     def __init__(self, *args, **kwargs):
         form = super(UserEditForm, self).__init__(*args, **kwargs)

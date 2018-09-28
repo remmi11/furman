@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %} {% block content %}
+
 <!-- <h1>New post</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
@@ -30,9 +31,9 @@
 	            {{ user_form.email.errors }}
 	        </p>
             <p>
-                <strong>Remember Token:</strong>
+                <strong>Edit:</strong>
             </p>
-            {{ user_form.remember_token }}
+            {{ user_form.edit_auth }}
         </div>
     </div>
     <button class="btn btn-ext">Save</button>
