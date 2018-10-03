@@ -50,19 +50,83 @@ def ajaxPagination(request):
     order_type = request.POST.get('order[0][dir]')
     order_key = order_cols[int(order_col)] if order_type == "asc" else "-" + order_cols[int(order_col)]
         
-    if search_key == None or search_key == "":
+    condition = None
+
+    col_search_key = request.POST.get('columns[0][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(pk__icontains=col_search_key) if condition != None else Q(pk__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[1][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(project_no__icontains=col_search_key) if condition != None else Q(project_no__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[2][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(survey_type__icontains=col_search_key) if condition != None else Q(survey_type__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[3][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(client__icontains=col_search_key) if condition != None else Q(client__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[4][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(county__icontains=col_search_key) if condition != None else Q(county__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[5][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(address_street__icontains=col_search_key) if condition != None else Q(address_street__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[6][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(survey__icontains=col_search_key) if condition != None else Q(survey__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[7][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(rural_block__icontains=col_search_key) if condition != None else Q(rural_block__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[8][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(rural_section__icontains=col_search_key) if condition != None else Q(rural_section__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[9][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(subdivision__icontains=col_search_key) if condition != None else Q(subdivision__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[10][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(unit__icontains=col_search_key) if condition != None else Q(unit__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[11][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(sub_block__icontains=col_search_key) if condition != None else Q(sub_block__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[12][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(lot__icontains=col_search_key) if condition != None else Q(lot__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[13][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(meridian__icontains=col_search_key) if condition != None else Q(meridian__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[14][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(t_r__icontains=col_search_key) if condition != None else Q(t_r__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[15][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(plss_section__icontains=col_search_key) if condition != None else Q(plss_section__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[16][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(notes__icontains=col_search_key) if condition != None else Q(notes__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[17][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(aka__icontains=col_search_key) if condition != None else Q(aka__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[18][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(folder_path__icontains=col_search_key) if condition != None else Q(folder_path__icontains=col_search_key)
+
+    if condition == None and (search_key == None or search_key == ""):
         count = FormAll.objects.all().count()
         posts = FormAll.objects.all().order_by(order_key)[start:start+length]
     else:
-        condition = Q(pk__icontains=search_key) | Q(project_no__icontains=search_key) | \
-            Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | \
-            Q(county__icontains=search_key) | Q(address_street__icontains=search_key) | \
-            Q(survey__icontains=search_key) | Q(rural_block__icontains=search_key) | \
-            Q(rural_section__icontains=search_key) | Q(subdivision__icontains=search_key) | \
-            Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
-            Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
-            Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key) \
-            | Q(notes__icontains=search_key) | Q(aka__icontains=search_key)
+        if search_key != None and search_key != "":
+            condition_global = (Q(pk__icontains=search_key) | Q(project_no__icontains=search_key) | \
+                Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | \
+                Q(county__icontains=search_key) | Q(address_street__icontains=search_key) | \
+                Q(survey__icontains=search_key) | Q(rural_block__icontains=search_key) | \
+                Q(rural_section__icontains=search_key) | Q(subdivision__icontains=search_key) | \
+                Q(unit__icontains=search_key) | Q(sub_block__icontains=search_key) | \
+                Q(lot__icontains=search_key) | Q(meridian__icontains=search_key) | \
+                Q(t_r__icontains=search_key) | Q(plss_section__icontains=search_key) \
+                | Q(notes__icontains=search_key) | Q(aka__icontains=search_key))
+
+            condition = condition & condition_global if condition != None else condition_global
+
         count = FormAll.objects.filter(condition).count()
         posts = FormAll.objects.filter(condition).order_by(order_key)[start:start+length]
 

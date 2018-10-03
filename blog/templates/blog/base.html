@@ -65,7 +65,16 @@
 
     <script>
         $(document).ready(function () {
-            $('#escalation').DataTable({
+            $('#escalation tfoot th').each( function () {
+                var title = $(this).text();
+                if (title == "Edit/Review") {
+                    $(this).html("");
+                } else {
+                    $(this).html( '<input type="text" style="width: 100%"/>' );
+                }
+            } );
+
+            var table = $('#escalation').DataTable({
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
@@ -75,6 +84,31 @@
                 "scrollX": true
             });
             $('#usertable').DataTable();
+
+            // Apply the search
+            table.columns().every( function () {
+                var that = this;
+         
+                $( 'input', this.footer() ).on( 'change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+
+            var r = $('.dataTables_scrollFootInner table tfoot tr');
+            var index = 0;
+            r.find('th').each(function(){
+                index += 1;
+                var css = $(".dataTables_scrollHeadInner thead th:nth-child("+index.toString()+")").attr("style");
+
+                $(this).attr('style', css + " padding: 2px;");
+                $(this).children().css('padding', 0);
+            });
+            $('.dataTables_scrollHeadInner table thead').append(r);
+            $('#search_0').css('text-align', 'center');
 
             {% if 'new' in request.path %}
                 $(".newitem").addClass("active")
