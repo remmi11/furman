@@ -22,12 +22,12 @@ form {
 
 
 .container { 
-max-width: 1800px;
+max-width: 100%;
 margin: 3% auto;
 }
 
  div.dataTables_wrapper {
-    max-width: 1600px;
+    max-width: 100%;
     margin: 50 auto;
 }
 

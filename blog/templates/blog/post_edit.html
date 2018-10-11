@@ -5,6 +5,7 @@
         <button type="submit" class="save btn btn-default">Save</button>
     </form> -->
 <form method="POST" class="post-form">{% csrf_token %}
+<input type="hidden" name="post_id" value="{{ post.id }}">
     <div class="row">
         <div class="col-md-12">
 
@@ -33,6 +34,7 @@
                 </strong>
             </p>
             <input type="text" id="projectno" name="projectno" class="form-control" value= '{{ form.project_no.value|default_if_none:"" }}' required/>
+            <span style="color: red">{{errors}}</span>
             <p>
                 <strong>Client:
                     <span style="color: red;">*</span>
@@ -195,7 +197,7 @@
                 <option value="{{join_type }}" 
                     {% if form.survey_type.value == join_type%}
                         selected 
-                    {% endif %}>{{ join_type|upper }}</option>
+                    {% endif %}> {{ join_type|upper }}</option>
                 {% endif %}
                 {% endfor %}
             </select>

@@ -169,7 +169,11 @@ AUTH_USER_MODEL = 'blog.Users'
 LOGIN_REDIRECT_URL = '/post/'
 LOGOUT_REDIRECT_URL = '/'
 
-SESSION_COOKIE_AGE = 3600
+TIME= 3600
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+SESSION_EXPIRE_AT_BROWSER_CLOSE= True
+SESSION_COOKIE_AGE = TIME
+SESSION_IDLE_TIMEOUT = TIME
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (

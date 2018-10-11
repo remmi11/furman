@@ -169,53 +169,57 @@ def ajaxClientData(request):
 @login_required
 def post_new(request):
     posts = FormAll.objects.all()
+    errors = ""
     if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.date_entered = timezone.now()
-            post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
-            post.client = request.POST.get('client')
-            post.project_no = request.POST.get('projectno')
-            post.map_no = request.POST.get('mapno')
-            post.contact = request.POST.get('jobcontact')
-            post.phone = request.POST.get('phone')
-            post.notes = request.POST.get('notes')
-            post.certify_to = request.POST.get('certify')
-            post.lender = request.POST.get('lender')
-            post.gf_no = request.POST.get('gf')
-            post.survey_type = request.POST.get('surveytype')
-            post.clerksfile = request.POST.get('clerksfile')
-            post.requested_by = request.POST.get('requested_by')
-            if request.POST.get('surveytype') == "prad":
-                post.county = request.POST.get('county')
-                post.subdivision = request.POST.get('subdivision')
-                post.unit = request.POST.get('unit')
-                post.sub_block = request.POST.get('subblock')
-                post.lot = request.POST.get('lot')
-                post.join_field = "\\".join([post.county, post.subdivision, post.unit, post.sub_block, post.lot])
-            elif request.POST.get('surveytype') == "rural":
-                post.county = request.POST.get('county')
-                post.survey = request.POST.get('survey')
-                post.rural_block = request.POST.get('block')
-                post.rural_section = request.POST.get('rural_section')
-                post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
-            else:
-                post.county = request.POST.get('county')
-                post.meridian = request.POST.get('meridian')
-                post.t_r = request.POST.get('town_range')
-                post.plss_section = request.POST.get('section')
-                post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
-            post.folder_path = request.POST.get('fpath')
+        count = FormAll.objects.filter(project_no=request.POST.get('projectno')).count()
+        if count == 0:
+            form = PostForm(request.POST)
+            if form.is_valid() and count == 0:
+                post = form.save(commit=False)
+                post.date_entered = timezone.now()
+                post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
+                post.client = request.POST.get('client')
+                post.project_no = request.POST.get('projectno')
+                post.map_no = request.POST.get('mapno')
+                post.contact = request.POST.get('jobcontact')
+                post.phone = request.POST.get('phone')
+                post.notes = request.POST.get('notes')
+                post.certify_to = request.POST.get('certify')
+                post.lender = request.POST.get('lender')
+                post.gf_no = request.POST.get('gf')
+                post.survey_type = request.POST.get('surveytype')
+                post.clerksfile = request.POST.get('clerksfile')
+                post.requested_by = request.POST.get('requested_by')
+                if request.POST.get('surveytype') == "prad":
+                    post.county = request.POST.get('county')
+                    post.subdivision = request.POST.get('subdivision')
+                    post.unit = request.POST.get('unit')
+                    post.sub_block = request.POST.get('subblock')
+                    post.lot = request.POST.get('lot')
+                    post.join_field = "\\".join([post.county, post.subdivision, post.unit, post.sub_block, post.lot])
+                elif request.POST.get('surveytype') == "rural":
+                    post.county = request.POST.get('county')
+                    post.survey = request.POST.get('survey')
+                    post.rural_block = request.POST.get('block')
+                    post.rural_section = request.POST.get('rural_section')
+                    post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
+                else:
+                    post.county = request.POST.get('county')
+                    post.meridian = request.POST.get('meridian')
+                    post.t_r = request.POST.get('town_range')
+                    post.plss_section = request.POST.get('section')
+                    post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
+                post.folder_path = request.POST.get('fpath')
 
-            form.save()
-            
-            return redirect("/post/%d/edit/" % post.pk)
+                form.save()
+                
+                return redirect("/post/%d/edit/" % post.pk)
+        else:
+            errors = "The project number is already exited."
 
-    else:
-        form = PostForm()
-        join_type = MasterGeom.objects.all().distinct('join_type')
-    return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type})
+    form = PostForm()
+    join_type = MasterGeom.objects.all().distinct('join_type')
+    return render(request, 'blog/post_new.html', {'form': form, 'join_types': join_type, 'errors': errors})
 
 
 def loadCounties(request):
@@ -294,105 +298,112 @@ def post_edit(request, pk):
 
     posts = FormAll.objects.all()
     post = get_object_or_404(FormAll, pk=pk)
+    errors = ""
+
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post.date_entered = timezone.now()
-            post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
-            post.client = request.POST.get('client')
-            post.project_no = request.POST.get('projectno')
-            post.map_no = request.POST.get('mapno')
-            post.contact = request.POST.get('jobcontact')
-            post.phone = request.POST.get('phone')
-            post.notes = request.POST.get('notes')
-            post.certify_to = request.POST.get('certify')
-            post.lender = request.POST.get('lender')
-            post.gf_no = request.POST.get('gf')
-            post.survey_type = request.POST.get('surveytype')
-            post.clerksfile = request.POST.get('clerksfile')
-            post.requested_by = request.POST.get('requested_by')
-            if request.POST.get('surveytype') == "prad":
-                post.county = request.POST.get('county')
-                post.subdivision = request.POST.get('subdivision')
-                post.unit = request.POST.get('unit')
-                post.sub_block = request.POST.get('subblock')
-                post.lot = request.POST.get('lot')
-                post.join_field = "\\".join([post.subdivision, post.unit, post.sub_block, post.lot])
-            elif request.POST.get('surveytype') == "rural":
-                post.county = request.POST.get('county')
-                post.survey = request.POST.get('survey')
-                post.rural_block = request.POST.get('block')
-                post.rural_section = request.POST.get('rural_section')
-                post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
-            else:
-                post.county = request.POST.get('county')
-                post.meridian = request.POST.get('meridian')
-                post.t_r = request.POST.get('town_range')
-                post.plss_section = request.POST.get('section')
-                post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
-            post.folder_path = request.POST.get('fpath')
+        count = FormAll.objects.filter(Q(project_no=request.POST.get('projectno')) & ~Q(pk=request.POST.get('post_id'))).count()
 
-            form.save()
-            return redirect("/post/%d/edit/" % post.pk)
-    else:
-        form = PostForm(instance=post)
-        join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
-        
-        counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
-        counties = [tp.county.strip() for tp in counties if tp.county!=None]
+        if count == 0:
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid() and count == 0:
+                post.date_entered = timezone.now()
+                post.date_needed = None if request.POST.get('date-needed') == "" else request.POST.get('date-needed')
+                post.client = request.POST.get('client')
+                post.project_no = request.POST.get('projectno')
+                post.map_no = request.POST.get('mapno')
+                post.contact = request.POST.get('jobcontact')
+                post.phone = request.POST.get('phone')
+                post.notes = request.POST.get('notes')
+                post.certify_to = request.POST.get('certify')
+                post.lender = request.POST.get('lender')
+                post.gf_no = request.POST.get('gf')
+                post.survey_type = request.POST.get('surveytype')
+                post.clerksfile = request.POST.get('clerksfile')
+                post.requested_by = request.POST.get('requested_by')
+                if request.POST.get('surveytype') == "prad":
+                    post.county = request.POST.get('county')
+                    post.subdivision = request.POST.get('subdivision')
+                    post.unit = request.POST.get('unit')
+                    post.sub_block = request.POST.get('subblock')
+                    post.lot = request.POST.get('lot')
+                    post.join_field = "\\".join([post.subdivision, post.unit, post.sub_block, post.lot])
+                elif request.POST.get('surveytype') == "rural":
+                    post.county = request.POST.get('county')
+                    post.survey = request.POST.get('survey')
+                    post.rural_block = request.POST.get('block')
+                    post.rural_section = request.POST.get('rural_section')
+                    post.join_field = "\\".join([post.county, post.survey, post.rural_block, post.rural_section])
+                else:
+                    post.county = request.POST.get('county')
+                    post.meridian = request.POST.get('meridian')
+                    post.t_r = request.POST.get('town_range')
+                    post.plss_section = request.POST.get('section')
+                    post.join_field = "\\".join([post.county, post.meridian, post.t_r, post.plss_section])
+                post.folder_path = request.POST.get('fpath')
 
-        res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county).distinct('join_field')
-        
-        level = [[], [], [], []]
-        tokens = []
+                form.save()
+                return redirect("/post/%d/edit/" % post.pk)
+        else:
+            errors = "The project number is already exited."
 
-        for element in res:
-            if element == None or element.join_field == None:
-                continue
-            tokens.append([tmp.strip() for tmp in element.join_field.split("\\") \
-                if tmp.strip()!="" and post.county.lower() != tmp.strip().lower()])
+    form = PostForm(instance=post)
+    join_types = ['prad', 'plss', 'rural']#MasterGeom.objects.all().distinct('join_type')
+    
+    counties = MasterGeom.objects.filter(join_type=post.survey_type).distinct('county')
+    counties = [tp.county.strip() for tp in counties if tp.county!=None]
+
+    res = MasterGeom.objects.filter(join_type=post.survey_type, county=post.county).distinct('join_field')
+    
+    level = [[], [], [], []]
+    tokens = []
+
+    for element in res:
+        if element == None or element.join_field == None:
+            continue
+        tokens.append([tmp.strip() for tmp in element.join_field.split("\\") \
+            if tmp.strip()!="" and post.county.lower() != tmp.strip().lower()])
 
 
-        if post.survey_type == "prad":
-            keys = [post.subdivision, post.unit, post.sub_block, post.lot]
-        elif post.survey_type == "plss":
-            keys = [post.meridian, post.t_r, post.plss_section, ""]
-        elif post.survey_type == "rural":
-            keys = [post.survey, post.rural_block, post.rural_section, ""]
+    if post.survey_type == "prad":
+        keys = [post.subdivision, post.unit, post.sub_block, post.lot]
+    elif post.survey_type == "plss":
+        keys = [post.meridian, post.t_r, post.plss_section, ""]
+    elif post.survey_type == "rural":
+        keys = [post.survey, post.rural_block, post.rural_section, ""]
 
-        for token in tokens:
-            try:
-                if token[0] not in level[0]:
-                    level[0].append(token[0])
-            except:
-                pass
-            try:
-                if token[0].lower() == keys[0].lower() and token[1] not in level[1]:
-                    print (token)
-                    print (token[0].lower(), keys[0].lower())
-                    level[1].append(token[1])
-            except:
-                pass
-            try:
-                if token[0].lower() == keys[0].lower() and \
-                    token[1].lower() == keys[1].lower() and token[2] not in level[2]:
-                    level[2].append(token[2])
-            except:
-                pass
-            try:
-                if token[0].lower() == keys[0].lower() and \
-                    token[1].lower() == keys[1].lower() and \
-                    token[2].lower() == keys[2].lower() and token[3] not in level[3]:
-                    level[3].append(token[3])
-            except:
-                pass
+    for token in tokens:
+        try:
+            if token[0] not in level[0]:
+                level[0].append(token[0])
+        except:
+            pass
+        try:
+            if token[0].lower() == keys[0].lower() and token[1] not in level[1]:
+                print (token)
+                print (token[0].lower(), keys[0].lower())
+                level[1].append(token[1])
+        except:
+            pass
+        try:
+            if token[0].lower() == keys[0].lower() and \
+                token[1].lower() == keys[1].lower() and token[2] not in level[2]:
+                level[2].append(token[2])
+        except:
+            pass
+        try:
+            if token[0].lower() == keys[0].lower() and \
+                token[1].lower() == keys[1].lower() and \
+                token[2].lower() == keys[2].lower() and token[3] not in level[3]:
+                level[3].append(token[3])
+        except:
+            pass
 
         # print (level)
         # print (keys)
 
     return render(request, 'blog/post_edit.html', {'form': form, "join_types": join_types, \
         'counties': counties, "level1": level[0], "level2": level[1], \
-        "level3": level[2], "level4": level[3], 'pk': post.pk})
+        "level3": level[2], "level4": level[3], 'pk': post.pk, "errors": errors, 'post': post})
 
 @login_required
 def user_list(request):

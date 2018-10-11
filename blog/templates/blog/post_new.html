@@ -40,7 +40,7 @@
             </p>
             <input type="text" id="projectno" name="projectno" class="form-control" value='{{ form.project_no.value|default_if_none:"" }}'
                 required/>
-
+            <span style="color: red">{{errors}}</span>
             <p>
                 <strong>Client:
                     <span style="color: red;">*</span>

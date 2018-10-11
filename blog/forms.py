@@ -11,7 +11,7 @@ from .models import MasterGeom, Users, FormAll
 
 
 class PostForm(forms.ModelForm):
-    
+
     class Meta:
         model = FormAll
         fields = ('__all__')
