@@ -168,6 +168,9 @@ def ajaxClientData(request):
 
 @login_required
 def post_new(request):
+    if request.user.edit_auth == False:
+        get_object_or_404(FormAll, pk=None)
+        
     posts = FormAll.objects.all()
     errors = ""
     if request.method == "POST":

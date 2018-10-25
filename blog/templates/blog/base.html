@@ -37,12 +37,11 @@
             </li>
             {% endif %}
             <li class="nav-item newitem">
-                    <a class="nav-link" href="
-                            {% if 'post' in request.path %}
-                                {% url 'post_new' %}
-                            {% elif 'user' in request.path and request.user.is_superuser %}
-                                {% url 'user_new' %}
-                            {% endif %}">New</a>
+                    {% if 'post' in request.path and request.user.edit_auth %}
+                        <a class="nav-link" href="{% url 'post_new' %}">New Post</a>
+                    {% elif 'user' in request.path and request.user.is_superuser %}
+                        <a class="nav-link" href="{% url 'user_new' %}">New User</a>
+                    {% endif %}
                 </li>
         </ul>
         <div class="pull-right" style="margin-right: 20px; color: white; font-size: 20px;">
