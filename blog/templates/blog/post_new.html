@@ -232,15 +232,21 @@
                 <p class="prad-select">
                     <strong>Unit</strong>
                 </p>
-                <input type="text" name="unit" id="unit" class="form-control prad-select" onblur="selLevel4(this)">
+                <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
+                    <option value=""> - Select - </option>
+                </select>
                 <p class="prad-select">
                     <strong>Sub Block</strong>
                 </p>
-                <input type="text" name="subblock" id="subblock" class="form-control prad-select" onblur="selLevel5(this)"/>
+                <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
+                    <option value=""> - Select - </option>
+                </select>
                 <p class="prad-select">
                     <strong>Lot</strong>
                 </p>
-                <input type="text" name="lot" id="lot" class="form-control prad-select"/>
+                <select name="lot" id="lot" class="form-control prad-select">
+                    <option value=""> - Select - </option>
+                </select>
             </div>
             <div id="rural-select">
                 <p class="rural-select">
@@ -515,7 +521,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp, flag)
+                { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
         }
 
         function selLevel4(obj) {
@@ -544,7 +550,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}",
-                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp, flag)
+                { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
         }
 
         function selLevel5(obj) {
@@ -562,7 +568,7 @@
                 {
                     join_type: join_type, county: county, level1: level1, level2: level2,
                     level3: $(obj).val(), type: tp
-                }, "#" + tp, 0)
+                }, "#" + tp)
         }
 
         function changePath(obj){
