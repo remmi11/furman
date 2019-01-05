@@ -37,7 +37,7 @@ def post_detail(request, pk):
 @login_required
 @csrf_exempt
 def ajaxPagination(request):
-    order_cols = ['pk', 'project_no', 'survey_type', 'client', 'county', 'address_street',
+    order_cols = ['pk', 'project_no', 'survey_type', 'client', 'map_no', 'county', 'address_street',
                     'survey', 'rural_block', 'rural_section', 'subdivision', 
                     'unit', 'sub_block', 'lot', 'meridian', 't_r', 'plss_section', 'notes', 'aka']
 
@@ -66,47 +66,50 @@ def ajaxPagination(request):
         condition = condition & Q(client__icontains=col_search_key) if condition != None else Q(client__icontains=col_search_key)
     col_search_key = request.POST.get('columns[4][search][value]')
     if col_search_key != "":
-        condition = condition & Q(county__icontains=col_search_key) if condition != None else Q(county__icontains=col_search_key)
+        condition = condition & Q(map_no__icontains=col_search_key) if condition != None else Q(map_no__icontains=col_search_key)
     col_search_key = request.POST.get('columns[5][search][value]')
     if col_search_key != "":
-        condition = condition & Q(address_street__icontains=col_search_key) if condition != None else Q(address_street__icontains=col_search_key)
+        condition = condition & Q(county__icontains=col_search_key) if condition != None else Q(county__icontains=col_search_key)
     col_search_key = request.POST.get('columns[6][search][value]')
     if col_search_key != "":
-        condition = condition & Q(survey__icontains=col_search_key) if condition != None else Q(survey__icontains=col_search_key)
+        condition = condition & Q(address_street__icontains=col_search_key) if condition != None else Q(address_street__icontains=col_search_key)
     col_search_key = request.POST.get('columns[7][search][value]')
     if col_search_key != "":
-        condition = condition & Q(rural_block__icontains=col_search_key) if condition != None else Q(rural_block__icontains=col_search_key)
+        condition = condition & Q(survey__icontains=col_search_key) if condition != None else Q(survey__icontains=col_search_key)
     col_search_key = request.POST.get('columns[8][search][value]')
     if col_search_key != "":
-        condition = condition & Q(rural_section__icontains=col_search_key) if condition != None else Q(rural_section__icontains=col_search_key)
+        condition = condition & Q(rural_block__icontains=col_search_key) if condition != None else Q(rural_block__icontains=col_search_key)
     col_search_key = request.POST.get('columns[9][search][value]')
     if col_search_key != "":
-        condition = condition & Q(subdivision__icontains=col_search_key) if condition != None else Q(subdivision__icontains=col_search_key)
+        condition = condition & Q(rural_section__icontains=col_search_key) if condition != None else Q(rural_section__icontains=col_search_key)
     col_search_key = request.POST.get('columns[10][search][value]')
     if col_search_key != "":
-        condition = condition & Q(unit__icontains=col_search_key) if condition != None else Q(unit__icontains=col_search_key)
+        condition = condition & Q(subdivision__icontains=col_search_key) if condition != None else Q(subdivision__icontains=col_search_key)
     col_search_key = request.POST.get('columns[11][search][value]')
     if col_search_key != "":
-        condition = condition & Q(sub_block__icontains=col_search_key) if condition != None else Q(sub_block__icontains=col_search_key)
+        condition = condition & Q(unit__icontains=col_search_key) if condition != None else Q(unit__icontains=col_search_key)
     col_search_key = request.POST.get('columns[12][search][value]')
     if col_search_key != "":
-        condition = condition & Q(lot__icontains=col_search_key) if condition != None else Q(lot__icontains=col_search_key)
+        condition = condition & Q(sub_block__icontains=col_search_key) if condition != None else Q(sub_block__icontains=col_search_key)
     col_search_key = request.POST.get('columns[13][search][value]')
     if col_search_key != "":
-        condition = condition & Q(meridian__icontains=col_search_key) if condition != None else Q(meridian__icontains=col_search_key)
+        condition = condition & Q(lot__icontains=col_search_key) if condition != None else Q(lot__icontains=col_search_key)
     col_search_key = request.POST.get('columns[14][search][value]')
     if col_search_key != "":
-        condition = condition & Q(t_r__icontains=col_search_key) if condition != None else Q(t_r__icontains=col_search_key)
+        condition = condition & Q(meridian__icontains=col_search_key) if condition != None else Q(meridian__icontains=col_search_key)
     col_search_key = request.POST.get('columns[15][search][value]')
     if col_search_key != "":
-        condition = condition & Q(plss_section__icontains=col_search_key) if condition != None else Q(plss_section__icontains=col_search_key)
+        condition = condition & Q(t_r__icontains=col_search_key) if condition != None else Q(t_r__icontains=col_search_key)
     col_search_key = request.POST.get('columns[16][search][value]')
     if col_search_key != "":
-        condition = condition & Q(notes__icontains=col_search_key) if condition != None else Q(notes__icontains=col_search_key)
+        condition = condition & Q(plss_section__icontains=col_search_key) if condition != None else Q(plss_section__icontains=col_search_key)
     col_search_key = request.POST.get('columns[17][search][value]')
     if col_search_key != "":
-        condition = condition & Q(aka__icontains=col_search_key) if condition != None else Q(aka__icontains=col_search_key)
+        condition = condition & Q(notes__icontains=col_search_key) if condition != None else Q(notes__icontains=col_search_key)
     col_search_key = request.POST.get('columns[18][search][value]')
+    if col_search_key != "":
+        condition = condition & Q(aka__icontains=col_search_key) if condition != None else Q(aka__icontains=col_search_key)
+    col_search_key = request.POST.get('columns[19][search][value]')
     if col_search_key != "":
         condition = condition & Q(folder_path__icontains=col_search_key) if condition != None else Q(folder_path__icontains=col_search_key)
 
@@ -116,7 +119,7 @@ def ajaxPagination(request):
     else:
         if search_key != None and search_key != "":
             condition_global = (Q(pk__icontains=search_key) | Q(project_no__icontains=search_key) | \
-                Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | \
+                Q(survey_type__icontains=search_key) | Q(client__icontains=search_key) | Q(map_no__icontains=search_key) | \
                 Q(county__icontains=search_key) | Q(address_street__icontains=search_key) | \
                 Q(survey__icontains=search_key) | Q(rural_block__icontains=search_key) | \
                 Q(rural_section__icontains=search_key) | Q(subdivision__icontains=search_key) | \
@@ -144,7 +147,7 @@ def ajaxPagination(request):
                 </a>'
 
         data.append([post.pk, post.project_no, post.survey_type, \
-            post.client, post.county, post.address_street, post.survey, \
+            post.client, post.map_no, post.county, post.address_street, post.survey, \
             post.rural_block, post.rural_section, post.subdivision, \
             post.unit, post.sub_block, post.lot, post.meridian, post.t_r, \
             post.plss_section, post.notes, post.aka, \
@@ -185,6 +188,7 @@ def post_new(request):
                 post.project_no = request.POST.get('projectno')
                 post.map_no = request.POST.get('mapno')
                 post.contact = request.POST.get('jobcontact')
+                post.client_address = request.POST.get('clientaddress')
                 post.phone = request.POST.get('phone')
                 post.notes = request.POST.get('notes')
                 post.certify_to = request.POST.get('certify')
@@ -315,6 +319,7 @@ def post_edit(request, pk):
                 post.project_no = request.POST.get('projectno')
                 post.map_no = request.POST.get('mapno')
                 post.contact = request.POST.get('jobcontact')
+                post.client_address = request.POST.get('clientaddress')
                 post.phone = request.POST.get('phone')
                 post.notes = request.POST.get('notes')
                 post.certify_to = request.POST.get('certify')
@@ -382,8 +387,6 @@ def post_edit(request, pk):
             pass
         try:
             if token[0].lower() == keys[0].lower() and token[1] not in level[1]:
-                print (token)
-                print (token[0].lower(), keys[0].lower())
                 level[1].append(token[1])
         except:
             pass
@@ -533,7 +536,7 @@ def getpdf(request, pk):
 
     offsetY = start_y-60
     canvas1.drawString(start_x, offsetY-line_space,'Date Needed')
-    lines = drawText(canvas1, cleanDate(post.date_needed), 17, start_x+130, offsetY)
+    lines = drawText(canvas1, clean(post.date_needed), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
     canvas1.drawString(start_x, offsetY-line_space,'Project No')
@@ -615,7 +618,7 @@ def getpdf(request, pk):
     offsetY = offsetY-lines*18
 
     canvas1.drawString(start_x+60, offsetY-18,'Date Needed')
-    lines = drawText(canvas1, cleanDate(post.date_needed), 17, start_x+150, offsetY, 20)
+    lines = drawText(canvas1, clean(post.date_needed), 17, start_x+150, offsetY, 20)
     offsetY = offsetY-lines*18
 
     canvas1.drawString(start_x+60, offsetY-18,'Requested By')

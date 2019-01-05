@@ -37,13 +37,14 @@ class County(models.Model):
 
 class FormAll(models.Model):
     date_entered = models.DateField(blank=True, null=True)
-    date_needed = models.DateField(blank=True, null=True)
+    date_needed = models.CharField(max_length=100, blank=True, null=True, default="")
     title = models.CharField(max_length=100, blank=True, null=True)
     client = models.CharField(max_length=200, blank=True, null=True)
     project_no = models.CharField(max_length=200, blank=True, null=True)
     map_no = models.CharField(max_length=50, blank=True, null=True)
     contact = models.CharField(max_length=50, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
+    client_address = models.CharField(max_length=255, blank=True, null=True)
     notes = models.CharField(max_length=500, blank=True, null=True)
     certify_to = models.CharField(max_length=200, blank=True, null=True)
     lender = models.CharField(max_length=200, blank=True, null=True)

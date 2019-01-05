@@ -27,7 +27,7 @@
             <p>
                 <strong>Date Needed:</strong>
             </p>
-            <input type="date" class="form-control" name="date-needed" value= '{{ form.date_needed.value|date:'Y-m-d' }}' />
+            <input type="text" class="form-control" name="date-needed" value= '{{ form.date_needed.value|default_if_none:"" }}' required/>
             <p>
                 <strong>Project No.
                     <span style="color: red;">*</span>
@@ -50,6 +50,11 @@
                 </strong>
             </p>
             <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}'/>
+            <p>
+                <strong>Client Address
+                </strong>
+            </p>
+            <input type="text" name="clientaddress" class="form-control" value='{{ form.client_address.value|default_if_none:"" }}'/>
             <p>
                 <strong>Phone
                 </strong>
@@ -246,15 +251,39 @@
                 <p class="prad-select">
                     <strong>Unit</strong>
                 </p>
-                <input type="text" name="unit" id="unit" class="form-control prad-select" onblur="selLevel4(this)" value="{{form.unit.value}}" />
+                <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level2 %}
+                        <option value="{{value}}" 
+                        {% if form.unit.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
                 <p class="prad-select">
                     <strong>Sub Block</strong>
                 </p>
-                <input type="text" name="subblock" id="subblock" class="form-control prad-select" onblur="selLevel5(this)" value="{{form.sub_block.value}}" />
+                <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
+                    <option value=""> - Select - </option>
+                    {% for value in level3 %}
+                        <option value="{{value}}" 
+                        {% if form.sub_block.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
                 <p class="prad-select">
                     <strong>Lot</strong>
                 </p>
-                <input type="text" name="lot" id="lot" class="form-control prad-select" value="{{form.lot.value}}">
+                <select name="lot" id="lot" class="form-control prad-select">
+                    <option value=""> - Select - </option>
+                    {% for value in level4 %}
+                        <option value="{{value}}" 
+                        {% if form.lot.value == value %}
+                            selected 
+                        {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div id="rural-select">
                 <p class="rural-select">
@@ -562,7 +591,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp, flag)
+                    { join_type: join_type, county: county, level1: $(obj).val(), type:tp }, "#" + tp)
         }
 
         function selLevel4(obj){
@@ -591,7 +620,7 @@
             }
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
-                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp, flag)
+                    { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type:tp }, "#" + tp)
         }
 
         function selLevel5(obj){
@@ -607,7 +636,7 @@
 
             ajaxFunc("{% url 'ajax_load_data' %}", 
                     { join_type: join_type, county: county, level1: level1, level2: level2, 
-                        level3: $(obj).val(), type:tp }, "#" + tp, 0)
+                        level3: $(obj).val(), type:tp }, "#" + tp)
         }
 
         function changePath(obj){

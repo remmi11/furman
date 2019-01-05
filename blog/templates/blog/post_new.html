@@ -32,7 +32,7 @@
             <p>
                 <strong>Date Needed:</strong>
             </p>
-            <input type="date" class="form-control" name="date-needed" value='{{ form.date_needed.value|date:' Y-m-d ' }}' />
+            <input type="date" class="form-control" name="date-needed" value='{{ form.date_needed.value|default_if_none:"" }}' required/>
             <p>
                 <strong>Project No.
                     <span style="color: red;">*</span>
@@ -57,7 +57,12 @@
                 <strong>Job Contact
                 </strong>
             </p>
-            <input type="text" name="jobcontact" class="form-control" value='{{ form.contact.value|default_if_none:"" }}'/>
+            <input type="text" class="form-control" name="requested_by" value='{{ form.requested_by.value|default_if_none:"" }}'/>
+            <p>
+                <strong>Client Address
+                </strong>
+            </p>
+            <input type="text" name="clientaddress" class="form-control" value='{{ form.client_address.value|default_if_none:"" }}'/>
             <p>
                 <strong>Phone
                 </strong>
