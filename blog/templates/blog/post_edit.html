@@ -84,14 +84,8 @@
         
                             <div class="form-group state" style="float: none;">
                                 <label class="control-label sr-only" for="f38_state">State / Province / Region</label>
-                                <input type="text" class="form-control" data-gaddress-types="administrative_area_level_1" data-gaddress-name="long_name" id="f38_state" name="state" value='{{ form.state.value|default_if_none:"" }}'  aria-describedby="f38_state-help-block" placeholder="State / Province / Region">
+                                <input type="text" class="form-control" data-gaddress-types="administrative_area_level_1" data-gaddress-name="long_name" id="f38_state" name="state" value='{{ form.state.value|default_if_none:"" }}'  aria-describedby="f38_state-help-block" placeholder="State">
                                 <p id="f38_state-help-block" class="description sr-only">State / Province / Region</p>
-                            </div>
-        
-                            <div class="form-group postalCode" style="float: none;">
-                                <label class="control-label sr-only" for="f38_postalCode">Postal / Zip Code</label>
-                                <input type="text" class="form-control" data-gaddress-types="postal_code" data-gaddress-name="long_name" id="f38_postalCode" name="zipcode" value='{{ form.zipcode.value|default_if_none:"" }}'  aria-describedby="f38_postalCode-help-block" placeholder="Postal / Zip Code">
-                                <p id="f38_postalCode-help-block" class="description sr-only">Postal / Zip Code</p>
                             </div>
                             <div class="mq-indicator"></div>
                         </div>            

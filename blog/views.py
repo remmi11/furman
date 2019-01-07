@@ -569,12 +569,8 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.city), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'State / Province / Region')
+    canvas1.drawString(start_x, offsetY-line_space,'State')
     lines = drawText(canvas1, clean(post.state), 15, start_x+140, offsetY)
-    offsetY = offsetY-lines*line_space
-
-    canvas1.drawString(start_x, offsetY-line_space,'Postal / Zip Code')
-    lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
     offsetY = offsetY - 30 - lines*line_space
