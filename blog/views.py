@@ -585,9 +585,9 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Country')
-    lines = drawText(canvas1, clean(post.country), 15, start_x+140, offsetY)
-    offsetY = offsetY-lines*line_space
+    # canvas1.drawString(start_x, offsetY-line_space,'Country')
+    # lines = drawText(canvas1, clean(post.country), 15, start_x+140, offsetY)
+    # offsetY = offsetY-lines*line_space
 
     offsetY = offsetY - 30 - lines*line_space
     canvas1.setFillColor(bgColor)
