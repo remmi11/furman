@@ -53,7 +53,7 @@ class FormAll(models.Model):
     city = models.CharField(max_length=50, blank=True, null=True)
     state = models.CharField(max_length=50, blank=True, null=True)
     zipcode = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
+    # country = models.CharField(max_length=50, blank=True, null=True)
     survey_type = models.CharField(max_length=10, blank=True, null=True)
     county = models.CharField(max_length=50, blank=True, null=True)
     subdivision = models.CharField(max_length=200, blank=True, null=True)
