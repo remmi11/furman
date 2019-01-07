@@ -515,7 +515,7 @@ def getpdf(request, pk):
     response['Content-Disposition'] = 'filename="%sWO.pdf"' % post.project_no
 
     start_x = 50
-    start_y = 680
+    start_y = 640
     line_space = 25
     bgColor = colors.Color(red=(211.0/255),green=(211.0/255),blue=(211.0/255))
 
@@ -523,7 +523,7 @@ def getpdf(request, pk):
     canvas1.setLineWidth(.3)
 
     canvas1.setFont('Helvetica-Bold', 15)
-    canvas1.drawString(start_x+140,start_y+40, clean(post.title))
+    canvas1.drawString(start_x+140,start_y+80, clean(post.title))
 
     canvas1.setFont('Helvetica', 12)
      
@@ -535,24 +535,16 @@ def getpdf(request, pk):
     canvas1.drawString(start_x, start_y-60,'Client Info')
 
     offsetY = start_y-60
-    canvas1.drawString(start_x, offsetY-line_space,'Date Needed')
-    lines = drawText(canvas1, clean(post.date_needed), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
-
-    canvas1.drawString(start_x, offsetY-line_space,'Project No')
-    lines = drawText(canvas1, clean(post.project_no), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
-
     canvas1.drawString(start_x, offsetY-line_space,'Client')
     lines = drawText(canvas1, clean(post.client), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Requested By')
-    lines = drawText(canvas1, clean(post.requested_by), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
-
     canvas1.drawString(start_x, offsetY-line_space,'Contact')
     lines = drawText(canvas1, clean(post.contact), 17, start_x+130, offsetY)
+    offsetY = offsetY-lines*line_space
+
+    canvas1.drawString(start_x, offsetY-line_space,'Client Address')
+    lines = drawText(canvas1, clean(post.client_address), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
     canvas1.drawString(start_x, offsetY-line_space,'Phone')
@@ -585,10 +577,6 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.zipcode), 15, start_x+140, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Country')
-    lines = drawText(canvas1, clean(post.country), 15, start_x+140, offsetY)
-    offsetY = offsetY-lines*line_space
-
     offsetY = offsetY - 30 - lines*line_space
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
@@ -597,10 +585,6 @@ def getpdf(request, pk):
 
     lines = drawText(canvas1, clean(post.notes), 40, start_x, offsetY)
     offsetY = offsetY-lines*line_space-80
-
-    canvas1.drawString(start_x, offsetY-line_space,'AKA')
-    lines = drawText(canvas1, clean(post.aka), 17, start_x+130, offsetY)
-    offsetY = offsetY-lines*line_space
 
     start_x = 310
     canvas1.setFont('Helvetica-Bold', 12)
