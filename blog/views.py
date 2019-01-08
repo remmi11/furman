@@ -625,7 +625,7 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.gf_no), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    canvas1.drawString(start_x, offsetY-line_space,'Clerkfile#')
+    canvas1.drawString(start_x, offsetY-line_space,'Clerksfile#')
     lines = drawText(canvas1, clean(post.clerksfile), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
