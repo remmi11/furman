@@ -515,7 +515,8 @@ def getpdf(request, pk):
     response['Content-Disposition'] = 'filename="%sWO.pdf"' % post.project_no
 
     start_x = 50
-    start_y = 640
+    # start_y = 640
+    start_y = 700
     line_space = 25
     bgColor = colors.Color(red=(211.0/255),green=(211.0/255),blue=(211.0/255))
 
@@ -523,7 +524,7 @@ def getpdf(request, pk):
     canvas1.setLineWidth(.3)
 
     canvas1.setFont('Helvetica-Bold', 15)
-    canvas1.drawString(start_x+140,start_y+80, clean(post.title))
+    canvas1.drawString(start_x+140,start_y+40, clean(post.title))
 
     canvas1.setFont('Helvetica', 12)
      
@@ -587,7 +588,7 @@ def getpdf(request, pk):
     canvas1.drawString(start_x+60,start_y,'Survey Work Order')
     canvas1.line(start_x+60,start_y-2,start_x+165,start_y-2)
 
-    offsetY = start_y - 20
+    offsetY = start_y #- 15
     canvas1.setFont('Helvetica', 12)
     canvas1.drawString(start_x+60, offsetY-18,'Project #')
     lines = drawText(canvas1, clean(post.project_no), 17, start_x+150, offsetY, 20)
@@ -644,12 +645,13 @@ def getpdf(request, pk):
     lines = drawText(canvas1, clean(post.well_number), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
 
-    offsetY = offsetY - 65
+    offsetY = offsetY - 45
     canvas1.setFillColor(bgColor)
     canvas1.rect(start_x-10,offsetY-5,270,20, fill=True, stroke=False)
     canvas1.setFillColor(colors.black)
     canvas1.drawString(start_x, offsetY,'Legal')
 
+    # line_space = 18
     canvas1.drawString(start_x, offsetY-line_space,'County')
     lines = drawText(canvas1, clean(post.county), 17, start_x+130, offsetY)
     offsetY = offsetY-lines*line_space
