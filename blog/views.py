@@ -48,7 +48,10 @@ def ajaxPagination(request):
 
     order_col = request.POST.get('order[0][column]')
     order_type = request.POST.get('order[0][dir]')
-    order_key = order_cols[int(order_col)] if order_type == "asc" else "-" + order_cols[int(order_col)]
+    if order_col == 0 and order_type == "desc":
+        order_key = "-pk"
+    else:
+        order_key = order_cols[int(order_col)] if order_type == "asc" else "-" + order_cols[int(order_col)]
         
     condition = None
 
@@ -499,8 +502,25 @@ def drawText(canvasObj, text, length, x, y, line_space=22):
 
     return len(wraped_text)
 
+def drawNotes(canvasObj, text, x, y, line_space=15):
+    text_list = text.split("\n")
+    if text == "":
+        return 1
+
+    y -= 10
+    length = 0
+    for txt in text_list:    
+        wraped_text = wrap(txt, 30)
+        for index in range(0, len(wraped_text)):
+            canvasObj.drawString(x, y-(index+1)*line_space, wraped_text[index])
+        length += len(wraped_text)
+        y = y-len(wraped_text)*line_space - 5
+
+    return length
+
 def clean(data):
     return "" if data == None else data
+
 def cleanDate(data):
     try:
         return data.strftime('%m/%d/%Y')
@@ -580,7 +600,7 @@ def getpdf(request, pk):
     canvas1.setFillColor(colors.black)
     canvas1.drawString(start_x, offsetY,'Notes')
 
-    lines = drawText(canvas1, clean(post.notes), 40, start_x, offsetY)
+    lines = drawNotes(canvas1, clean(post.notes), start_x, offsetY)
     offsetY = offsetY-lines*line_space-80
 
     start_x = 310
