@@ -1,0 +1,210 @@
+{% extends 'blog/base.html' %} {% block content %}
+
+<form method="POST" class="ticket-form">
+	<div class="row">
+		<div class="col-md-2"> </div>
+		<div class="col-md-8 main-form"> 
+			<p class="section-header">Ticket Detail:</p>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Status</strong>
+                </div>
+                <div class="col-md-9">
+                    {% if ticket.status == 2 %}
+                        CLOSED
+                    {% else %}
+                        OPEN
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Subject</strong>
+                </div>
+                <div class="col-md-9">
+                    {{ ticket.subject }}
+                </div>
+            </div>
+            
+			<div class="row">
+				<div class="col-md-3">
+	                <strong>Survey Type</strong>
+	            </div>
+	            <div class="col-md-9">
+		            {{ ticket.survey_type }}
+		        </div>
+		    </div>
+
+            <div class="countyblk row">
+                <div class="col-md-3">
+                    <strong>County</strong>
+                </div>
+                <div class="col-md-9">
+                    {{ ticket.county }}
+            	</div>
+            </div>
+
+            <div id="prad-select">
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Subdivision</strong>
+                	</div>
+	                <div class="col-md-9">
+                        {{ ticket.subdivision }}
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Unit</strong>
+                    </div>
+	                <div class="col-md-9">
+                        {{ ticket.unit }}
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Sub Block</strong>
+                	</div>
+	                <div class="col-md-9">
+                        {{ ticket.sub_block }}
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Lot</strong>
+	                </div>
+	                <div class="col-md-9">
+                        {{ ticket.lot }}
+                	</div>
+                </div>
+                <div class="row prad-select">
+                    <div class="col-md-3">
+                        <strong>Address</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ ticket.address }}
+                    </div>
+                </div>
+                <div class="row prad-select">
+                    <div class="col-md-3">
+                        <strong>Account Number</strong>
+                    </div>
+                    <div class="col-md-9">
+                        {{ ticket.account_no }}
+                    </div>
+                </div>
+            </div>
+            <div id="rural-select">
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Survey</strong>
+                	</div>
+	                <div class="col-md-9">
+                        {{ ticket.survey }}
+                	</div>
+                </div>
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Block</strong>
+                	</div>
+	                <div class="col-md-9">
+                        {{ ticket.rural_block }}
+                	</div>
+                </div>
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Section</strong>
+                	</div>
+	                <div class="col-md-9">
+                        {{ ticket.rural_section }}
+                	</div>
+                </div>
+            </div>
+            <div id="plss-select">
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Meridian</strong>
+	                </div>
+	                <div class="col-md-9">
+                        {{ ticket.meridian }}
+                	</div>
+                </div>
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Township Range</strong>
+	                </div>
+	                <div class="col-md-9">
+                        {{ ticket.t_r }}
+                	</div>
+                </div>
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Section</strong>
+	                </div>
+	                <div class="col-md-9">
+                        {{ ticket.plss_section }}
+                	</div>
+                </div>
+            </div>
+            <div id="other-select">
+            	<div class="row">
+	                <div class="col-md-3">
+	                    <strong>Description</strong>
+	                </div>
+	                <div class="col-md-9">
+                        {{ ticket.description }}
+                	</div>
+                </div>
+            </div>
+		</div>
+		<div class="col-md-2"> </div>
+	</div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var join_type = '{{ticket.survey_type}}';
+
+        var rural = $(".rural-select");
+        var prad = $(".prad-select");
+        var plss = $(".plss-select");
+        var county = $(".countyblk");
+        var other = $(".other-select");
+
+        if (join_type == "RURAL") {
+            //display rural-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:flex");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+        } else if (join_type == "PRAD") {
+            //display prad-select
+            prad.attr("style", "display:flex");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+        } else if (join_type == "PLSS") {
+            //display plss-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:flex");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+        } else if (join_type == "OTHER ISSUE") {
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:none");
+            other.attr("style", "display:flex");
+        } else {
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:none");
+            other.attr("style", "display:none");
+        }
+    })
+</script>
+{% endblock %}

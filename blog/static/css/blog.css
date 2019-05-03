@@ -23,12 +23,16 @@ form {
 
 .container { 
 max-width: 100%;
-margin: 3% auto;
+margin: 2% auto;
 }
 
  div.dataTables_wrapper {
     max-width: 100%;
-    margin: 50 auto;
+}
+
+#escalation_filter {
+    position: absolute;
+    top: -50px;
 }
 
 .nav-item {
@@ -54,4 +58,41 @@ list-style-type:none !important;
 #top-nav > ul > li.nav-item.active {
     background-color: #666;
     color: white;
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.dropdown-menu .divider {
+    height: 2px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+
+.card-body {
+    color: white;
+    font-weight: bold;
+    margin-top: -122px;
+}
+
+.card-date {
+    font-size: 20px;
+}
+
+.card-link {
+    margin-top: 18px;
 }

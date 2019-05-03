@@ -1,0 +1,422 @@
+{% extends 'blog/base.html' %} 
+{% load staticfiles %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+  integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+  crossorigin=""/>
+
+<style type="text/css">
+	#test {
+		background-color: #3c3838e3;
+	}
+</style>
+
+<div class="view-mode map-view row">
+    <div class="col-md-4 card-block" style="overflow-y: scroll; height: 80%;">
+    </div>
+    <div class="col-md-8">
+    <div id="mapid" style="height: 80%;
+        width: 101%;
+        position: relative;
+        margin: 0px -7px;"></div>
+    </div>
+</div>
+
+<div id="test" style="color: white;">
+	<form name="search" id="search" method="post" style="padding: 0px;">
+		<p class="section-header" style="width: 100%; font-size: 20px;
+	    font-weight: bold;">Search locations</p>
+		<p>
+	        <strong>Survey Type</strong>
+	    </p>
+	    <select name="surveytype" id="selectsurveytype" class="form-control" oninput="determineForm(this)">
+	        <option value=""> - Select - </option>
+	        {% for join_type in join_types %} {% if join_type.join_type != '0' %}
+	        <option value="{{join_type.join_type }}">{{ join_type.join_type|upper }}</option>
+	        {% endif %} {% endfor %}
+	    </select>
+	    <div class="countyblk">
+	        <p>
+	            <strong>County</strong>
+	        </p>
+
+	        <select name="county" id="selectcounty" class="form-control"  oninput="selCounty(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	    </div>
+
+	    <!-- <select id="company-list">
+	        {% for company in company_list %}
+	        <option value="{{ company.id }}">
+	            {{ company.name }}
+	        </option>
+	        {% endfor %}
+	    </select> -->
+
+
+	    <!-- <input type="text" name="county" class="form-control" id="county" value='{{ form.county.value }}' /> -->
+	    <div id="prad-select">
+	        <p class="prad-select">
+	            <strong>Subdivision</strong>
+	        </p>
+	        <select name="subdivision" id="subdivision" class="form-control prad-select" oninput="selLevel3(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="prad-select">
+	            <strong>Unit</strong>
+	        </p>
+	        <select name="unit" id="unit" class="form-control prad-select" oninput="selLevel4(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="prad-select">
+	            <strong>Sub Block</strong>
+	        </p>
+	        <select name="subblock" id="subblock" class="form-control prad-select" oninput="selLevel5(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="prad-select">
+	            <strong>Lot</strong>
+	        </p>
+	        <select name="lot" id="lot" class="form-control prad-select">
+	            <option value=""> - Select - </option>
+	        </select>
+	    </div>
+	    <div id="rural-select">
+	        <p class="rural-select">
+	            For assistance locating Texas Sections refer to this <a href="http://gisweb.glo.texas.gov/glomapjs/index.html" target="_blank">map.</a>
+	        </br>
+	            <strong>Survey</strong>
+	        </p>
+	        <select name="survey" id="survey" class="form-control rural-select"  oninput="selLevel3(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="rural-select">
+	            <strong>Block</strong>
+	        </p>
+	        <select name="block" id="block" class="form-control rural-select"  oninput="selLevel4(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="rural-select">
+	            <strong>Section</strong>
+	        </p>
+	        <select name="rural_section" id="rural_section" class="form-control rural-select" >
+	            <option value=""> - Select - </option>
+	        </select>
+	    </div>
+	    <div id="plss-select">
+	        <p class="plss-select">
+	                For assistance locating New Mexico Sections refer to this <a href="http://mapservice.nmstatelands.org/LandStatus/" target="_blank">map.</a>
+	              </br>
+	            <strong>Meridian</strong>
+	        </p>
+	        <select name="meridian" id="meridian" class="form-control plss-select"  oninput="selLevel3(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="plss-select">
+	            <strong>Township Range</strong>
+	        </p>
+	        <select name="town_range" id="town_range" class="form-control plss-select"  oninput="selLevel4(this)">
+	            <option value=""> - Select - </option>
+	        </select>
+	        <p class="plss-select">
+	            <strong>Section</strong>
+	        </p>
+	        <select name="section" id="section" class="form-control plss-select" >
+	            <option value=""> - Select - </option>
+	        </select>
+	    </div>
+		<button class="btn btn-ext" style=" float: right; margin-right: 20px;">Search</button>
+	</form>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+  integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+  crossorigin=""></script>
+
+
+<script>
+	function ajaxFunc(url, data, indicator, flag=1) {
+        $.ajax({
+            method: "get",
+            url: url,
+            data: data
+        }).done(function (counties) {
+            if(flag == 1){
+                body = '<option value=""> - Select - </option>'
+                for (i = 0; i < counties.length; i++) {
+                    body += '<option value="' + counties[i].toUpperCase() + '">' + counties[i].toUpperCase() + '</option>'
+
+                }
+                $(indicator).html(body)
+            } else {
+                $(indicator).autocomplete({
+                    source: counties
+                });
+            }
+        });
+    }
+
+    function determineForm(e) {
+        var join_type = $("#selectsurveytype").val();
+
+        $.ajax({
+            method: "get",
+            url: "{% url 'ajax_load_counties' %}",
+            data: { join_type: join_type }
+        })
+            .done(function (counties) {
+                body = '<option value=""> - Select - </option>'
+                for (i = 0; i < counties.length; i++) {
+                    body += '<option value="' + counties[i] + '">' + counties[i] + '</option>'
+
+                }
+                $("#selectcounty").html(body)
+            });
+
+        $("#subdivision").html('<option value=""> - Select - </option>')
+        $("#unit").html('<option value=""> - Select - </option>')
+        $("#subblock").html('<option value=""> - Select - </option>')
+        $("#lot").html('<option value=""> - Select - </option>')
+        $("#survey").html('<option value=""> - Select - </option>')
+        $("#block").html('<option value=""> - Select - </option>')
+        $("#rural_section").html('<option value=""> - Select - </option>')
+        $("#meridian").html('<option value=""> - Select - </option>')
+        $("#town_range").html('<option value=""> - Select - </option>')
+        $("#section").html('<option value=""> - Select - </option>')
+
+        //3 values are: rural, prad, plss
+        var rural = $(".rural-select"); //document.getElementById('rural-select');
+        var prad = $(".prad-select"); //document.getElementById('prad-select');
+        var plss = $(".plss-select"); //document.getElementById('plss-select');
+        if (e.value == "rural") {
+            //display rural-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:block");
+        } else if (e.value == "prad") {
+            //display prad-select
+            prad.attr("style", "display:block");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+        } else if (e.value == "plss") {
+            //display plss-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:block");
+            rural.attr("style", "display:none");
+        } else {
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+        }
+    }
+
+    function selCounty(e) {
+        var join_type = $("#selectsurveytype").val();
+        var county = $("#selectcounty").val();
+
+        $("#subdivision").html('<option value=""> - Select - </option>')
+        $("#unit").html('<option value=""> - Select - </option>')
+        $("#subblock").html('<option value=""> - Select - </option>')
+        $("#lot").html('<option value=""> - Select - </option>')
+        $("#survey").html('<option value=""> - Select - </option>')
+        $("#block").html('<option value=""> - Select - </option>')
+        $("#rural_section").html('<option value=""> - Select - </option>')
+        $("#meridian").html('<option value=""> - Select - </option>')
+        $("#town_range").html('<option value=""> - Select - </option>')
+        $("#section").html('<option value=""> - Select - </option>')
+
+        if (join_type == "rural") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "survey" }, "#survey")
+        } else if (join_type == "prad") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "subdivision" }, "#subdivision")
+        } else if (join_type == "plss") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "meridian" }, "#meridian")
+        } else {
+        }
+    }
+
+    function selLevel3(obj) {
+        var join_type = $("#selectsurveytype").val();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        $("#unit").html('<option value=""> - Select - </option>')
+        $("#subblock").html('<option value=""> - Select - </option>')
+        $("#lot").html('<option value=""> - Select - </option>')
+        $("#block").html('<option value=""> - Select - </option>')
+        $("#rural_section").html('<option value=""> - Select - </option>')
+        $("#town_range").html('<option value=""> - Select - </option>')
+        $("#section").html('<option value=""> - Select - </option>')
+
+        tp = ""
+        flag = 1
+        if (type == "subdivision") {
+            tp = "unit"
+            flag = 0
+        } else if (type == "survey") {
+            tp = "block"
+        } else if (type == "meridian") {
+            tp = "town_range"
+        }
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
+    }
+
+    function selLevel4(obj) {
+        var join_type = $("#selectsurveytype").val();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        $("#subblock").html('<option value=""> - Select - </option>')
+        $("#lot").html('<option value=""> - Select - </option>')
+        $("#rural_section").html('<option value=""> - Select - </option>')
+        $("#section").html('<option value=""> - Select - </option>')
+
+        tp = ""
+        level1 = ""
+        flag = 1
+        if (type == "unit") {
+            level1 = $("#subdivision").val()
+            tp = "subblock"
+            flag = 0
+        } else if (type == "block") {
+            level1 = $("#survey").val()
+            tp = "rural_section"
+        } else if (type == "town_range") {
+            level1 = $("#meridian").val()
+            tp = "section"
+        }
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
+    }
+
+    function selLevel5(obj) {
+        var join_type = $("#selectsurveytype").val();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        $("#lot").html('<option value=""> - Select - </option>')
+
+        level1 = $("#subdivision").val()
+        level2 = $("#unit").val()
+        tp = "lot"
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            {
+                join_type: join_type, county: county, level1: level1, level2: level2,
+                level3: $(obj).val(), type: tp
+            }, "#" + tp)
+    }
+
+window.onload = function(){ 
+	var defaultPt = [35.1939828742388, -101.90669834943];
+
+	var goe = [];
+	var mapMarkers = [];
+    mymap = L.map('mapid').setView(defaultPt, 10);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+
+    try{
+        var geo_json = '{{ geo_json }}';
+        geo_json = geo_json.replace(/&quot;/g, "\"").replace(/\\/g, "\\\\");
+    }catch(err){
+    }
+
+    updatePtOnMap(geo_json);
+	
+	$('#test').BootSideMenu({
+	    side: "right",
+	    pushBody: false,
+	    remember: false,
+	    icons:{
+            left:'fa fa-arrow-left',
+            right:'fa fa-arrow-right',
+            down:'fa fa-arrow-down'
+        },
+        width: 300,
+        closeOnClick: true
+	});
+
+	var form_type = "";
+	var rural = $(".rural-select"); //document.getElementById('rural-select');
+    var prad = $(".prad-select"); //document.getElementById('prad-select');
+    var plss = $(".plss-select"); //document.getElementById('plss-select');
+    if (form_type == "rural") {
+        prad.attr("style", "display:none");
+        plss.attr("style", "display:none");
+        rural.attr("style", "display:block");
+    } else if (form_type == "prad") {
+        //display prad-select
+        prad.attr("style", "display:block");
+        plss.attr("style", "display:none");
+        rural.attr("style", "display:none");
+    } else if (form_type == "plss") {
+        //display plss-select
+        prad.attr("style", "display:none");
+        plss.attr("style", "display:block");
+        rural.attr("style", "display:none");
+    } else {
+        prad.attr("style", "display:none");
+        plss.attr("style", "display:none");
+        rural.attr("style", "display:none");
+    }
+
+    $("form").submit(function(e){
+    	$.ajax({
+            url: '{% url "ajax_map_search" %}',
+            type : "POST",
+            data : $("#search").serialize(),
+            success : function(result) {
+            	var goe = [];
+            	console.log(result)
+            	var flag = 1;
+				try{
+					goe = result;
+					defaultPt = goe['features'][0]['geometry']['coordinates'];
+					defaultPt = [defaultPt[1], defaultPt[0]];
+					mymap.panTo(new L.LatLng(defaultPt[0], defaultPt[1]));
+				}catch(err) { 
+					flag = 0;
+				}
+
+				for(var i = 0; i < mapMarkers.length; i++){
+				    mymap.removeLayer(mapMarkers[i]);
+				}
+				mapMarkers = [];
+
+				if (flag == 0) {
+					alert("There is no result!")
+					return;
+				}
+
+                updatePtOnMap(goe);
+                L.geoJSON(goe, {
+				    pointToLayer: function (feature, latlng) {
+				    	var marker = L.marker(latlng);
+				    	marker.bindPopup("Project No: " + 
+				    		feature.properties.project_no + '<br/>' +
+				    		"Join Field: " + feature.properties.join_field);
+				    	mapMarkers.push(marker);
+						return marker; 
+				    }
+				}).addTo(mymap);
+            },
+            error: function(xhr, resp, text) {
+                console.log(xhr, resp, text);
+            }
+        })
+
+        e.preventDefault();
+    });
+};
+</script>
+
+{% endblock %}

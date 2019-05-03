@@ -1,0 +1,444 @@
+{% extends 'blog/base.html' %} {% block content %}
+
+<form method="POST" class="ticket-form">
+    <input type="hidden" name="id" value="{{ ticket.id }}">
+	<div class="row">
+		<div class="col-md-2"> </div>
+		<div class="col-md-8 main-form"> 
+			<p class="section-header">New Ticket:</p>
+
+            {% if ticket.id %}
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>CLOSED
+                        <span style="color:red;">*</span>
+                    </strong>
+                </div>
+                <div class="col-md-9">
+                    <input type="checkbox" name="status" class="form-control" 
+                    {% if ticket.status == 2 %}
+                        checked
+                    {% endif %} 
+                    />
+                </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Subject
+                        <span style="color:red;">*</span>
+                    </strong>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" name="subject" class="form-control"  required placeholder="ex. add section number" value="{{ ticket.subject | default_if_none:'' }}" />
+                </div>
+            </div>
+			<div class="row">
+				<div class="col-md-3">
+	                <strong>Survey Type
+	                    <span style="color:red;">*</span>
+	                </strong>
+	            </div>
+	            <div class="col-md-9">
+		            <select name="survey_type" id="selectsurveytype" class="form-control" oninput="determineForm(this)" required>
+		                <option value=""> - Select - </option>
+		                {% for join_type in join_types %}
+		                	<option value="{{ join_type }}"
+                            {% if ticket.survey_type == join_type %}
+                                selected
+                            {% endif %} 
+                            >{{ join_type|upper }}</option>
+		                {% endfor %}
+		            </select>
+		        </div>
+		    </div>
+
+            <div class="countyblk row">
+                <div class="col-md-3">
+                    <strong>County
+                        <span style="color: red;">*</span>
+                        <span class="selectcounty-check"><i class="fa fa-check" style="color: blue"></i></span>
+                    </strong>
+                </div>
+                <div class="col-md-9">
+                	<input type="text" name="county" id="selectcounty" class="form-control countyblk" required onblur="selCounty(this)" value="{{ ticket.county | default_if_none:'' }}" />
+            	</div>
+            </div>
+
+            <div id="prad-select">
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Subdivision
+	                    	<span style="color: red;">*</span>
+	                    	<span id="subdivision-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                	</div>
+	                <div class="col-md-9">
+                		<input name="subdivision" id="subdivision" class="form-control prad-select" onblur="selLevel3(this)" value="{{ ticket.subdivision | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Unit
+	                    	<span style="color: red;">*</span>
+	                    	<span id="unit-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                    </div>
+	                <div class="col-md-9">
+                		<input name="unit" id="unit" class="form-control prad-select" onblur="selLevel4(this)" value="{{ ticket.unit | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Sub Block
+	                    	<span style="color: red;">*</span>
+	                    	<span id="subblock-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                	</div>
+	                <div class="col-md-9">
+                		<input name="sub_block" id="subblock" class="form-control prad-select" onblur="selLevel5(this)" value="{{ ticket.sub_block | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row prad-select">
+	                <div class="col-md-3">
+	                    <strong>Lot
+	                    	<span style="color: red;">*</span>
+	                    	<span id="lot-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+	                </div>
+	                <div class="col-md-9">
+                		<input name="lot" id="lot" class="form-control prad-select" value="{{ ticket.lot | default_if_none:'' }}" />
+                	</div>
+                </div>
+                <div class="row prad-select">
+                    <div class="col-md-3">
+                        <strong>Address
+                            <span style="color: red;">*</span>
+                        </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input name="address" id="address" class="form-control prad-select" onblur="selLevel3(this)" value="{{ ticket.address | default_if_none:'' }}" />
+                    </div>
+                </div>
+                <div class="row prad-select">
+                    <div class="col-md-3">
+                        <strong>Account Number
+                            <span style="color: red;">*</span>
+                        </strong>
+                    </div>
+                    <div class="col-md-9">
+                        <input name="account_no" id="account_no" class="form-control prad-select" onblur="selLevel3(this)" value="{{ ticket.account_no | default_if_none:'' }}" />
+                    </div>
+                </div>
+            </div>
+            <div id="rural-select">
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Survey
+	                        <span style="color: red;">*</span>
+	                        <span id="survey-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                	</div>
+	                <div class="col-md-9">
+                		<input name="survey" id="survey" class="form-control rural-select" required onblur="selLevel3(this)" value="{{ ticket.survey | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Block
+	                        <span style="color: red;">*</span>
+	                        <span id="block-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                	</div>
+	                <div class="col-md-9">
+                		<input name="rural_block" id="block" class="form-control rural-select" required onblur="selLevel4(this)" value="{{ ticket.rural_block | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row rural-select">
+	                <div class="col-md-3">
+	                    <strong>Section
+	                        <span style="color: red;">*</span>
+	                        <span id="rural_section-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+                	</div>
+	                <div class="col-md-9">
+                		<input name="rural_section" id="rural_section" class="form-control rural-select" required value="{{ ticket.rural_section | default_if_none:'' }}" />
+                	</div>
+                </div>
+            </div>
+            <div id="plss-select">
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Meridian
+	                        <span style="color: red;">*</span>
+	                        <span id="meridian-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+	                </div>
+	                <div class="col-md-9">
+                		<input name="meridian" id="meridian" class="form-control plss-select" required onblur="selLevel3(this)" value="{{ ticket.meridian | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Township Range
+	                        <span style="color: red;">*</span>
+	                        <span id="town_range-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+	                </div>
+	                <div class="col-md-9">
+                		<input name="t_r" id="town_range" class="form-control plss-select" required onblur="selLevel4(this)" value="{{ ticket.t_r | default_if_none:'' }}" />
+                	</div>
+                </div>
+	            <div class="row plss-select">
+	                <div class="col-md-3">
+	                    <strong>Section
+	                        <span style="color: red;">*</span>
+	                        <span id="section-check" class="data-load"><i class="fa fa-check" style="color: blue"></i></span>
+	                    </strong>
+	                </div>
+	                <div class="col-md-9">
+                		<input name="plss_section" id="section" class="form-control plss-select" required value="{{ ticket.plss_section | default_if_none:'' }}" />
+                	</div>
+                </div>
+            </div>
+            <div id="other-select">
+            	<div class="row">
+	                <div class="col-md-3">
+	                    <strong>Description
+	                    </strong>
+	                </div>
+	                <div class="col-md-9">
+                		<textarea name="description" id="description" class="form-control" rows=5/> {{ticket.description | default_if_none:""}} </textarea>
+                	</div>
+                </div>
+            </div>
+            <button class="btn btn-ext" style="float: right; margin-right: 20px;">Save</button>
+		</div>
+		<div class="col-md-2"> </div>
+	</div>
+</form>
+
+<script type="text/javascript">
+	function ajaxFunc(url, data, indicator) {
+		$(indicator+"-check").hide();
+        $.ajax({
+            method: "get",
+            url: url,
+            data: data
+        }).done(function (counties) {
+            var filtered = counties.filter(function (el) {
+                return el != null;
+            });
+            $(indicator).autocomplete({
+                source: filtered
+            });
+            $(indicator+"-check").show();
+        });
+    }
+
+    function showInfoBlock(value) {
+        //3 values are: rural, prad, plss
+        var rural = $(".rural-select");
+        var prad = $(".prad-select");
+        var plss = $(".plss-select");
+        var county = $(".countyblk");
+        var other = $(".other-select");
+
+        if (value == "RURAL") {
+            //display rural-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:flex");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+
+            prad.removeAttr("required");
+            plss.removeAttr("required");
+            rural.attr("required", "");
+        } else if (value == "PRAD") {
+            //display prad-select
+            prad.attr("style", "display:flex");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+
+            prad.attr("required", "");
+            plss.removeAttr("required");
+            rural.removeAttr("required");
+            other.removeAttr("required");
+        } else if (value == "PLSS") {
+            //display plss-select
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:flex");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:flex");
+            other.attr("style", "display:none");
+
+            prad.removeAttr("required");
+            plss.attr("required", "");
+            rural.removeAttr("required");
+            other.removeAttr("required");
+        } else if (value == "OTHER ISSUE") {
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:none");
+            other.attr("style", "display:flex");
+
+            prad.removeAttr("required");
+            plss.removeAttr("required");
+            rural.removeAttr("required");
+            county.removeAttr("required");
+            other.attr("required", "");
+        } else {
+            prad.attr("style", "display:none");
+            plss.attr("style", "display:none");
+            rural.attr("style", "display:none");
+            county.attr("style", "display:none");
+            other.attr("style", "display:none");
+
+            prad.removeAttr("required");
+            plss.removeAttr("required");
+            rural.removeAttr("required");
+            county.removeAttr("required");
+            other.removeAttr("required");
+        }
+    }
+
+	$(document).ready(function () {
+		var rural = $(".rural-select"); 
+        var prad = $(".prad-select"); 
+        var plss = $(".plss-select");
+        var county = $(".countyblk");
+        var other = $(".other-select");
+
+        prad.attr("style", "display:none");
+        plss.attr("style", "display:none");
+        rural.attr("style", "display:none");
+        county.attr("style", "display:none");
+        other.attr("style", "display:none");
+
+        plss.removeAttr("required");
+        rural.removeAttr("required");
+
+        var survey_type = '{{ ticket.survey_type }}';
+        console.log(survey_type)
+        if (survey_type != 'None')
+            showInfoBlock(survey_type);
+	})
+
+	function determineForm(e) {
+        var join_type = $("#selectsurveytype").val();
+
+        $(".selectcounty-check").hide();
+        $(".data-load").hide();
+
+        if (join_type == "RURAL" || join_type == "PRAD" || join_type == "PLSS")
+	        $.ajax({
+	            method: "get",
+	            url: "{% url 'ajax_load_counties' %}",
+	            data: { join_type: join_type.toLowerCase() }
+	        }).done(function (counties) {
+                var filtered = counties.filter(function (el) {
+                    return el != null;
+                });
+	            $("#selectcounty").autocomplete({
+	                source: filtered
+	            });
+
+	            $(".selectcounty-check").show();
+	        });
+
+        $("#selectcounty").val('')
+        $("#subdivision").val('')
+        $("#unit").val('')
+        $("#subblock").val('')
+        $("#lot").val('')
+        $("#address").val('')
+        $("#account_no").val('')
+        $("#survey").val('')
+        $("#block").val('')
+        $("#rural_section").val('')
+        $("#meridian").val('')
+        $("#town_range").val('')
+        $("#section").val('')
+
+        showInfoBlock(e.value)
+    }
+
+    function selCounty(e) {
+        var join_type = $("#selectsurveytype").val().toLowerCase();
+        var county = $("#selectcounty").val();
+
+        if (join_type == "rural") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "survey" }, "#survey")
+        } else if (join_type == "prad") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "subdivision" }, "#subdivision")
+        } else if (join_type == "plss") {
+            ajaxFunc("{% url 'ajax_load_data' %}",
+                { join_type: join_type, county: county, type: "meridian" }, "#meridian")
+        } else {
+        }
+    }
+
+    function selLevel3(obj) {
+        var join_type = $("#selectsurveytype").val().toLowerCase();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        tp = ""
+        if (type == "subdivision") {
+            tp = "unit"
+        } else if (type == "survey") {
+            tp = "block"
+        } else if (type == "meridian") {
+            tp = "town_range"
+        }
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            { join_type: join_type, county: county, level1: $(obj).val(), type: tp }, "#" + tp)
+    }
+
+    function selLevel4(obj) {
+        var join_type = $("#selectsurveytype").val().toLowerCase();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        tp = ""
+        level1 = ""
+        if (type == "unit") {
+            level1 = $("#subdivision").val()
+            tp = "subblock"
+        } else if (type == "block") {
+            level1 = $("#survey").val()
+            tp = "rural_section"
+        } else if (type == "town_range") {
+            level1 = $("#meridian").val()
+            tp = "section"
+        }
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            { join_type: join_type, county: county, level1: level1, level2: $(obj).val(), type: tp }, "#" + tp)
+    }
+
+    function selLevel5(obj) {
+        var join_type = $("#selectsurveytype").val().toLowerCase();
+        var county = $("#selectcounty").val();
+        type = $(obj).attr("id")
+
+        level1 = $("#subdivision").val()
+        level2 = $("#unit").val()
+        tp = "lot"
+
+        ajaxFunc("{% url 'ajax_load_data' %}",
+            {
+                join_type: join_type, county: county, level1: level1, level2: level2,
+                level3: $(obj).val(), type: tp
+            }, "#" + tp)
+    }
+</script>
+
+{% endblock %}

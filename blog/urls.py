@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from . import views
+from ticket import views as ticket_views
 from django.contrib import admin
 from django.urls import path, include
 
@@ -32,6 +33,18 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     # change password urls
-    url(r'^update-profile/(?P<pk>\d+)/$', views.update_profile, name='update_profile')
+    url(r'^update-profile/(?P<pk>\d+)/$', views.update_profile, name='update_profile'),
 
+    url(r'^map/$', views.show_map, name='show_map'),
+    url(r'^ajax-map-search/$', views.ajax_map_search, name='ajax_map_search'),
+    url(r'^export/xls/$', views.export_users_xls, name='export_users_xls'),
+
+    url(r'^tickets/$', ticket_views.ticket_list, name='ticket_list'),
+    url(r'^ticket/(?P<pk>\d+)/$', ticket_views.ticket_detail, name='ticket_detail'),
+    url(r'^ticket/new/$', ticket_views.ticket_new, name='ticket_new'),
+    url(r'^ticket/(?P<pk>\d+)/edit/$', ticket_views.ticket_edit, name='ticket_edit'),
+    url(r'^ticket/(?P<pk>\d+)/remove/$', ticket_views.ticket_remove, name='ticket_remove'),
+
+    url(r'^ajax-map-bound/$', views.ajax_map_bound, name='ajax_map_bound'),
+    url(r'^ajax-map-formid/$', views.ajax_map_by_formid, name='ajax_map_formid'),
 ]

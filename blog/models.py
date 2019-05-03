@@ -36,6 +36,7 @@ class County(models.Model):
 
 
 class FormAll(models.Model):
+    geom = models.TextField(blank=True, null=True)  # This field type is a guess.
     date_entered = models.DateField(blank=True, null=True)
     date_needed = models.CharField(max_length=100, blank=True, null=True, default="")
     title = models.CharField(max_length=100, blank=True, null=True)
