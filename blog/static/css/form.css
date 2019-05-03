@@ -32,3 +32,24 @@ input[type="checkbox"] {
     width: 20px;
     height: 20px;
 }
+
+.menu-wrapper{
+    padding: 10px !important;
+    font-size: 14px; 
+}
+
+.toggler {
+    color: #414242;
+}
+
+.action-node {
+    white-space: nowrap;
+}
+
+.ticket-form .main-form .row {
+    margin: 20px 0px;
+}
+
+.view-mode.srch-active {
+    background-color: green !important;
+}
